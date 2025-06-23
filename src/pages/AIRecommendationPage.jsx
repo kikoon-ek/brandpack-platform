@@ -130,77 +130,78 @@ const AIRecommendationPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-      {/* 헤더 섹션 */}
-      <section className="relative py-16 overflow-hidden">
+      {/* 헤더 섹션 - 완전히 새로운 디자인 */}
+      <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6">
-            AI 어시스턴트
+          <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-8">
+            🤖 AI 어시스턴트
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            화장품 업계 전문 AI가 법규, 마케팅, 수출, 성분 분석까지 모든 궁금증을 해결해드립니다
+          <p className="text-2xl text-gray-600 mb-12 max-w-4xl mx-auto leading-relaxed">
+            화장품 업계 전문 AI가 법규, 마케팅, 수출, 성분 분석까지<br />
+            모든 궁금증을 실시간으로 해결해드립니다
           </p>
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl px-6 py-3 shadow-lg">
-              <div className="text-2xl font-bold text-blue-600">6개</div>
-              <div className="text-sm text-gray-600">전문 AI 봇</div>
+          <div className="flex flex-wrap justify-center gap-6 mb-12">
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl px-8 py-6 shadow-xl">
+              <div className="text-3xl font-bold text-blue-600">6개</div>
+              <div className="text-gray-600">전문 AI 봇</div>
             </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl px-6 py-3 shadow-lg">
-              <div className="text-2xl font-bold text-green-600">24/7</div>
-              <div className="text-sm text-gray-600">실시간 상담</div>
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl px-8 py-6 shadow-xl">
+              <div className="text-3xl font-bold text-green-600">24/7</div>
+              <div className="text-gray-600">실시간 상담</div>
             </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl px-6 py-3 shadow-lg">
-              <div className="text-2xl font-bold text-purple-600">95%+</div>
-              <div className="text-sm text-gray-600">정확도</div>
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl px-8 py-6 shadow-xl">
+              <div className="text-3xl font-bold text-purple-600">95%+</div>
+              <div className="text-gray-600">정확도</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 메인 콘텐츠 - 모바일 우선 반응형 구조 */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-        {/* 모바일: 세로 배치, 데스크톱: 좌우 배치 */}
+      {/* 메인 콘텐츠 - 완전히 새로운 반응형 구조 */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+        {/* 🔥 핵심: 모바일 세로 배치, 데스크톱 좌우 배치 */}
         <div className="flex flex-col lg:flex-row gap-8">
           
           {/* AI 전문가 선택 영역 - 모바일에서 상단, 데스크톱에서 좌측 */}
-          <div className="w-full lg:w-80 lg:flex-shrink-0 order-1 lg:order-1">
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20">
+          <div className="w-full lg:w-96 lg:flex-shrink-0 order-1">
+            <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/30">
               
               {/* 헤더 - 모바일에서만 접기 버튼 표시 */}
-              <div className="flex items-center justify-between p-6 border-b border-gray-100">
-                <h3 className="text-xl font-bold text-gray-800">AI 전문가 선택</h3>
+              <div className="flex items-center justify-between p-8 border-b border-gray-100">
+                <h3 className="text-2xl font-bold text-gray-800">🎯 AI 전문가 선택</h3>
                 <button 
                   onClick={() => setIsAIListExpanded(!isAIListExpanded)}
-                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors lg:hidden"
+                  className="p-3 hover:bg-gray-100 rounded-xl transition-colors lg:hidden"
                 >
-                  <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform ${isAIListExpanded ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-6 h-6 text-gray-500 transition-transform ${isAIListExpanded ? 'rotate-180' : ''}`} />
                 </button>
               </div>
               
               {/* AI 목록 - 모바일에서 접기/펼치기 가능 */}
-              <div className={`p-6 space-y-4 ${!isAIListExpanded ? 'hidden lg:block' : ''}`}>
+              <div className={`p-8 space-y-6 ${!isAIListExpanded ? 'hidden lg:block' : ''}`}>
                 {Object.entries(aiExperts).map(([key, ai]) => (
                   <button
                     key={key}
                     onClick={() => setSelectedAI(key)}
-                    className={`w-full text-left p-4 rounded-xl transition-all duration-300 border-2 ${
+                    className={`w-full text-left p-6 rounded-2xl transition-all duration-300 border-2 ${
                       selectedAI === key
-                        ? 'border-blue-500 bg-blue-50 shadow-lg'
-                        : 'border-gray-200 bg-white hover:border-blue-300 hover:shadow-md'
+                        ? 'border-blue-500 bg-blue-50 shadow-xl scale-105'
+                        : 'border-gray-200 bg-white hover:border-blue-300 hover:shadow-lg hover:scale-102'
                     }`}
                   >
-                    <div className="flex items-start gap-4">
-                      <div className="text-3xl">{ai.icon}</div>
+                    <div className="flex items-start gap-5">
+                      <div className="text-4xl">{ai.icon}</div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-bold text-gray-800 mb-2">{ai.name}</h4>
-                        <p className="text-sm text-gray-600 mb-3 line-clamp-2">{ai.description}</p>
+                        <h4 className="font-bold text-lg text-gray-800 mb-3">{ai.name}</h4>
+                        <p className="text-sm text-gray-600 mb-4 line-clamp-2">{ai.description}</p>
                         
-                        <div className="flex justify-between items-center mb-3">
+                        <div className="flex justify-between items-center mb-4">
                           <span className="text-sm text-gray-500">정확도</span>
-                          <span className="text-sm font-bold text-green-600">{ai.accuracy}%</span>
+                          <span className="text-lg font-bold text-green-600">{ai.accuracy}%</span>
                         </div>
                         
-                        <div className="flex flex-wrap gap-2 mb-3">
+                        <div className="flex flex-wrap gap-2 mb-4">
                           {ai.tags.map((tag, index) => (
                             <span key={index} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
                               {tag}
@@ -209,7 +210,9 @@ const AIRecommendationPage = () => {
                         </div>
                         
                         {selectedAI === key && (
-                          <div className="text-sm text-blue-600 font-semibold">✓ 현재 선택됨</div>
+                          <div className="text-sm text-blue-600 font-semibold flex items-center gap-2">
+                            <span>✅</span> 현재 선택됨
+                          </div>
                         )}
                       </div>
                     </div>
@@ -220,34 +223,34 @@ const AIRecommendationPage = () => {
           </div>
           
           {/* 채팅 영역 - 모바일에서 하단, 데스크톱에서 우측 */}
-          <div className="flex-1 order-2 lg:order-2">
-            <div className="bg-white rounded-2xl shadow-xl border border-white/20 flex flex-col h-[600px] lg:h-[700px]">
+          <div className="flex-1 order-2">
+            <div className="bg-white rounded-3xl shadow-2xl border border-white/30 flex flex-col h-[700px] lg:h-[800px]">
               
               {/* AI 헤더 */}
-              <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-t-2xl">
-                <div className="flex items-center space-x-4">
-                  <div className="text-3xl bg-white/20 backdrop-blur-sm rounded-2xl p-4">
+              <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-8 rounded-t-3xl">
+                <div className="flex items-center space-x-6">
+                  <div className="text-4xl bg-white/20 backdrop-blur-sm rounded-3xl p-6">
                     {currentAI.icon}
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold">{currentAI.name}</h3>
-                    <p className="text-blue-100">{currentAI.description}</p>
+                    <h3 className="text-3xl font-bold">{currentAI.name}</h3>
+                    <p className="text-blue-100 text-lg">{currentAI.description}</p>
                   </div>
                 </div>
               </div>
 
               {/* 자주 묻는 질문 */}
-              <div className="p-6 border-b border-gray-100">
-                <h4 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <div className="p-8 border-b border-gray-100">
+                <h4 className="font-bold text-lg text-gray-800 mb-6 flex items-center gap-3">
                   <span>💡</span>
                   자주 묻는 질문
                 </h4>
-                <div className="grid grid-cols-1 gap-3">
+                <div className="grid grid-cols-1 gap-4">
                   {currentAI.faqs.map((faq, index) => (
                     <button
                       key={index}
                       onClick={() => handleFAQClick(faq)}
-                      className="text-left p-4 bg-gray-50 hover:bg-blue-50 rounded-xl text-sm text-gray-700 hover:text-blue-700 transition-all duration-200 border border-transparent hover:border-blue-200"
+                      className="text-left p-5 bg-gray-50 hover:bg-blue-50 rounded-2xl text-sm text-gray-700 hover:text-blue-700 transition-all duration-200 border border-transparent hover:border-blue-200 hover:shadow-md"
                     >
                       {faq}
                     </button>
@@ -256,10 +259,10 @@ const AIRecommendationPage = () => {
               </div>
 
               {/* 채팅 메시지 */}
-              <div className="flex-1 overflow-y-auto p-6 space-y-4">
+              <div className="flex-1 overflow-y-auto p-8 space-y-6">
                 {messages.map((message, index) => (
                   <div key={index} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-xs lg:max-w-md px-5 py-3 rounded-2xl shadow-md ${
+                    <div className={`max-w-xs lg:max-w-md px-6 py-4 rounded-2xl shadow-lg ${
                       message.type === 'user' 
                         ? 'bg-blue-500 text-white' 
                         : 'bg-gray-100 text-gray-800 border border-gray-200'
@@ -270,11 +273,11 @@ const AIRecommendationPage = () => {
                 ))}
                 {isTyping && (
                   <div className="flex justify-start">
-                    <div className="bg-gray-100 px-5 py-3 rounded-2xl border border-gray-200">
-                      <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                    <div className="bg-gray-100 px-6 py-4 rounded-2xl border border-gray-200">
+                      <div className="flex space-x-2">
+                        <div className="w-3 h-3 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div className="w-3 h-3 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                        <div className="w-3 h-3 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
                       </div>
                     </div>
                   </div>
@@ -282,7 +285,7 @@ const AIRecommendationPage = () => {
               </div>
 
               {/* 입력 영역 */}
-              <div className="p-6 border-t border-gray-100 bg-gray-50 rounded-b-2xl">
+              <div className="p-8 border-t border-gray-100 bg-gray-50 rounded-b-3xl">
                 <div className="flex space-x-4">
                   <input
                     type="text"
@@ -290,12 +293,12 @@ const AIRecommendationPage = () => {
                     onChange={(e) => setInputMessage(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                     placeholder={`${currentAI.name}에게 질문해보세요...`}
-                    className="flex-1 px-5 py-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white shadow-sm"
+                    className="flex-1 px-6 py-4 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white shadow-sm text-lg"
                   />
                   <button
                     onClick={handleSendMessage}
                     disabled={!inputMessage.trim()}
-                    className="px-8 py-4 bg-blue-500 text-white rounded-xl hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center space-x-2 shadow-md"
+                    className="px-8 py-4 bg-blue-500 text-white rounded-2xl hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center space-x-3 shadow-lg"
                   >
                     <Send className="w-5 h-5" />
                     <span className="font-medium">전송</span>
