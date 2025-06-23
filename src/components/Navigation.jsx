@@ -1,22 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, User, ChevronDown } from 'lucide-react';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const location = useLocation();
 
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
   const navItems = [
-    { name: '홈', path: '/', description: '메인 페이지' },
-    { name: '파트너', path: '/partners', description: '파트너 찾기' },
-    { name: '용기', path: '/containers', description: '용기 및 패키징' },
-    { name: '콘셉트', path: '/concepts', description: '브랜드 콘셉트' },
-    { name: '프로젝트', path: '/projects', description: '프로젝트 관리' },
-    { name: '글로벌 비즈니스', path: '/global-business', description: '해외 진출' },
-    { name: 'AI 어시스턴트', path: '/ai-assistant', description: 'AI 상담 서비스' },
-    { name: '포트폴리오', path: '/portfolio', description: '성공 사례' },
-    { name: '콘텐츠', path: '/content', description: '업계 인사이트' }
+    { name: '파트너', path: '/partners' },
+    { name: '용기', path: '/containers' },
+    { name: '콘셉트', path: '/concepts' },
+    { name: '프로젝트', path: '/projects' },
+    { name: '글로벌 비즈니스', path: '/global-business' },
+    { name: 'AI 어시스턴트', path: '/ai-assistant' },
+    { name: '포트폴리오', path: '/portfolio' },
+    { name: '콘텐츠', path: '/content' }
   ];
 
   const isActive = (path) => {
@@ -26,141 +36,346 @@ const Navigation = () => {
     return location.pathname.startsWith(path);
   };
 
+  const styles = {
+    nav: {
+      backgroundColor: 'white',
+      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+      position: 'sticky',
+      top: 0,
+      zIndex: 50
+    },
+    container: {
+      maxWidth: '1280px',
+      margin: '0 auto',
+      padding: '0 16px'
+    },
+    header: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      height: '64px',
+      width: '100%'
+    },
+    logo: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
+      textDecoration: 'none',
+      flex: '0 0 auto'
+    },
+    logoIcon: {
+      width: '32px',
+      height: '32px',
+      background: 'linear-gradient(to right, #4b5563, #57534e)',
+      borderRadius: '8px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    logoText: {
+      fontSize: '20px',
+      fontWeight: 'bold',
+      color: '#1f2937'
+    },
+    centerSection: {
+      display: isMobile ? 'none' : 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flex: '1',
+      gap: '4px',
+      margin: '0 32px'
+    },
+    menuLink: {
+      padding: '8px 16px',
+      borderRadius: '8px',
+      fontSize: '14px',
+      fontWeight: '500',
+      textDecoration: 'none',
+      transition: 'all 0.3s',
+      color: '#374151'
+    },
+    activeMenuLink: {
+      padding: '8px 16px',
+      borderRadius: '8px',
+      fontSize: '14px',
+      fontWeight: '500',
+      textDecoration: 'none',
+      transition: 'all 0.3s',
+      backgroundColor: '#4b5563',
+      color: 'white'
+    },
+    rightSection: {
+      display: isMobile ? 'none' : 'flex',
+      alignItems: 'center',
+      gap: '16px',
+      flex: '0 0 auto',
+      minWidth: 'fit-content'
+    },
+    userButton: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
+      padding: '8px 16px',
+      color: '#374151',
+      backgroundColor: 'transparent',
+      border: 'none',
+      borderRadius: '8px',
+      cursor: 'pointer',
+      fontSize: '14px',
+      fontWeight: '500',
+      position: 'relative'
+    },
+    mobileButton: {
+      display: isMobile ? 'block' : 'none',
+      padding: '8px',
+      borderRadius: '8px',
+      color: '#374151',
+      backgroundColor: 'transparent',
+      border: 'none',
+      cursor: 'pointer',
+      fontSize: '20px'
+    },
+    dropdown: {
+      position: 'absolute',
+      right: 0,
+      top: '100%',
+      marginTop: '8px',
+      width: '192px',
+      backgroundColor: 'white',
+      borderRadius: '8px',
+      boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+      border: '1px solid #e5e7eb',
+      padding: '8px 0',
+      zIndex: 50
+    },
+    dropdownLink: {
+      display: 'block',
+      padding: '8px 16px',
+      fontSize: '14px',
+      color: '#374151',
+      textDecoration: 'none'
+    },
+    mobileMenu: {
+      position: 'fixed',
+      top: '64px',
+      left: 0,
+      right: 0,
+      backgroundColor: 'white',
+      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+      zIndex: 60,
+      maxHeight: 'calc(100vh - 64px)',
+      overflowY: 'auto'
+    },
+    mobileMenuItems: {
+      padding: '24px 0'
+    },
+    mobileMenuItem: {
+      display: 'flex',
+      alignItems: 'center',
+      padding: '20px 24px',
+      fontSize: '16px',
+      fontWeight: '500',
+      color: '#374151',
+      textDecoration: 'none',
+      borderBottom: '1px solid #f3f4f6',
+      gap: '12px'
+    },
+    activeMobileMenuItem: {
+      display: 'flex',
+      alignItems: 'center',
+      padding: '20px 24px',
+      fontSize: '16px',
+      fontWeight: '500',
+      color: '#2563eb',
+      textDecoration: 'none',
+      borderBottom: '1px solid #f3f4f6',
+      backgroundColor: '#eff6ff',
+      gap: '12px'
+    },
+    mobileFooter: {
+      padding: '16px 24px',
+      borderTop: '1px solid #e5e7eb'
+    },
+    mobileLoginButton: {
+      display: 'block',
+      width: '100%',
+      padding: '12px',
+      backgroundColor: '#6b7280',
+      color: 'white',
+      textAlign: 'center',
+      borderRadius: '8px',
+      textDecoration: 'none',
+      fontWeight: '500'
+    },
+    overlay: {
+      position: 'fixed',
+      inset: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      zIndex: 40
+    }
+  };
+
   return (
-    <nav className="bg-white shadow-lg sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-gray-600 to-stone-700 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">BP</span>
-            </div>
-            <span className="text-xl font-bold text-gray-800">BrandPack</span>
-          </Link>
+    <>
+      <nav style={styles.nav}>
+        <div style={styles.container}>
+          <div style={styles.header}>
+            
+            {/* 좌측: 브랜드 로고 */}
+            <Link to="/" style={styles.logo}>
+              <div style={styles.logoIcon}>
+                <span style={{ color: 'white', fontWeight: 'bold', fontSize: '14px' }}>BP</span>
+              </div>
+              <span style={styles.logoText}>BrandPack</span>
+            </Link>
 
-          {/* Desktop Navigation */}
-          <div className="flex items-center space-x-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                  isActive(item.path)
-                    ? 'bg-gradient-to-r from-gray-600 to-stone-700 text-white'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                {item.name}
-              </Link>
-            ))}
-          </div>
-
-          {/* User Menu */}
-          <div className="flex items-center space-x-4">
-            <div className="relative">
-              <button
-                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                className="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                <User className="w-5 h-5" />
-                <span className="text-sm font-medium">계정</span>
-                <ChevronDown className="w-4 h-4" />
-              </button>
-
-              {isUserMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2">
-                  <Link
-                    to="/login"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    onClick={() => setIsUserMenuOpen(false)}
-                  >
-                    로그인
-                  </Link>
-                  <Link
-                    to="/login?tab=signup"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    onClick={() => setIsUserMenuOpen(false)}
-                  >
-                    회원가입
-                  </Link>
-                  {/* 로그인 상태일 때만 표시 */}
-                  {false && ( // 현재는 비로그인 상태로 가정
-                    <>
-                      <div className="border-t border-gray-200 my-2"></div>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >
-                        마이페이지
-                      </a>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >
-                        설정
-                      </a>
-                    </>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Mobile menu button */}
-          <div className="lg:hidden">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
-            >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        {isOpen && (
-          <div className="lg:hidden border-t border-gray-200">
-            <div className="py-4 space-y-2">
+            {/* 중앙: 메뉴들 (PC에서만) */}
+            <div style={styles.centerSection}>
               {navItems.map((item) => (
                 <Link
                   key={item.path}
                   to={item.path}
-                  onClick={() => setIsOpen(false)}
-                  className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300 ${
-                    isActive(item.path)
-                      ? 'bg-gradient-to-r from-gray-600 to-stone-700 text-white'
-                      : 'text-gray-700 hover:bg-gray-100'
-                  }`}
+                  style={isActive(item.path) ? styles.activeMenuLink : styles.menuLink}
+                  onMouseEnter={(e) => {
+                    if (!isActive(item.path)) {
+                      e.target.style.backgroundColor = '#f3f4f6';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive(item.path)) {
+                      e.target.style.backgroundColor = 'transparent';
+                    }
+                  }}
                 >
-                  <div>
-                    <div className="font-medium">{item.name}</div>
-                    <div className="text-xs text-gray-500 mt-1">{item.description}</div>
-                  </div>
+                  {item.name}
                 </Link>
               ))}
-              
-              <div className="border-t border-gray-200 mt-4 pt-4">
-                <Link
-                  to="/login"
-                  onClick={() => setIsOpen(false)}
-                  className="block px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+            </div>
+
+            {/* 우측: 계정 메뉴 (PC에서만) */}
+            <div style={styles.rightSection}>
+              <div style={{ position: 'relative' }}>
+                <button
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  style={styles.userButton}
+                  onMouseEnter={(e) => e.target.style.backgroundColor = '#f3f4f6'}
+                  onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
                 >
-                  로그인 / 회원가입
-                </Link>
+                  <span style={{ fontSize: '18px' }}>👤</span>
+                  <span>계정</span>
+                  <span style={{ fontSize: '12px' }}>▼</span>
+                </button>
+
+                {isUserMenuOpen && !isMobile && (
+                  <div style={styles.dropdown}>
+                    <Link
+                      to="/login"
+                      style={styles.dropdownLink}
+                      onClick={() => setIsUserMenuOpen(false)}
+                      onMouseEnter={(e) => e.target.style.backgroundColor = '#f3f4f6'}
+                      onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                    >
+                      로그인
+                    </Link>
+                    <Link
+                      to="/login?tab=signup"
+                      style={styles.dropdownLink}
+                      onClick={() => setIsUserMenuOpen(false)}
+                      onMouseEnter={(e) => e.target.style.backgroundColor = '#f3f4f6'}
+                      onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                    >
+                      회원가입
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
-          </div>
-        )}
-      </div>
 
-      {/* Overlay for user menu */}
+            {/* 모바일: 햄버거 버튼 */}
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              style={styles.mobileButton}
+            >
+              {isOpen ? '✕' : '☰'}
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Mobile Menu - 상단에서 아래로 슬라이드 */}
+      {isMobile && isOpen && (
+        <div style={styles.mobileMenu}>
+          {/* Menu Items */}
+          <div style={styles.mobileMenuItems}>
+            {navItems.map((item) => {
+              const getIcon = (name) => {
+                switch(name) {
+                  case '파트너': return '👥';
+                  case '용기': return '📦';
+                  case '콘셉트': return '💡';
+                  case '프로젝트': return '🚀';
+                  case '글로벌 비즈니스': return '🌍';
+                  case 'AI 어시스턴트': return '🤖';
+                  case '포트폴리오': return '📁';
+                  case '콘텐츠': return '📝';
+                  default: return '📋';
+                }
+              };
+
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => setIsOpen(false)}
+                  style={isActive(item.path) ? styles.activeMobileMenuItem : styles.mobileMenuItem}
+                >
+                  <span style={{ fontSize: '20px' }}>{getIcon(item.name)}</span>
+                  <div>
+                    <div>{item.name}</div>
+                    <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '2px' }}>
+                      {item.name === '파트너' && '제조공장 및 업체 찾기'}
+                      {item.name === '용기' && '다양한 용기 카탈로그'}
+                      {item.name === '콘셉트' && '완성된 브랜드 기획안'}
+                      {item.name === '프로젝트' && '진행 중인 프로젝트'}
+                      {item.name === '글로벌 비즈니스' && '해외 시장 진출'}
+                      {item.name === 'AI 어시스턴트' && '24/7 전문 상담'}
+                      {item.name === '포트폴리오' && '성공 사례 모음'}
+                      {item.name === '콘텐츠' && '업계 소식 및 트렌드'}
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Mobile Footer */}
+          <div style={styles.mobileFooter}>
+            <Link
+              to="/login"
+              onClick={() => setIsOpen(false)}
+              style={styles.mobileLoginButton}
+            >
+              로그인
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Overlays */}
       {isUserMenuOpen && (
         <div
-          className="fixed inset-0 z-40"
+          style={styles.overlay}
           onClick={() => setIsUserMenuOpen(false)}
-        ></div>
+        />
       )}
-    </nav>
+      
+      {isOpen && isMobile && (
+        <div
+          style={styles.overlay}
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+    </>
   );
 };
 

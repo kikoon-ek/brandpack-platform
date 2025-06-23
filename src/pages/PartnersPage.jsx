@@ -11,10 +11,8 @@ const PartnersPage = () => {
   const [selectedPartner, setSelectedPartner] = useState(null);
   const [selectedFilters, setSelectedFilters] = useState({
     manufacturers: {
-      productCategory: [], // 대분류 (스킨케어, 클렌징 등)
-      productSubCategory: [], // 세부분류 (스킨/미스트, 로션/에멀전 등)
+      productCategory: [],
       productType: [],
-      equipment: [],
       certifications: []
     },
     containers: {
@@ -34,27 +32,8 @@ const PartnersPage = () => {
   // 탭별 필터 옵션
   const filterOptions = {
     manufacturers: {
-      productCategory: {
-        '스킨케어': ['스킨/미스트', '로션/에멀전', '멀티밤', '에센스/앰플/오일', '크림/수딩젤/아이크림', '스팟/미세침/캡슐', '부스터', '파우더', '스팟'],
-        '클렌징': ['클렌징폼/오일/워터/밤/젤', '클렌징패드/티슈', '필링젤/팩', '클렌징파우더', '피지연화제/스크럽', '메이크업 리무버', '블랙헤드', '클렌징 스틱/비누'],
-        '베이스메이크업': ['파우더', '파운데이션/쿠션', '컨실러/블러셔/쿼셔', '하이라이터/프라이머', 'BB/CC 크림', '톤업크림', '스틱/밤'],
-        '립메이크업/케어': ['립스틱', '립글로스', '립밤', '립틴트', '립케어/클렌저'],
-        '아이메이크업/케어': ['마스카라', '아이라이너', '아이브로우', '아이섀도우', '속눈썹영양제/펌', '속눈썹글루/픽서'],
-        '헤어케어': ['샴푸/린스/트리트먼트/팩', '헤어로션/크림/오일/앰플', '헤어미스트/토닉', '두피케어', '헤어젤/왁스/스프레이', '헤어 곡서', '헤어끈', '염색제', '흑채', '헤어/두피 파우더'],
-        '바디케어': ['바디로션/크림/오일', '바디워시/스크럽/미스트', '핸드크림/워시', '풋케어', '청결제', '입욕제', '바스밤/솔트', '제모크림', '데오드란트', '튼살/스포츠/마사지 크림'],
-        '시트제품': ['마스크팩/패드', '하이드로겔', '골프패치', '코팅/필름마스크', '아이/리프팅패치', '코팩/틈/석패치', '헤어/바디/와이존', '녹는콜라겐필름'],
-        '팩': ['모델링팩', '하이드로겔', '석고팩', '팩/워시오프팩'],
-        '기능성': ['새치샴푸', '아토피', '주름개선/미백/탄력', '여드름/뾰루지', '탈모기능성 샴푸', '잡티/기미', '여성청결제', '선케어'],
-        '홈/라이프': ['탈취제/방향제', '주방/청소/세탁세제', '칫솔/치약', '물티슈/휴지/면봉', '보건용 마스크', '손소독제/티슈', '아로마/아피지파', '피치 실크레스프레이', '구강제품', '크리닉스/사우던트', '점착제/접착제'],
-        '의약외품': ['치아미백제/고체치약', '손소독제', '마스크', '샴푸', '소독제', '가피제', '손발톱 케어'],
-        '식품': ['음료/차', '파우더', '유산균/비타민', '건강기능식품'],
-        '비누': ['바디바', '샴푸/트리트먼트 바', '클렌징바', '세제바', '애견 비누'],
-        '네일/페디': ['네일/패디', '젤네일', '네일로션오일', '네일/림무/소독', '네일영양제/탑젤', '네일패디_스티커'],
-        '향수/아로마': ['향수/밤', '디퓨저/캔들', '이너/오일/퍼퓸', '아로마 오일', '시향지/프래그런스', '인센스', '차량용방향제'],
-        '반려동물': ['목욕', '위생', '미용/케어', '구강케어', '아웃케어']
-      },
+      productCategory: ['스킨케어', '클렌징', '메이크업', '립 메이크업/케어', '아이 메이크업/케어', '헤어케어', '바디케어', '팩/시트 제품', '비누', '네일/페디', '향수/아로마', '기능성'],
       productType: ['일반 화장품', '의약외품', '동물용 의약외품', '건강기능식품', '생활용품'],
-      equipment: ['호모믹서', '샴푸믹서', '립스틱믹서', '아이섀도우믹서', '파운데이션믹서', '크림 자동충전기', '립스틱 자동충전기', '마스카라 자동충전기', '고온 자동충전기', '향상파우치 충전기', '튜브 실링기', '립스틱 자동충전기', '마스카라 자동충전기', '고온 자동충전기', '향상파우치 충전기'],
       certifications: ['ISO', 'CGMP', 'VEGAN', '할랄', 'KGMP']
     },
     containers: {
@@ -1270,7 +1249,9 @@ const PartnersPage = () => {
                           
                           {/* 크림/밤 제품분류 */}
                           <div>
-                            <h4 className="font-medium text-blue-600 mb-2">크림/밤</h4>                              <span className="text-sm text-gray-600">제품분류 &gt; 기초</span>                          </div>
+                            <h4 className="font-medium text-blue-600 mb-2">크림/밤</h4>
+                            <span className="text-sm text-gray-600">제품분류 > 기초</span>
+                          </div>
                         </div>
                       </div>
 
@@ -1379,204 +1360,164 @@ const PartnersPage = () => {
                 </div>
               )}
 
-              {/* 탭별 필터 렌더링 */}
-              {Object.entries(currentFilterOptions).map(([filterType, options], index) => {
-                // 용기사에서 용도 필터 다음에 슬라이더 삽입
-                const isUsageFilter = filterType === 'usage' && activeTab === 'containers';
+              {/* 통합 필터 박스 */}
+              <div className="bg-white rounded-lg border border-gray-200 p-4">
+                <h3 className="font-medium text-gray-900 mb-4">필터</h3>
                 
-                // 제조사의 productCategory는 2단계 구조로 처리
-                if (filterType === 'productCategory' && activeTab === 'manufacturers') {
-                  return (
-                    <React.Fragment key={filterType}>
-                      {/* 대분류 선택 */}
-                      <div className="bg-white rounded-lg border border-gray-200 p-4">
-                        <h3 className="font-medium text-gray-900 mb-3">
-                          제품 카테고리 (대분류) {(currentSelectedFilters[filterType]?.length || 0)}
-                        </h3>
-                        
-                        <div className="grid grid-cols-2 gap-2">
-                          {Object.keys(options).map((category, categoryIndex) => (
-                            <label key={categoryIndex} className="flex items-center space-x-2 cursor-pointer">
-                              <input
-                                type="checkbox"
-                                checked={(currentSelectedFilters[filterType] || []).includes(category)}
-                                onChange={() => toggleFilter(filterType, category)}
-                                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                              />
-                              <span className="text-sm text-gray-700">{category}</span>
-                            </label>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* 세부분류 선택 (선택된 대분류가 있을 때만) */}
-                      {(currentSelectedFilters[filterType] || []).length > 0 && (
-                        <div className="bg-white rounded-lg border border-gray-200 p-4">
-                          <h3 className="font-medium text-gray-900 mb-3">
-                            제품 세부분류 {(currentSelectedFilters.productSubCategory?.length || 0)}
-                          </h3>
+                {/* 필터 영역 */}
+                <div className="space-y-6">
+                  {/* 탭별 필터 렌더링 */}
+                  {Object.entries(currentFilterOptions).map(([filterType, options], index) => {
+                    // 생산설비 필터 제외
+                    if (filterType === 'equipment') return null;
+                    
+                    // 용기사에서 용도 필터 다음에 슬라이더 삽입
+                    const isUsageFilter = filterType === 'usage' && activeTab === 'containers';
+                    
+                    return (
+                      <React.Fragment key={filterType}>
+                        {/* 기본 필터 */}
+                        <div className="border-b border-gray-100 pb-4 last:border-b-0">
+                          <h4 className="font-medium text-gray-900 mb-3">
+                            {filterType === 'productCategory' ? '제품 카테고리' :
+                             filterType === 'productType' ? '제품 유형' :
+                             filterType === 'certifications' ? '인증 현황' :
+                             filterType === 'usage' ? '용도' :
+                             filterType === 'product' ? '제품' :
+                             filterType === 'material' ? '재질' :
+                             filterType === 'postProcessing' ? '후가공' : filterType} 
+                            {(currentSelectedFilters[filterType]?.length || 0) > 0 && (
+                              <span className="ml-2 text-sm text-blue-600">
+                                ({currentSelectedFilters[filterType]?.length || 0})
+                              </span>
+                            )}
+                          </h4>
                           
-                          <div className="space-y-4">
-                            {(currentSelectedFilters[filterType] || []).map((selectedCategory, catIndex) => (
-                              <div key={catIndex}>
-                                <h4 className="text-sm font-medium text-blue-600 mb-2">{selectedCategory}</h4>
-                                <div className="grid grid-cols-2 gap-2 ml-4">
-                                  {options[selectedCategory]?.map((subCategory, subIndex) => (
-                                    <label key={subIndex} className="flex items-center space-x-2 cursor-pointer">
-                                      <input
-                                        type="checkbox"
-                                        checked={(currentSelectedFilters.productSubCategory || []).includes(subCategory)}
-                                        onChange={() => toggleFilter('productSubCategory', subCategory)}
-                                        className="rounded border-gray-300 text-green-600 focus:ring-green-500"
-                                      />
-                                      <span className="text-xs text-gray-600">{subCategory}</span>
-                                    </label>
-                                  ))}
+                          {/* 개별 필터에 스크롤 적용 */}
+                          <div className="max-h-32 overflow-y-auto">
+                            <div className="grid grid-cols-2 gap-2">
+                              {options.map((option, optionIndex) => (
+                                <label key={optionIndex} className="flex items-center space-x-2 cursor-pointer">
+                                  <input
+                                    type="checkbox"
+                                    checked={(currentSelectedFilters[filterType] || []).includes(option)}
+                                    onChange={() => toggleFilter(filterType, option)}
+                                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                  />
+                                  <span className="text-sm text-gray-700">{option}</span>
+                                </label>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* 용도 필터 다음에 슬라이더 삽입 */}
+                        {isUsageFilter && (
+                          <>
+                            {/* 용량 슬라이더 */}
+                            <div className="border-b border-gray-100 pb-4">
+                              <h4 className="font-medium text-gray-900 mb-3">용량</h4>
+                              <div className="space-y-3">
+                                <div className="flex justify-between text-sm text-gray-600">
+                                  <span>{currentSelectedFilters.capacity?.[0] || 0}ml</span>
+                                  <span>{currentSelectedFilters.capacity?.[1] || 1000}ml</span>
+                                </div>
+                                <div className="relative">
+                                  <div 
+                                    className="absolute h-2 bg-blue-500 rounded"
+                                    style={{
+                                      left: `${((currentSelectedFilters.capacity?.[0] || 0) / 1000) * 100}%`,
+                                      width: `${(((currentSelectedFilters.capacity?.[1] || 1000) - (currentSelectedFilters.capacity?.[0] || 0)) / 1000) * 100}%`,
+                                      zIndex: 1
+                                    }}
+                                  />
+                                  <input
+                                    type="range"
+                                    min="0"
+                                    max="1000"
+                                    step="10"
+                                    value={currentSelectedFilters.capacity?.[0] || 0}
+                                    onChange={(e) => {
+                                      const newMin = parseInt(e.target.value);
+                                      const currentMax = currentSelectedFilters.capacity?.[1] || 1000;
+                                      updateSliderFilter('capacity', [newMin, Math.max(newMin, currentMax)]);
+                                    }}
+                                    className="absolute w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb-blue"
+                                    style={{ zIndex: 3 }}
+                                  />
+                                  <input
+                                    type="range"
+                                    min="0"
+                                    max="1000"
+                                    step="10"
+                                    value={currentSelectedFilters.capacity?.[1] || 1000}
+                                    onChange={(e) => {
+                                      const newMax = parseInt(e.target.value);
+                                      const currentMin = currentSelectedFilters.capacity?.[0] || 0;
+                                      updateSliderFilter('capacity', [Math.min(currentMin, newMax), newMax]);
+                                    }}
+                                    className="absolute w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb-red"
+                                    style={{ zIndex: 4 }}
+                                  />
                                 </div>
                               </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </React.Fragment>
-                  );
-                }
-                
-                return (
-                  <React.Fragment key={filterType}>
-                    {/* 기본 필터 */}
-                    <div className="bg-white rounded-lg border border-gray-200 p-4">
-                      <h3 className="font-medium text-gray-900 mb-3">
-                        {filterType === 'productCategory' ? '제품 카테고리' :
-                         filterType === 'productType' ? '제품 유형' :
-                         filterType === 'equipment' ? '생산설비' :
-                         filterType === 'certifications' ? '인증 현황' :
-                         filterType === 'usage' ? '용도' :
-                         filterType === 'product' ? '제품' :
-                         filterType === 'material' ? '재질' :
-                         filterType === 'postProcessing' ? '후가공' : filterType} 필터 {(currentSelectedFilters[filterType]?.length || 0)}
-                      </h3>
-                      
-                      <div className="grid grid-cols-2 gap-2">
-                        {Array.isArray(options) && options.map((option, optionIndex) => (
-                          <label key={optionIndex} className="flex items-center space-x-2 cursor-pointer">
-                            <input
-                              type="checkbox"
-                              checked={(currentSelectedFilters[filterType] || []).includes(option)}
-                              onChange={() => toggleFilter(filterType, option)}
-                              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                            />
-                            <span className="text-sm text-gray-700">{option}</span>
-                          </label>
-                        ))}
-                      </div>
-                    </div>
+                            </div>
 
-                    {/* 용도 필터 다음에 슬라이더 삽입 */}
-                    {isUsageFilter && (
-                      <>
-                        {/* 용량 슬라이더 */}
-                        <div className="bg-white rounded-lg border border-gray-200 p-4">
-                          <h3 className="font-medium text-gray-900 mb-3">용량 필터</h3>
-                          <div className="space-y-3">
-                            <div className="flex justify-between text-sm text-gray-600">
-                              <span>{currentSelectedFilters.capacity?.[0] || 0}ml</span>
-                              <span>{currentSelectedFilters.capacity?.[1] || 1000}ml</span>
+                            {/* 넥파이 슬라이더 */}
+                            <div className="border-b border-gray-100 pb-4">
+                              <h4 className="font-medium text-gray-900 mb-3">넥파이</h4>
+                              <div className="space-y-3">
+                                <div className="flex justify-between text-sm text-gray-600">
+                                  <span>{currentSelectedFilters.neckSize?.[0] || 0}Ø</span>
+                                  <span>{currentSelectedFilters.neckSize?.[1] || 100}Ø</span>
+                                </div>
+                                <div className="relative">
+                                  <div 
+                                    className="absolute h-2 bg-blue-500 rounded"
+                                    style={{
+                                      left: `${((currentSelectedFilters.neckSize?.[0] || 0) / 100) * 100}%`,
+                                      width: `${(((currentSelectedFilters.neckSize?.[1] || 100) - (currentSelectedFilters.neckSize?.[0] || 0)) / 100) * 100}%`,
+                                      zIndex: 1
+                                    }}
+                                  />
+                                  <input
+                                    type="range"
+                                    min="0"
+                                    max="100"
+                                    step="1"
+                                    value={currentSelectedFilters.neckSize?.[0] || 0}
+                                    onChange={(e) => {
+                                      const newMin = parseInt(e.target.value);
+                                      const currentMax = currentSelectedFilters.neckSize?.[1] || 100;
+                                      updateSliderFilter('neckSize', [newMin, Math.max(newMin, currentMax)]);
+                                    }}
+                                    className="absolute w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb-blue"
+                                    style={{ zIndex: 3 }}
+                                  />
+                                  <input
+                                    type="range"
+                                    min="0"
+                                    max="100"
+                                    step="1"
+                                    value={currentSelectedFilters.neckSize?.[1] || 100}
+                                    onChange={(e) => {
+                                      const newMax = parseInt(e.target.value);
+                                      const currentMin = currentSelectedFilters.neckSize?.[0] || 0;
+                                      updateSliderFilter('neckSize', [Math.min(currentMin, newMax), newMax]);
+                                    }}
+                                    className="absolute w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb-red"
+                                    style={{ zIndex: 4 }}
+                                  />
+                                </div>
+                              </div>
                             </div>
-                            <div className="relative">
-                              <div 
-                                className="absolute h-2 bg-blue-500 rounded"
-                                style={{
-                                  left: `${((currentSelectedFilters.capacity?.[0] || 0) / 1000) * 100}%`,
-                                  width: `${(((currentSelectedFilters.capacity?.[1] || 1000) - (currentSelectedFilters.capacity?.[0] || 0)) / 1000) * 100}%`,
-                                  zIndex: 1
-                                }}
-                              />
-                              <input
-                                type="range"
-                                min="0"
-                                max="1000"
-                                step="10"
-                                value={currentSelectedFilters.capacity?.[0] || 0}
-                                onChange={(e) => {
-                                  const newMin = parseInt(e.target.value);
-                                  const currentMax = currentSelectedFilters.capacity?.[1] || 1000;
-                                  updateSliderFilter('capacity', [newMin, Math.max(newMin, currentMax)]);
-                                }}
-                                className="absolute w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb-blue"
-                                style={{ zIndex: 3 }}
-                              />
-                              <input
-                                type="range"
-                                min="0"
-                                max="1000"
-                                step="10"
-                                value={currentSelectedFilters.capacity?.[1] || 1000}
-                                onChange={(e) => {
-                                  const newMax = parseInt(e.target.value);
-                                  const currentMin = currentSelectedFilters.capacity?.[0] || 0;
-                                  updateSliderFilter('capacity', [Math.min(currentMin, newMax), newMax]);
-                                }}
-                                className="absolute w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb-red"
-                                style={{ zIndex: 4 }}
-                              />
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* 넥파이 슬라이더 */}
-                        <div className="bg-white rounded-lg border border-gray-200 p-4">
-                          <h3 className="font-medium text-gray-900 mb-3">넥파이 필터</h3>
-                          <div className="space-y-3">
-                            <div className="flex justify-between text-sm text-gray-600">
-                              <span>{currentSelectedFilters.neckSize?.[0] || 0}Ø</span>
-                              <span>{currentSelectedFilters.neckSize?.[1] || 100}Ø</span>
-                            </div>
-                            <div className="relative">
-                              <div 
-                                className="absolute h-2 bg-blue-500 rounded"
-                                style={{
-                                  left: `${((currentSelectedFilters.neckSize?.[0] || 0) / 100) * 100}%`,
-                                  width: `${(((currentSelectedFilters.neckSize?.[1] || 100) - (currentSelectedFilters.neckSize?.[0] || 0)) / 100) * 100}%`,
-                                  zIndex: 1
-                                }}
-                              />
-                              <input
-                                type="range"
-                                min="0"
-                                max="100"
-                                step="1"
-                                value={currentSelectedFilters.neckSize?.[0] || 0}
-                                onChange={(e) => {
-                                  const newMin = parseInt(e.target.value);
-                                  const currentMax = currentSelectedFilters.neckSize?.[1] || 100;
-                                  updateSliderFilter('neckSize', [newMin, Math.max(newMin, currentMax)]);
-                                }}
-                                className="absolute w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb-blue"
-                                style={{ zIndex: 3 }}
-                              />
-                              <input
-                                type="range"
-                                min="0"
-                                max="100"
-                                step="1"
-                                value={currentSelectedFilters.neckSize?.[1] || 100}
-                                onChange={(e) => {
-                                  const newMax = parseInt(e.target.value);
-                                  const currentMin = currentSelectedFilters.neckSize?.[0] || 0;
-                                  updateSliderFilter('neckSize', [Math.min(currentMin, newMax), newMax]);
-                                }}
-                                className="absolute w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb-red"
-                                style={{ zIndex: 4 }}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </React.Fragment>
-                );
-              })}
+                          </>
+                        )}
+                      </React.Fragment>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           )}
 
@@ -1611,7 +1552,7 @@ const PartnersPage = () => {
                     {/* 크림/밤 제품분류 */}
                     <div>
                       <h4 className="font-medium text-blue-600 mb-2">크림/밤</h4>
-                      <span className="text-sm text-gray-600">제품분류 &gt; 기초</span>
+                      <span className="text-sm text-gray-600">제품분류 > 기초</span>
                     </div>
                   </div>
                 </div>
