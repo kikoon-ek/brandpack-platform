@@ -140,10 +140,10 @@ const NewAIAssistantPage = () => {
 
       {/* 메인 콘텐츠 - PC에서 좌우 배치, 모바일에서 세로 배치 */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 sm:grid-cols-[320px_1fr] gap-6">
+        <div className="flex flex-col sm:flex-row gap-6">
           
           {/* AI 전문가 선택 영역 - PC에서 좌측, 모바일에서 상단 */}
-          <div>
+          <div className="w-full sm:w-80 sm:flex-shrink-0">
             <div className="bg-white rounded-xl shadow-sm border border-gray-200">
               
               {/* 헤더 - 모바일에서만 접기 버튼 */}
