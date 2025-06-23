@@ -1250,8 +1250,7 @@ const PartnersPage = () => {
                           {/* 크림/밤 제품분류 */}
                           <div>
                             <h4 className="font-medium text-blue-600 mb-2">크림/밤</h4>
-                            <span className="text-sm text-gray-600">제품분류 > 기초</span>
-                          </div>
+                              <span className="text-sm text-gray-600">제품분류 &gt; 기초</span>                         </div>
                         </div>
                       </div>
 
@@ -1552,7 +1551,7 @@ const PartnersPage = () => {
                     {/* 크림/밤 제품분류 */}
                     <div>
                       <h4 className="font-medium text-blue-600 mb-2">크림/밤</h4>
-                      <span className="text-sm text-gray-600">제품분류 > 기초</span>
+                      <span className="text-sm text-gray-600">제품분류 &gt; 기초</span>
                     </div>
                   </div>
                 </div>

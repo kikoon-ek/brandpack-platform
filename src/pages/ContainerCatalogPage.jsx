@@ -88,103 +88,367 @@ const ContainerCatalogPage = () => {
     '에어리스 펌프', '휴대용 전용', '친환경 재질'
   ];
 
-  // 샘플 제품 데이터
-  const sampleProducts = [
+  //   // 용기 데이터 (30개)
+  const containers = [
     {
       id: 1,
-      name: '심리실산 세럼',
-      category: 'skin',
+      name: '화장품 튜브 세트',
+      category: 'tube',
       mainCategory: 'cosmetic',
       material: 'PE',
-      capacity: 200,
+      capacity: 30,
       price: 2500,
       rating: 4.8,
-      image: '/api/placeholder/300/300',
-      features: ['진공 구조', '리필 가능']
+      image: '/container-images/container_01_cosmetic_tubes.jpeg',
+      features: ['다양한 사이즈', '친환경 재질']
     },
     {
       id: 2,
-      name: '디퓨저 병',
-      category: 'diffuser',
-      mainCategory: 'diffuser',
-      material: '유리',
-      capacity: 10,
-      price: 1800,
+      name: '펌프 보틀',
+      category: 'skin',
+      mainCategory: 'cosmetic',
+      material: 'PET',
+      capacity: 120,
+      price: 3200,
       rating: 4.6,
-      image: '/api/placeholder/300/300',
-      features: ['친환경 재질']
+      image: '/container-images/container_02_pump_bottle.jpeg',
+      features: ['펌프 디스펜서', '투명 재질']
     },
     {
       id: 3,
-      name: '럭셔리 크림 자',
+      name: '화장품 디자인 용기',
       category: 'cream',
       mainCategory: 'cosmetic',
       material: '아크릴',
       capacity: 50,
-      price: 3200,
+      price: 4500,
       rating: 4.9,
-      image: '/api/placeholder/300/300',
-      features: ['고급 디자인']
+      image: '/container-images/container_03_cosmetic_design.jpeg',
+      features: ['고급 디자인', '리필 가능']
     },
     {
       id: 4,
-      name: '샘플 튜브',
+      name: '광택 보틀',
+      category: 'skin',
+      mainCategory: 'cosmetic',
+      material: 'PET',
+      capacity: 100,
+      price: 2800,
+      rating: 4.5,
+      image: '/container-images/container_04_glossy_bottle.jpeg',
+      features: ['광택 마감', '투명 재질']
+    },
+    {
+      id: 5,
+      name: '무광 보틀',
+      category: 'skin',
+      mainCategory: 'cosmetic',
+      material: 'PP',
+      capacity: 80,
+      price: 3000,
+      rating: 4.7,
+      image: '/container-images/container_05_frosted_bottle.jpeg',
+      features: ['무광 마감', '고급스러운 질감']
+    },
+    {
+      id: 6,
+      name: '토너 보틀',
+      category: 'skin',
+      mainCategory: 'cosmetic',
+      material: 'PET',
+      capacity: 200,
+      price: 2200,
+      rating: 4.4,
+      image: '/container-images/container_06_toner_bottle.jpeg',
+      features: ['대용량', '스킨케어 전용']
+    },
+    {
+      id: 7,
+      name: '펌프 박스 세트',
+      category: 'skin',
+      mainCategory: 'cosmetic',
+      material: 'PP',
+      capacity: 150,
+      price: 5500,
+      rating: 4.8,
+      image: '/container-images/container_07_pump_box_mockup.jpeg',
+      features: ['박스 포장', '펌프 포함']
+    },
+    {
+      id: 8,
+      name: '유리 펌프 보틀',
+      category: 'luxury',
+      mainCategory: 'cosmetic',
+      material: '유리',
+      capacity: 100,
+      price: 6800,
+      rating: 4.9,
+      image: '/container-images/container_08_glass_pump_bottle.jpeg',
+      features: ['프리미엄 유리', '에어리스 펌프']
+    },
+    {
+      id: 9,
+      name: '스킨케어 보틀 세트',
+      category: 'skin',
+      mainCategory: 'cosmetic',
+      material: 'PET',
+      capacity: 120,
+      price: 4200,
+      rating: 4.6,
+      image: '/container-images/container_09_skincare_bottles.jpeg',
+      features: ['세트 구성', '다양한 용량']
+    },
+    {
+      id: 10,
+      name: '에어리스 펌프',
+      category: 'skin',
+      mainCategory: 'cosmetic',
+      material: 'PP',
+      capacity: 50,
+      price: 4800,
+      rating: 4.8,
+      image: '/container-images/container_10_airless_pump.jpeg',
+      features: ['에어리스 구조', '산화 방지']
+    },
+    {
+      id: 11,
+      name: '화이트 보틀 세트',
+      category: 'skin',
+      mainCategory: 'cosmetic',
+      material: 'PE',
+      capacity: 100,
+      price: 3800,
+      rating: 4.5,
+      image: '/container-images/container_11_white_bottles.jpeg',
+      features: ['화이트 컬러', '미니멀 디자인']
+    },
+    {
+      id: 12,
+      name: '보스턴 보틀',
+      category: 'skin',
+      mainCategory: 'cosmetic',
+      material: 'PET',
+      capacity: 250,
+      price: 2600,
+      rating: 4.4,
+      image: '/container-images/container_12_boston_bottle.jpeg',
+      features: ['클래식 디자인', '대용량']
+    },
+    {
+      id: 13,
+      name: '크림 돔 보틀',
+      category: 'cream',
+      mainCategory: 'cosmetic',
+      material: 'PP',
+      capacity: 30,
+      price: 3500,
+      rating: 4.7,
+      image: '/container-images/container_13_cream_dome_bottle.jpeg',
+      features: ['돔 형태', '크림 전용']
+    },
+    {
+      id: 14,
+      name: '화장품 용기',
+      category: 'cream',
+      mainCategory: 'cosmetic',
+      material: 'PP',
+      capacity: 50,
+      price: 2900,
+      rating: 4.6,
+      image: '/container-images/container_14_cosmetic_jar.jpeg',
+      features: ['넓은 입구', '사용 편리']
+    },
+    {
+      id: 15,
+      name: '플립탑 보틀',
+      category: 'tube',
+      mainCategory: 'cosmetic',
+      material: 'PE',
+      capacity: 200,
+      price: 2400,
+      rating: 4.3,
+      image: '/container-images/container_15_flip_top_bottle.jpeg',
+      features: ['플립탑 캡', '원터치 개폐']
+    },
+    {
+      id: 16,
+      name: '무광 펌프 보틀',
+      category: 'skin',
+      mainCategory: 'cosmetic',
+      material: 'PP',
+      capacity: 120,
+      price: 3600,
+      rating: 4.7,
+      image: '/container-images/container_16_matt_pump_bottle.jpeg',
+      features: ['무광 마감', '펌프 타입']
+    },
+    {
+      id: 17,
+      name: '투명 돔 보틀',
+      category: 'skin',
+      mainCategory: 'cosmetic',
+      material: 'PET',
+      capacity: 100,
+      price: 3200,
+      rating: 4.5,
+      image: '/container-images/container_17_clear_dome_bottle.jpeg',
+      features: ['투명 재질', '돔 형태']
+    },
+    {
+      id: 18,
+      name: '화이트 디스펜서',
+      category: 'skin',
+      mainCategory: 'cosmetic',
+      material: 'PP',
+      capacity: 300,
+      price: 2800,
+      rating: 4.4,
+      image: '/container-images/container_18_white_dispenser.jpeg',
+      features: ['대용량', '디스펜서 타입']
+    },
+    {
+      id: 19,
+      name: '비건 클렌저 용기',
+      category: 'skin',
+      mainCategory: 'cosmetic',
+      material: 'PET',
+      capacity: 150,
+      price: 3400,
+      rating: 4.6,
+      image: '/container-images/container_19_vegan_cleanser.jpeg',
+      features: ['친환경 재질', '클렌저 전용']
+    },
+    {
+      id: 20,
+      name: '스킨케어 제품 세트',
+      category: 'skin',
+      mainCategory: 'cosmetic',
+      material: 'PET',
+      capacity: 100,
+      price: 5200,
+      rating: 4.8,
+      image: '/container-images/container_20_skincare_products.jpeg',
+      features: ['세트 구성', '다양한 타입']
+    },
+    {
+      id: 21,
+      name: '화장품 패키징 세트',
+      category: 'luxury',
+      mainCategory: 'cosmetic',
+      material: '아크릴',
+      capacity: 50,
+      price: 6500,
+      rating: 4.9,
+      image: '/container-images/container_21_cosmetic_packaging.jpeg',
+      features: ['프리미엄 패키징', '고급 재질']
+    },
+    {
+      id: 22,
+      name: '드로퍼 보틀',
+      category: 'dropper',
+      mainCategory: 'sample',
+      material: '유리',
+      capacity: 30,
+      price: 4200,
+      rating: 4.7,
+      image: '/container-images/container_22_dropper_bottle.jpeg',
+      features: ['정밀 투여', '유리 재질']
+    },
+    {
+      id: 23,
+      name: '스킨케어 시리즈',
+      category: 'skin',
+      mainCategory: 'cosmetic',
+      material: 'PET',
+      capacity: 120,
+      price: 4800,
+      rating: 4.6,
+      image: '/container-images/container_23_skincare_series.jpeg',
+      features: ['시리즈 구성', '통일된 디자인']
+    },
+    {
+      id: 24,
+      name: '진공 보틀',
+      category: 'skin',
+      mainCategory: 'cosmetic',
+      material: 'PP',
+      capacity: 80,
+      price: 5500,
+      rating: 4.8,
+      image: '/container-images/container_24_vacuum_bottle.jpeg',
+      features: ['진공 구조', '산화 방지']
+    },
+    {
+      id: 25,
+      name: '유리 용기',
+      category: 'cream',
+      mainCategory: 'cosmetic',
+      material: '유리',
+      capacity: 50,
+      price: 4500,
+      rating: 4.7,
+      image: '/container-images/container_25_glass_jar.jpeg',
+      features: ['프리미엄 유리', '고급스러운 디자인']
+    },
+    {
+      id: 26,
+      name: '보스턴 투명 보틀',
+      category: 'skin',
+      mainCategory: 'cosmetic',
+      material: 'PET',
+      capacity: 200,
+      price: 2800,
+      rating: 4.4,
+      image: '/container-images/container_26_boston_clear.jpeg',
+      features: ['투명 재질', '클래식 형태']
+    },
+    {
+      id: 27,
+      name: '사셰 목업',
       category: 'tube',
       mainCategory: 'sample',
       material: 'PE',
       capacity: 5,
-      price: 800,
-      rating: 4.5,
-      image: '/api/placeholder/300/300',
-      features: ['휴대용 전용']
+      price: 600,
+      rating: 4.3,
+      image: '/container-images/container_27_sachet_mockup.jpeg',
+      features: ['소용량', '샘플용']
     },
     {
-      id: 5,
-      name: '에어리스 펌프',
-      category: 'pump',
+      id: 28,
+      name: '에어리스 보틀',
+      category: 'skin',
       mainCategory: 'cosmetic',
       material: 'PP',
-      capacity: 30,
-      price: 2200,
-      rating: 4.7,
-      image: '/api/placeholder/300/300',
-      features: ['에어리스 펌프', '진공 구조']
-    },
-    {
-      id: 6,
-      name: 'PCR PET 병',
-      category: 'pcr',
-      mainCategory: 'eco',
-      material: 'PCR',
       capacity: 100,
-      price: 1900,
-      rating: 4.4,
-      image: '/api/placeholder/300/300',
-      features: ['친환경 재질', '리필 가능']
-    },
-    {
-      id: 7,
-      name: '프레스 캡',
-      category: 'functional_cap',
-      mainCategory: 'accessories',
-      material: 'PP',
-      capacity: 0,
-      price: 500,
-      rating: 4.3,
-      image: '/api/placeholder/300/300',
-      features: ['기능성']
-    },
-    {
-      id: 8,
-      name: '앰플 바이알',
-      category: 'ampoule',
-      mainCategory: 'pharma',
-      material: '유리',
-      capacity: 2,
-      price: 1200,
+      price: 4800,
       rating: 4.8,
-      image: '/api/placeholder/300/300',
-      features: ['정밀 용량']
+      image: '/container-images/container_28_airless_bottle.jpeg',
+      features: ['에어리스 시스템', '고급 기능']
+    },
+    {
+      id: 29,
+      name: '실린더 보틀',
+      category: 'skin',
+      mainCategory: 'cosmetic',
+      material: 'PET',
+      capacity: 150,
+      price: 3200,
+      rating: 4.5,
+      image: '/container-images/container_29_cylinder_bottle.jpeg',
+      features: ['실린더 형태', '플립탑 캡']
+    },
+    {
+      id: 30,
+      name: '화장품 컬렉션',
+      category: 'luxury',
+      mainCategory: 'cosmetic',
+      material: '아크릴',
+      capacity: 80,
+      price: 7200,
+      rating: 4.9,
+      image: '/container-images/container_30_cosmetic_collection.jpeg',
+      features: ['컬렉션 세트', '프리미엄 디자인']
     }
   ];
 
@@ -215,7 +479,7 @@ const ContainerCatalogPage = () => {
   };
 
   // 필터링된 제품
-  const filteredProducts = sampleProducts.filter(product => {
+  const filteredProducts = containers.filter(product => {
     // 대분류 필터
     if (product.mainCategory !== activeMainCategory) return false;
     
