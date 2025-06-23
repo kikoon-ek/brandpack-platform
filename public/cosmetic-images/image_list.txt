@@ -1,0 +1,32 @@
+Pinterest에서 수집한 화장품 이미지 목록
+
+1. cosmetic_01_shampoo_conditioner.jpeg - 샴푸/컨디셔너 (236×295)
+2. cosmetic_02_red_gift_set.jpeg - 빨간 선물세트 (236×355)
+3. cosmetic_03_benefit_pink.jpeg - 베네핏 핑크 (236×354)
+4. cosmetic_04_tribe_collection.png - 트라이브 컬렉션 (280×350)
+5. cosmetic_05_lipstick_display.jpeg - 립스틱 디스플레이 (236×177)
+6. cosmetic_06_birthday_cake.jpeg - 생일 케이크 스타일 (236×236)
+7. cosmetic_07_natural_products.jpeg - 자연 제품 (236×314)
+8. cosmetic_08_pink_perfume.jpeg - 핑크 향수 (236×257)
+9. cosmetic_09_amorepacific_innisfree.jpeg - 아모레퍼시픽 이니스프리 (236×177)
+10. cosmetic_10_belif_birthday.jpeg - 벨리프 생일 (236×236)
+11. cosmetic_11_natural_skincare.jpeg - 자연 스킨케어 (236×314)
+12. cosmetic_12_mermade_shower_gel.jpeg - 머메이드 샤워젤 (236×257)
+13. cosmetic_13_colorful_photography.jpeg - 컬러풀 포토그래피 (235×342)
+14. cosmetic_14_natural_oil.jpeg - 자연 오일 (236×314)
+15. cosmetic_15_beach_sunscreen.jpeg - 비치 선크림 (236×236)
+16. cosmetic_16_dixionist_cleanser.png - 딕셔니스트 클렌저 (258×33)
+17. cosmetic_17_colorful_skincare.jpeg - 컬러풀 스킨케어 (236×295)
+18. cosmetic_18_baby_oil.jpeg - 베이비 오일 (236×236)
+19. cosmetic_19_drunk_elephant.jpeg - 드렁크 엘리펀트 (236×295)
+20. cosmetic_20_kefir_bottles.jpeg - 케피어 보틀 (236×236)
+
+총 20개의 다양한 화장품 이미지를 수집했습니다.
+각 이미지는 다양한 브랜드와 제품 카테고리를 대표합니다:
+- 스킨케어 제품
+- 메이크업 제품
+- 향수
+- 바디케어 제품
+- 베이비케어 제품
+- 남성 그루밍 제품
+
