@@ -205,7 +205,7 @@ const AIRecommendationPage = () => {
 
   // AI 전문가 선택 컴포넌트
   const AIExpertSelector = () => (
-    <div className="bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-100">
+    <div className={`bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-100 ${!isMobile ? 'h-full' : ''}`}>
       <div className="p-5 border-b border-gray-100">
         <div className="flex justify-between items-center">
           <div>
@@ -223,7 +223,7 @@ const AIRecommendationPage = () => {
         </div>
       </div>
       {(!isMobile || isAIListExpanded) && (
-        <div className="p-3 space-y-2 max-h-96 overflow-y-auto">
+        <div className={`p-3 space-y-2 overflow-y-auto ${isMobile ? 'max-h-96' : 'h-[calc(100%-80px)]'}`}>
           {Object.entries(aiExperts).map(([key, ai]) => (
             <button
               key={key}
