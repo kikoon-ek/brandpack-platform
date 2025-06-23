@@ -1,6 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { Send, ChevronDown } from 'lucide-react';
 
+// 커스텀 CSS 스타일
+const customStyles = `
+  .ai-assistant-layout {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .ai-assistant-sidebar {
+    width: 100%;
+  }
+  
+  @media (min-width: 640px) {
+    .ai-assistant-layout {
+      flex-direction: row;
+    }
+    
+    .ai-assistant-sidebar {
+      width: 320px;
+      flex-shrink: 0;
+    }
+  }
+`;
+
 const NewAIAssistantPage = () => {
   const [selectedAI, setSelectedAI] = useState('화장품법');
   const [messages, setMessages] = useState([]);
@@ -129,7 +152,11 @@ const NewAIAssistantPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
+      {/* 커스텀 CSS 주입 */}
+      <style>{customStyles}</style>
+      
+      <div className="min-h-screen bg-gray-50">
       {/* 간결한 헤더 */}
       <section className="py-8 bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -140,10 +167,10 @@ const NewAIAssistantPage = () => {
 
       {/* 메인 콘텐츠 - PC에서 좌우 배치, 모바일에서 세로 배치 */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col sm:flex-row gap-6">
+        <div className="ai-assistant-layout gap-6">
           
           {/* AI 전문가 선택 영역 - PC에서 좌측, 모바일에서 상단 */}
-          <div className="w-full sm:w-80 sm:flex-shrink-0">
+          <div className="ai-assistant-sidebar">
             <div className="bg-white rounded-xl shadow-sm border border-gray-200">
               
               {/* 헤더 - 모바일에서만 접기 버튼 */}
@@ -285,7 +312,8 @@ const NewAIAssistantPage = () => {
           </div>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 };
 
