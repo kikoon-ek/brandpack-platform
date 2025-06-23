@@ -150,15 +150,6 @@ const ConceptViewPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-stone-100">
-      {/* Header - 거의 없애다시피 축소 */}
-      <div className="bg-gradient-to-r from-gray-600 via-stone-600 to-slate-700 text-white py-0.5">
-        <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-xs font-medium">
-            콘셉트 보기
-          </h1>
-        </div>
-      </div>
-
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex gap-8">
           {/* 좌측 사이드바 - 검색 및 필터 */}
