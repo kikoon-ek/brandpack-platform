@@ -9,7 +9,7 @@ import ConceptViewPage from './pages/ConceptViewPage';
 import ConceptDetailPage from './pages/ConceptDetailPage';
 import ProjectPage from './pages/ProjectPage';
 import GlobalBusinessPage from './pages/GlobalBusinessPage';
-import AIAssistant from './pages/ai-assistant';
+import AIRecommendationPage from './pages/AIRecommendationPage';
 import AIChatPage from './pages/AIChatPage';
 import PortfolioPage from './pages/PortfolioPage';
 import PortfolioDetailPage from './pages/PortfolioDetailPage';
@@ -30,7 +30,7 @@ function App() {
           <Route path="/concepts/:id" element={<ConceptDetailPage />} />
           <Route path="/projects" element={<ProjectPage />} />
           <Route path="/global-business" element={<GlobalBusinessPage />} />
-          <Route path="/ai-assistant" element={<AIAssistant />} />
+          <Route path="/ai-assistant" element={<AIRecommendationPage />} />
           <Route path="/ai-chat" element={<AIChatPage />} />
           <Route path="/portfolio" element={<PortfolioPage />} />
           <Route path="/portfolio/:id" element={<PortfolioDetailPage />} />

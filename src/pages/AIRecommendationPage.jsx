@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Send, ChevronDown } from 'lucide-react';
 
-const AIAssistant = () => {
+const AIRecommendationPage = () => {
   const [selectedAI, setSelectedAI] = useState('화장품법');
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
@@ -309,5 +309,5 @@ const AIAssistant = () => {
   );
 };
 
-export default AIAssistant;
+export default AIRecommendationPage;
 
