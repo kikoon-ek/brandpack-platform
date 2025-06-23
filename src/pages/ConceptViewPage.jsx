@@ -432,10 +432,10 @@ const ConceptViewPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-stone-100">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex gap-8">
-          {/* 좌측 사이드바 - 통합 필터 */}
-          <div className="w-56">
-            <div className="bg-white rounded-lg shadow-lg p-6">
+        {/* 모바일에서는 필터를 상단에 배치 */}
+        {isMobile && (
+          <div className="mb-6">
+            <div className="bg-white rounded-lg shadow-lg p-4">
               {/* 검색 및 필터 토글 헤더 */}
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-gray-800">필터</h3>
@@ -467,7 +467,7 @@ const ConceptViewPage = () => {
 
               {/* 접을 수 있는 필터 섹션 */}
               {isFilterExpanded && (
-                <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {/* 카테고리 */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">카테고리</label>
@@ -515,24 +515,128 @@ const ConceptViewPage = () => {
                   </div>
 
                   {/* 필터 초기화 */}
-                  <button
-                    onClick={() => {
-                      setSearchTerm('');
-                      setSelectedCategory('all');
-                      setSelectedTarget('all');
-                      setSelectedPriceRange('all');
-                    }}
-                    className="w-full bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium"
-                  >
-                    필터 초기화
-                  </button>
+                  <div className="sm:col-span-3">
+                    <button
+                      onClick={() => {
+                        setSearchTerm('');
+                        setSelectedCategory('all');
+                        setSelectedTarget('all');
+                        setSelectedPriceRange('all');
+                      }}
+                      className="w-full bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium"
+                    >
+                      필터 초기화
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
           </div>
+        )}
 
-          {/* 우측 메인 영역 - 제품 그리드 */}
-          <div className="flex-1">
+        <div className={`${isMobile ? 'block' : 'flex gap-8'}`}>
+          {/* 데스크톱에서만 좌측 사이드바 표시 */}
+          {!isMobile && (
+            <div className="w-56">
+              <div className="bg-white rounded-lg shadow-lg p-6">
+                {/* 검색 및 필터 토글 헤더 */}
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-gray-800">필터</h3>
+                  <button
+                    onClick={() => setIsFilterExpanded(!isFilterExpanded)}
+                    className="p-1 hover:bg-gray-100 rounded transition-colors"
+                  >
+                    {isFilterExpanded ? (
+                      <ChevronUp className="w-5 h-5 text-gray-600" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-gray-600" />
+                    )}
+                  </button>
+                </div>
+
+                {/* 검색 (항상 표시) */}
+                <div className="mb-4">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <input
+                      type="text"
+                      placeholder="콘셉트명 또는 설명 검색..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+
+                {/* 접을 수 있는 필터 섹션 */}
+                {isFilterExpanded && (
+                  <div className="space-y-4">
+                    {/* 카테고리 */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">카테고리</label>
+                      <select
+                        value={selectedCategory}
+                        onChange={(e) => setSelectedCategory(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-sm"
+                      >
+                        {categories.map(category => (
+                          <option key={category} value={category}>
+                            {category === 'all' ? '전체 카테고리' : category}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* 타겟 */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">타겟</label>
+                      <select
+                        value={selectedTarget}
+                        onChange={(e) => setSelectedTarget(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-sm"
+                      >
+                        <option value="all">전체 타겟</option>
+                        {targets.slice(1).map(target => (
+                          <option key={target} value={target}>{target}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* 가격대 */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">가격대</label>
+                      <select
+                        value={selectedPriceRange}
+                        onChange={(e) => setSelectedPriceRange(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-sm"
+                      >
+                        <option value="all">전체 가격대</option>
+                        {priceRanges.slice(1).map(range => (
+                          <option key={range} value={range}>{range}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* 필터 초기화 */}
+                    <button
+                      onClick={() => {
+                        setSearchTerm('');
+                        setSelectedCategory('all');
+                        setSelectedTarget('all');
+                        setSelectedPriceRange('all');
+                      }}
+                      className="w-full bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium"
+                    >
+                      필터 초기화
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* 메인 영역 - 제품 그리드 */}
+          <div className={`${isMobile ? 'w-full' : 'flex-1'}`}>
             {/* 결과 개수 */}
             <div className="mb-6">
               <p className="text-gray-600">
@@ -541,7 +645,7 @@ const ConceptViewPage = () => {
             </div>
 
             {/* 콘셉트 그리드 */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className={`grid gap-6 ${isMobile ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 lg:grid-cols-2 xl:grid-cols-3'}`}>
               {filteredConcepts.map((concept) => (
                 <div key={concept.id} className="relative group cursor-pointer">
                   {/* 메인 이미지 카드 */}
