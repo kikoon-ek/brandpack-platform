@@ -205,7 +205,7 @@ const AIRecommendationPage = () => {
 
   // AI 전문가 선택 컴포넌트
   const AIExpertSelector = () => (
-    <div className={`bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-100 ${isMobile ? 'w-full' : 'h-full'} ${isMobile && !isAIListExpanded ? 'h-auto' : ''}`}>
+    <div className="bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-100">
       <div className="p-5 border-b border-gray-100">
         <div className="flex justify-between items-center">
           <div>
@@ -223,7 +223,7 @@ const AIRecommendationPage = () => {
         </div>
       </div>
       {(!isMobile || isAIListExpanded) && (
-        <div className={`p-3 space-y-2 overflow-y-auto ${isMobile ? 'max-h-96' : ''}`} style={!isMobile ? { height: 'calc(100% - 80px)' } : {}}>
+        <div className="p-3 space-y-2 max-h-96 overflow-y-auto">
           {Object.entries(aiExperts).map(([key, ai]) => (
             <button
               key={key}
@@ -288,7 +288,7 @@ const AIRecommendationPage = () => {
 
   // 채팅 영역 컴포넌트
   const ChatArea = () => (
-    <div className={`bg-white rounded-3xl shadow-lg flex flex-col overflow-hidden border border-gray-100 ${isMobile ? 'w-full h-[calc(100vh-400px)]' : 'h-full'}`}>
+    <div className="bg-white rounded-3xl shadow-lg flex flex-col overflow-hidden border border-gray-100 h-full">
       {/* AI 헤더 */}
       <div className={`bg-gradient-to-r ${currentAI.color} text-white p-5 rounded-t-3xl`}>
         <div className="flex items-center space-x-4">
@@ -418,12 +418,16 @@ const AIRecommendationPage = () => {
       <div className="max-w-7xl mx-auto px-4 py-4">
         {isMobile ? (
           // 모바일 레이아웃: AI 선택이 상단에, 채팅이 하단에 완전 분리
-          <div className="space-y-4">
-            {/* 모바일: 상단 AI 전문가 선택 */}
-            <AIExpertSelector />
+          <div className="flex flex-col space-y-4 h-[calc(100vh-120px)]">
+            {/* 모바일: 상단 AI 전문가 선택 - 동적 높이 */}
+            <div className="flex-shrink-0">
+              <AIExpertSelector />
+            </div>
             
-            {/* 모바일: 하단 채팅 영역 */}
-            <ChatArea />
+            {/* 모바일: 하단 채팅 영역 - 남은 공간 모두 사용 */}
+            <div className="flex-1 min-h-0">
+              <ChatArea />
+            </div>
           </div>
         ) : (
           // 데스크톱 레이아웃: 좌우 분할
