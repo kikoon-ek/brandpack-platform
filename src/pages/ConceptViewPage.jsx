@@ -167,7 +167,7 @@ const ConceptViewPage = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex gap-8">
           {/* 좌측 사이드바 - 검색 및 필터 */}
-          <div className="w-80 space-y-6">
+          <div className="w-56 space-y-6">
             {/* 검색 */}
             <div className="bg-white rounded-lg shadow-lg p-6">
               <h3 className="text-lg font-semibold text-gray-800 mb-4">검색</h3>
@@ -258,7 +258,7 @@ const ConceptViewPage = () => {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredConcepts.map((concept) => (
                 <div key={concept.id} className="relative group cursor-pointer">
-                  {/* 메인 이미지 카드 */}
+                  {/* 메인 이미지 카드 - 순수 이미지만 표시 */}
                   <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                     <div 
                       className="h-80 relative"
@@ -266,11 +266,7 @@ const ConceptViewPage = () => {
                         background: `linear-gradient(135deg, ${concept.colors[0]}, ${concept.colors[1]}, ${concept.colors[2]})`
                       }}
                     >
-                      {/* 기본 상태에서는 제품명만 표시 */}
-                      <div className="absolute bottom-4 left-4">
-                        <h3 className="text-2xl font-bold text-white drop-shadow-lg">{concept.name}</h3>
-                        <p className="text-white/90 text-sm">{concept.category}</p>
-                      </div>
+                      {/* 기본 상태에서는 아무것도 표시하지 않음 - 순수 이미지만 */}
                     </div>
                   </div>
 
@@ -327,9 +323,9 @@ const ConceptViewPage = () => {
                         ))}
                       </div>
 
-                      {/* 통계 및 버튼 */}
-                      <div className="flex items-center justify-between pt-4 border-t border-white/20">
-                        <div className="flex items-center gap-3 text-sm text-white/80">
+                      {/* 통계만 표시 (자세히 보기 버튼 제거) */}
+                      <div className="flex items-center justify-center pt-4 border-t border-white/20">
+                        <div className="flex items-center gap-4 text-sm text-white/80">
                           <div className="flex items-center gap-1">
                             <Star className="w-4 h-4 text-yellow-400 fill-current" />
                             <span>{concept.rating}</span>
@@ -343,9 +339,6 @@ const ConceptViewPage = () => {
                             <span>{concept.views}</span>
                           </div>
                         </div>
-                        <button className="bg-white text-gray-800 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors">
-                          자세히 보기
-                        </button>
                       </div>
                     </div>
                   </div>
