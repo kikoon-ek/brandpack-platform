@@ -205,7 +205,7 @@ const AIRecommendationPage = () => {
 
   // AI 전문가 선택 컴포넌트
   const AIExpertSelector = () => (
-    <div className="bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-100">
+    <div className={`bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-100 ${isMobile ? 'w-full' : 'h-full'}`}>
       <div className="p-5 border-b border-gray-100">
         <div className="flex justify-between items-center">
           <div>
@@ -286,9 +286,128 @@ const AIRecommendationPage = () => {
     </div>
   );
 
+  // 채팅 영역 컴포넌트
+  const ChatArea = () => (
+    <div className={`bg-white rounded-3xl shadow-lg flex flex-col overflow-hidden border border-gray-100 ${isMobile ? 'w-full h-[calc(100vh-400px)]' : 'h-full'}`}>
+      {/* AI 헤더 */}
+      <div className={`bg-gradient-to-r ${currentAI.color} text-white p-5 rounded-t-3xl`}>
+        <div className="flex items-center space-x-4">
+          <div className="text-2xl bg-white/20 backdrop-blur-sm rounded-2xl p-3">
+            {currentAI.icon}
+          </div>
+          <div>
+            <h2 className="text-xl font-bold">{currentAI.name}</h2>
+            <p className="text-sm opacity-90 mt-1">{currentAI.description}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* 자주 묻는 질문 */}
+      <div className="p-4 border-b border-gray-100">
+        <button
+          onClick={() => setShowFAQ(!showFAQ)}
+          className="flex items-center justify-between w-full text-left hover:bg-gray-50 rounded-xl p-2 transition-colors duration-200"
+        >
+          <h3 className="text-base font-bold text-gray-800">자주 묻는 질문</h3>
+          {showFAQ ? (
+            <ChevronUp className="w-5 h-5 text-gray-400" />
+          ) : (
+            <ChevronDown className="w-5 h-5 text-gray-400" />
+          )}
+        </button>
+        
+        {showFAQ && (
+          <div className="mt-3 grid grid-cols-1 gap-2">
+            {currentAI.faqs.map((faq, index) => (
+              <button
+                key={index}
+                onClick={() => handleFAQClick(faq)}
+                className="p-3 text-left bg-gray-50 hover:bg-gray-100 rounded-2xl transition-all duration-200 border border-gray-200 hover:border-gray-300 text-sm hover:shadow-sm"
+              >
+                <span className="text-gray-700">{faq}</span>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* 채팅 영역 */}
+      <div className="flex-1 overflow-y-auto p-5">
+        {messages.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full text-center">
+            <div className="text-5xl mb-4 opacity-20">💬</div>
+            <h3 className={`text-xl font-bold mb-2 ${currentAI.textColor}`}>
+              안녕하세요! {currentAI.name}입니다.
+            </h3>
+            <p className="text-gray-500 text-sm">
+              궁금한 것이 있으시면 언제든 물어보세요.
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div
+                  className={`max-w-xs lg:max-w-md px-4 py-3 rounded-3xl shadow-sm ${
+                    message.sender === 'user'
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-gray-100 text-gray-800'
+                  }`}
+                >
+                  <p className="text-sm leading-relaxed">{message.text}</p>
+                  <p className={`text-xs mt-2 ${
+                    message.sender === 'user' ? 'text-blue-100' : 'text-gray-500'
+                  }`}>
+                    {message.sender === 'user' ? '나' : currentAI.name} • {message.timestamp}
+                  </p>
+                </div>
+              </div>
+            ))}
+            {isTyping && (
+              <div className="flex justify-start">
+                <div className="bg-gray-100 text-gray-800 px-4 py-3 rounded-3xl shadow-sm">
+                  <p className="text-sm">
+                    {currentAI.name}이 답변을 준비하고 있습니다...
+                  </p>
+                  <p className="text-xs text-gray-500 mt-2">
+                    {currentAI.name} • 지금
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* 입력 영역 */}
+      <div className="p-5 border-t border-gray-100">
+        <div className="flex space-x-3">
+          <input
+            type="text"
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+            placeholder={`${currentAI.name}에게 질문하세요`}
+            className="flex-1 px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+          />
+          <button
+            onClick={handleSendMessage}
+            disabled={!inputMessage.trim()}
+            className="px-6 py-3 bg-blue-500 text-white rounded-2xl hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center space-x-2 shadow-md hover:shadow-lg"
+          >
+            <Send className="w-4 h-4" />
+            <span>전송</span>
+          </button>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* 컴팩트한 헤더 - 높이 대폭 축소 */}
+      {/* 컴팩트한 헤더 */}
       <div className="bg-white border-b border-gray-200 py-3">
         <div className="max-w-7xl mx-auto px-4">
           <h1 className="text-2xl font-bold text-gray-800">AI 어시스턴트</h1>
@@ -298,256 +417,25 @@ const AIRecommendationPage = () => {
 
       <div className="max-w-7xl mx-auto px-4 py-4">
         {isMobile ? (
-          // 모바일 레이아웃: AI 선택이 상단에, 채팅이 하단에
+          // 모바일 레이아웃: AI 선택이 상단에, 채팅이 하단에 완전 분리
           <div className="space-y-4">
             {/* 모바일: 상단 AI 전문가 선택 */}
             <AIExpertSelector />
             
-            {/* 모바일: 채팅 영역 */}
-            <div className="h-[calc(100vh-300px)]">
-              <div className="bg-white rounded-3xl shadow-lg h-full flex flex-col overflow-hidden border border-gray-100">
-                {/* AI 헤더 - 더 컴팩트하게 */}
-                <div className={`bg-gradient-to-r ${currentAI.color} text-white p-5 rounded-t-3xl`}>
-                  <div className="flex items-center space-x-4">
-                    <div className="text-2xl bg-white/20 backdrop-blur-sm rounded-2xl p-3">
-                      {currentAI.icon}
-                    </div>
-                    <div>
-                      <h2 className="text-xl font-bold">{currentAI.name}</h2>
-                      <p className="text-sm opacity-90 mt-1">{currentAI.description}</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* 자주 묻는 질문 */}
-                <div className="p-4 border-b border-gray-100">
-                  <button
-                    onClick={() => setShowFAQ(!showFAQ)}
-                    className="flex items-center justify-between w-full text-left hover:bg-gray-50 rounded-xl p-2 transition-colors duration-200"
-                  >
-                    <h3 className="text-base font-bold text-gray-800">자주 묻는 질문</h3>
-                    {showFAQ ? (
-                      <ChevronUp className="w-5 h-5 text-gray-400" />
-                    ) : (
-                      <ChevronDown className="w-5 h-5 text-gray-400" />
-                    )}
-                  </button>
-                  
-                  {showFAQ && (
-                    <div className="mt-3 grid grid-cols-1 gap-2">
-                      {currentAI.faqs.map((faq, index) => (
-                        <button
-                          key={index}
-                          onClick={() => handleFAQClick(faq)}
-                          className="p-3 text-left bg-gray-50 hover:bg-gray-100 rounded-2xl transition-all duration-200 border border-gray-200 hover:border-gray-300 text-sm hover:shadow-sm"
-                        >
-                          <span className="text-gray-700">{faq}</span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* 채팅 영역 */}
-                <div className="flex-1 overflow-y-auto p-5">
-                  {messages.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-full text-center">
-                      <div className="text-5xl mb-4 opacity-20">💬</div>
-                      <h3 className={`text-xl font-bold mb-2 ${currentAI.textColor}`}>
-                        안녕하세요! {currentAI.name}입니다.
-                      </h3>
-                      <p className="text-gray-500 text-sm">
-                        궁금한 것이 있으시면 언제든 물어보세요.
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {messages.map((message) => (
-                        <div
-                          key={message.id}
-                          className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                        >
-                          <div
-                            className={`max-w-xs lg:max-w-md px-4 py-3 rounded-3xl shadow-sm ${
-                              message.sender === 'user'
-                                ? 'bg-blue-500 text-white'
-                                : 'bg-gray-100 text-gray-800'
-                            }`}
-                          >
-                            <p className="text-sm leading-relaxed">{message.text}</p>
-                            <p className={`text-xs mt-2 ${
-                              message.sender === 'user' ? 'text-blue-100' : 'text-gray-500'
-                            }`}>
-                              {message.sender === 'user' ? '나' : currentAI.name} • {message.timestamp}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                      {isTyping && (
-                        <div className="flex justify-start">
-                          <div className="bg-gray-100 text-gray-800 px-4 py-3 rounded-3xl shadow-sm">
-                            <p className="text-sm">
-                              {currentAI.name}이 답변을 준비하고 있습니다...
-                            </p>
-                            <p className="text-xs text-gray-500 mt-2">
-                              {currentAI.name} • 지금
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                {/* 입력 영역 */}
-                <div className="p-5 border-t border-gray-100">
-                  <div className="flex space-x-3">
-                    <input
-                      type="text"
-                      value={inputMessage}
-                      onChange={(e) => setInputMessage(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                      placeholder={`${currentAI.name}에게 질문하세요`}
-                      className="flex-1 px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    />
-                    <button
-                      onClick={handleSendMessage}
-                      disabled={!inputMessage.trim()}
-                      className="px-6 py-3 bg-blue-500 text-white rounded-2xl hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center space-x-2 shadow-md hover:shadow-lg"
-                    >
-                      <Send className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {/* 모바일: 하단 채팅 영역 */}
+            <ChatArea />
           </div>
         ) : (
-          // 데스크톱 레이아웃: 기존 좌측 사이드바 + 우측 채팅
+          // 데스크톱 레이아웃: 좌우 분할
           <div className="flex gap-6 h-[calc(100vh-140px)]">
-            {/* 좌측 AI 전문가 선택 (30%) */}
+            {/* 데스크톱: 좌측 AI 전문가 선택 */}
             <div className="w-80 flex-shrink-0">
               <AIExpertSelector />
             </div>
 
-            {/* 우측 채팅 영역 (70%) */}
+            {/* 데스크톱: 우측 채팅 영역 */}
             <div className="flex-1">
-              <div className="bg-white rounded-3xl shadow-lg h-full flex flex-col overflow-hidden border border-gray-100">
-                {/* AI 헤더 - 더 컴팩트하게 */}
-                <div className={`bg-gradient-to-r ${currentAI.color} text-white p-5 rounded-t-3xl`}>
-                  <div className="flex items-center space-x-4">
-                    <div className="text-2xl bg-white/20 backdrop-blur-sm rounded-2xl p-3">
-                      {currentAI.icon}
-                    </div>
-                    <div>
-                      <h2 className="text-xl font-bold">{currentAI.name}</h2>
-                      <p className="text-sm opacity-90 mt-1">{currentAI.description}</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* 자주 묻는 질문 */}
-                <div className="p-4 border-b border-gray-100">
-                  <button
-                    onClick={() => setShowFAQ(!showFAQ)}
-                    className="flex items-center justify-between w-full text-left hover:bg-gray-50 rounded-xl p-2 transition-colors duration-200"
-                  >
-                    <h3 className="text-base font-bold text-gray-800">자주 묻는 질문</h3>
-                    {showFAQ ? (
-                      <ChevronUp className="w-5 h-5 text-gray-400" />
-                    ) : (
-                      <ChevronDown className="w-5 h-5 text-gray-400" />
-                    )}
-                  </button>
-                  
-                  {showFAQ && (
-                    <div className="mt-3 grid grid-cols-1 gap-2">
-                      {currentAI.faqs.map((faq, index) => (
-                        <button
-                          key={index}
-                          onClick={() => handleFAQClick(faq)}
-                          className="p-3 text-left bg-gray-50 hover:bg-gray-100 rounded-2xl transition-all duration-200 border border-gray-200 hover:border-gray-300 text-sm hover:shadow-sm"
-                        >
-                          <span className="text-gray-700">{faq}</span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* 채팅 영역 */}
-                <div className="flex-1 overflow-y-auto p-5">
-                  {messages.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-full text-center">
-                      <div className="text-5xl mb-4 opacity-20">💬</div>
-                      <h3 className={`text-xl font-bold mb-2 ${currentAI.textColor}`}>
-                        안녕하세요! {currentAI.name}입니다.
-                      </h3>
-                      <p className="text-gray-500 text-sm">
-                        궁금한 것이 있으시면 언제든 물어보세요.
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {messages.map((message) => (
-                        <div
-                          key={message.id}
-                          className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                        >
-                          <div
-                            className={`max-w-xs lg:max-w-md px-4 py-3 rounded-3xl shadow-sm ${
-                              message.sender === 'user'
-                                ? 'bg-blue-500 text-white'
-                                : 'bg-gray-100 text-gray-800'
-                            }`}
-                          >
-                            <p className="text-sm leading-relaxed">{message.text}</p>
-                            <p className={`text-xs mt-2 ${
-                              message.sender === 'user' ? 'text-blue-100' : 'text-gray-500'
-                            }`}>
-                              {message.sender === 'user' ? '나' : currentAI.name} • {message.timestamp}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                      {isTyping && (
-                        <div className="flex justify-start">
-                          <div className="bg-gray-100 text-gray-800 px-4 py-3 rounded-3xl shadow-sm">
-                            <p className="text-sm">
-                              {currentAI.name}이 답변을 준비하고 있습니다...
-                            </p>
-                            <p className="text-xs text-gray-500 mt-2">
-                              {currentAI.name} • 지금
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                {/* 입력 영역 */}
-                <div className="p-5 border-t border-gray-100">
-                  <div className="flex space-x-3">
-                    <input
-                      type="text"
-                      value={inputMessage}
-                      onChange={(e) => setInputMessage(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                      placeholder={`${currentAI.name}에게 질문하세요`}
-                      className="flex-1 px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    />
-                    <button
-                      onClick={handleSendMessage}
-                      disabled={!inputMessage.trim()}
-                      className="px-6 py-3 bg-blue-500 text-white rounded-2xl hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center space-x-2 shadow-md hover:shadow-lg"
-                    >
-                      <Send className="w-4 h-4" />
-                      <span>전송</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <ChatArea />
             </div>
           </div>
         )}
