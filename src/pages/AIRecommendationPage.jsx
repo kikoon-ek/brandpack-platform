@@ -159,10 +159,10 @@ const AIRecommendationPage = () => {
 
       {/* 메인 콘텐츠 - 핵심 flex-col lg:flex-row 구조 */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="flex flex-col md:flex-row gap-8">
+        <div className="flex flex-col xl:flex-row gap-8">
           
           {/* AI 전문가 선택 영역 - 모바일: 전체 너비, 데스크톱: 320px 고정 */}
-          <div className="w-full md:w-80 md:flex-shrink-0">
+          <div className="w-full xl:w-80 xl:flex-shrink-0">
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20">
               
               {/* 헤더 */}
@@ -170,14 +170,14 @@ const AIRecommendationPage = () => {
                 <h3 className="text-xl font-bold text-gray-800">AI 전문가 선택</h3>
                 <button 
                   onClick={() => setIsAIListExpanded(!isAIListExpanded)}
-                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors md:hidden"
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors xl:hidden"
                 >
                   <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform ${isAIListExpanded ? 'rotate-180' : ''}`} />
                 </button>
               </div>
               
               {/* AI 목록 */}
-              <div className={`p-6 space-y-4 ${!isAIListExpanded ? 'hidden md:block' : ''}`}>
+              <div className={`p-6 space-y-4 ${!isAIListExpanded ? 'hidden xl:block' : ''}`}>
                 {Object.entries(aiExperts).map(([key, ai]) => (
                   <button
                     key={key}
@@ -220,7 +220,7 @@ const AIRecommendationPage = () => {
           
           {/* 채팅 영역 - 남은 공간 모두 사용 */}
           <div className="flex-1">
-            <div className="bg-white rounded-2xl shadow-xl border border-white/20 flex flex-col h-full md:h-[700px]">
+            <div className="bg-white rounded-2xl shadow-xl border border-white/20 flex flex-col h-full xl:h-[700px]">
               
               {/* AI 헤더 */}
               <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-t-2xl">
