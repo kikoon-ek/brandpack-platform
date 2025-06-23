@@ -1,368 +1,553 @@
 import React, { useState } from 'react';
-import { Search, Filter, Grid, List, Star, ShoppingCart, Eye, Heart } from 'lucide-react';
-import '../App.css';
+import { Search, Filter, Star, Heart, Eye, ShoppingCart, ChevronUp, ChevronDown } from 'lucide-react';
 
 const ContainerCatalogPage = () => {
-  const [viewMode, setViewMode] = useState('grid');
+  const [activeMainCategory, setActiveMainCategory] = useState('cosmetic');
+  const [activeSubCategory, setActiveSubCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedMaterial, setSelectedMaterial] = useState('all');
-  const [priceRange, setPriceRange] = useState([0, 10000]);
-  const [sortBy, setSortBy] = useState('popular');
+  const [capacityRange, setCapacityRange] = useState([1, 500]);
+  const [selectedMaterials, setSelectedMaterials] = useState({
+    plastic: [],
+    metal: [],
+    natural: []
+  });
+  const [selectedFeatures, setSelectedFeatures] = useState([]);
+  const [isSubCategoryCollapsed, setIsSubCategoryCollapsed] = useState(false);
+  const [isFilterCollapsed, setIsFilterCollapsed] = useState(false);
 
-  const containers = [
+  // 대분류 카테고리
+  const mainCategories = {
+    cosmetic: '화장품 용기',
+    sample: '소용량/샘플 용기',
+    accessories: '부자재/캡/펌프 전용관',
+    diffuser: '디퓨저/생활/산업용기',
+    eco: '친환경 라인',
+    pharma: '제약/건기식 용기'
+  };
+
+  // 각 대분류별 세부카테고리
+  const subCategories = {
+    cosmetic: [
+      { id: 'all', name: '전체 보기', desc: '모든 화장품 용기' },
+      { id: 'skin', name: '스킨/로션/에센스 용기', desc: 'PET, 진공, 펌프, 스포이드형 등' },
+      { id: 'cream', name: '크림/밤 용기', desc: '아크릴, 유리, 리필형, 친환경 등' },
+      { id: 'color', name: '색조/립/밤스틱', desc: '립글로스, 립밤, 밤스틱, 틴트 등' },
+      { id: 'hair', name: '헤어/두피용', desc: '샴푸/에센스 펌프, 스프레이 등' },
+      { id: 'sun', name: '선스틱/선밤', desc: '기능성 스틱류, 방수용기 등' },
+      { id: 'tube', name: '튜브/다층브로우', desc: '다층, 금속튜브, 알루미늄튜브 등' },
+      { id: 'luxury', name: '고급/디자인 용기', desc: '아크릴, 금속 장식, 디자인 포인트용기' }
+    ],
+    sample: [
+      { id: 'all', name: '전체 보기', desc: '모든 소용량/샘플 용기' },
+      { id: 'tube', name: '샘플 튜브', desc: '3ml, 5ml 미니 튜브류' },
+      { id: 'pump', name: '미니 에센스펌프', desc: '5ml~10ml 펌프/진공/디스펜서' },
+      { id: 'spray', name: '미니 스프레이', desc: '휴대용, 트래블용' },
+      { id: 'dropper', name: '미니 스포이드/앰플', desc: '유리 바이알, 바이오 드롭 등' }
+    ],
+    accessories: [
+      { id: 'all', name: '전체 보기', desc: '모든 부자재/캡/펌프 전용관' },
+      { id: 'basic_cap', name: '일반 캡류', desc: '단캡, 롱캡, 이중캡, 왕관캡 등' },
+      { id: 'functional_cap', name: '기능성 캡류', desc: '프레스캡, 원터치캡, 롤온캡, 삼각캡 등' },
+      { id: 'pump', name: '펌프류', desc: '샴푸/에센스/오일/버블 펌프 전용' },
+      { id: 'dropper', name: '스포이드', desc: '오토 스포이드, 바이알용, 버튼형 등' },
+      { id: 'accessories', name: '기타 액세서리', desc: '스파출러, 집게, 계량스푼, 팩볼 등' }
+    ],
+    diffuser: [
+      { id: 'all', name: '전체 보기', desc: '모든 디퓨저/생활/산업용기' },
+      { id: 'diffuser', name: '디퓨저 용기', desc: '유리, 알루미늄, 목캡, 방향제 세트' },
+      { id: 'oil', name: '오일/산업용 용기', desc: '대용량 오일펌프, 공업용 HDPE 등' },
+      { id: 'bottle', name: '물병/음료병', desc: '기능성 드링크 타입, 스파우트 포함 등' },
+      { id: 'remover', name: '리무버/버블 용기', desc: '버블펌프, 리무버 병, 거품 분사형 등' }
+    ],
+    eco: [
+      { id: 'all', name: '전체 보기', desc: '모든 친환경 라인' },
+      { id: 'pcr', name: 'PCR PET 용기', desc: '재활용 PET, 투명/불투명 버전' },
+      { id: 'metal_free', name: '메탈프리 펌프', desc: '재질분리 쉬운 친환경 펌프' },
+      { id: 'refill', name: '리필용기', desc: '리필 가능한 내부 용기 포함' },
+      { id: 'biodegradable', name: 'PE/PP 생분해 용기', desc: '미생물 분해 가능한 소재 용기 등' }
+    ],
+    pharma: [
+      { id: 'all', name: '전체 보기', desc: '모든 제약/건기식 용기' },
+      { id: 'ampoule', name: '앰플/바이알/주사기', desc: '유리/플라스틱 앰플, 바이알, 주사기' },
+      { id: 'eye_drop', name: '투약/안약병', desc: '5~50ml 용기, 드롭퍼 타입 등' },
+      { id: 'supplement', name: '건강기능식품 용기', desc: '껌통형, 밀폐형, 광구 PET, 스푼 포함형' },
+      { id: 'safety', name: '안전캡/계량컵', desc: '스푼, 컵, 드리퍼, 캡 포함형 세트 등' }
+    ]
+  };
+
+  // 재질 필터 옵션
+  const materialOptions = {
+    plastic: ['PET', 'PE', 'PP', 'ABS', 'PC', 'PCR', 'ABL', 'PBL', 'HDPE', 'LDPE', 'PET-G', 'SAN', 'ETC', 'OTHER'],
+    metal: ['알루미늄', '스틸', '아크릴'],
+    natural: ['나무', '실리콘', '나일론', '유리']
+  };
+
+  // 기능 필터 옵션
+  const featureOptions = [
+    '진공 구조', '리필 가능', '미세 분사', '내열 / 내화학', 
+    '에어리스 펌프', '휴대용 전용', '친환경 재질'
+  ];
+
+  // 샘플 제품 데이터
+  const sampleProducts = [
     {
       id: 1,
-      name: "프리미엄 글래스 세럼병",
-      category: "세럼/앰플",
-      material: "유리",
-      capacity: "30ml",
+      name: '심리실산 세럼',
+      category: 'skin',
+      mainCategory: 'cosmetic',
+      material: 'PE',
+      capacity: 200,
       price: 2500,
-      minOrder: 1000,
       rating: 4.8,
-      reviews: 124,
-      image: "/api/placeholder/300/300",
-      colors: ["투명", "앰버", "코발트"],
-      features: ["UV 차단", "고급스러운 디자인", "정밀 드로퍼"],
-      supplier: "코스모스",
-      leadTime: "14일"
+      image: '/api/placeholder/300/300',
+      features: ['진공 구조', '리필 가능']
     },
     {
       id: 2,
-      name: "에어리스 펌프 용기",
-      category: "크림/로션",
-      material: "플라스틱",
-      capacity: "50ml",
+      name: '디퓨저 병',
+      category: 'diffuser',
+      mainCategory: 'diffuser',
+      material: '유리',
+      capacity: 10,
       price: 1800,
-      minOrder: 500,
       rating: 4.6,
-      reviews: 89,
-      image: "/api/placeholder/300/300",
-      colors: ["화이트", "블랙", "실버"],
-      features: ["에어리스 시스템", "위생적", "마지막까지 사용"],
-      supplier: "삼화용기",
-      leadTime: "10일"
+      image: '/api/placeholder/300/300',
+      features: ['친환경 재질']
     },
     {
       id: 3,
-      name: "럭셔리 크림 자",
-      category: "크림/로션",
-      material: "유리",
-      capacity: "50ml",
+      name: '럭셔리 크림 자',
+      category: 'cream',
+      mainCategory: 'cosmetic',
+      material: '아크릴',
+      capacity: 50,
       price: 3200,
-      minOrder: 800,
       rating: 4.9,
-      reviews: 156,
-      image: "/api/placeholder/300/300",
-      colors: ["투명", "프로스트", "골드"],
-      features: ["프리미엄 소재", "무게감", "고급 마감"],
-      supplier: "프리미엄팩",
-      leadTime: "21일"
+      image: '/api/placeholder/300/300',
+      features: ['고급 디자인']
     },
     {
       id: 4,
-      name: "미스트 스프레이 병",
-      category: "미스트/토너",
-      material: "플라스틱",
-      capacity: "100ml",
-      price: 1200,
-      minOrder: 1000,
-      rating: 4.4,
-      reviews: 67,
-      image: "/api/placeholder/300/300",
-      colors: ["투명", "화이트", "핑크"],
-      features: ["미세 분사", "휴대용", "경량"],
-      supplier: "삼화용기",
-      leadTime: "7일"
+      name: '샘플 튜브',
+      category: 'tube',
+      mainCategory: 'sample',
+      material: 'PE',
+      capacity: 5,
+      price: 800,
+      rating: 4.5,
+      image: '/api/placeholder/300/300',
+      features: ['휴대용 전용']
     },
     {
       id: 5,
-      name: "아크릴 컴팩트",
-      category: "메이크업",
-      material: "아크릴",
-      capacity: "10g",
-      price: 2800,
-      minOrder: 500,
+      name: '에어리스 펌프',
+      category: 'pump',
+      mainCategory: 'cosmetic',
+      material: 'PP',
+      capacity: 30,
+      price: 2200,
       rating: 4.7,
-      reviews: 93,
-      image: "/api/placeholder/300/300",
-      colors: ["투명", "블랙", "로즈골드"],
-      features: ["투명도", "내구성", "세련된 디자인"],
-      supplier: "코스모스",
-      leadTime: "14일"
+      image: '/api/placeholder/300/300',
+      features: ['에어리스 펌프', '진공 구조']
     },
     {
       id: 6,
-      name: "립스틱 케이스",
-      category: "메이크업",
-      material: "플라스틱",
-      capacity: "3.5g",
-      price: 1500,
-      minOrder: 1000,
-      rating: 4.5,
-      reviews: 78,
-      image: "/api/placeholder/300/300",
-      colors: ["블랙", "실버", "골드"],
-      features: ["매끄러운 작동", "자석 잠금", "컴팩트"],
-      supplier: "삼화용기",
-      leadTime: "10일"
+      name: 'PCR PET 병',
+      category: 'pcr',
+      mainCategory: 'eco',
+      material: 'PCR',
+      capacity: 100,
+      price: 1900,
+      rating: 4.4,
+      image: '/api/placeholder/300/300',
+      features: ['친환경 재질', '리필 가능']
+    },
+    {
+      id: 7,
+      name: '프레스 캡',
+      category: 'functional_cap',
+      mainCategory: 'accessories',
+      material: 'PP',
+      capacity: 0,
+      price: 500,
+      rating: 4.3,
+      image: '/api/placeholder/300/300',
+      features: ['기능성']
+    },
+    {
+      id: 8,
+      name: '앰플 바이알',
+      category: 'ampoule',
+      mainCategory: 'pharma',
+      material: '유리',
+      capacity: 2,
+      price: 1200,
+      rating: 4.8,
+      image: '/api/placeholder/300/300',
+      features: ['정밀 용량']
     }
   ];
 
-  const categories = ['all', '세럼/앰플', '크림/로션', '미스트/토너', '메이크업'];
-  const materials = ['all', '유리', '플라스틱', '아크릴'];
+  // 재질 필터 토글
+  const toggleMaterial = (category, material) => {
+    setSelectedMaterials(prev => ({
+      ...prev,
+      [category]: prev[category].includes(material)
+        ? prev[category].filter(m => m !== material)
+        : [...prev[category], material]
+    }));
+  };
 
-  const filteredContainers = containers.filter(container => {
-    const matchesSearch = container.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         container.category.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || container.category === selectedCategory;
-    const matchesMaterial = selectedMaterial === 'all' || container.material === selectedMaterial;
-    const matchesPrice = container.price >= priceRange[0] && container.price <= priceRange[1];
+  // 기능 필터 토글
+  const toggleFeature = (feature) => {
+    setSelectedFeatures(prev =>
+      prev.includes(feature)
+        ? prev.filter(f => f !== feature)
+        : [...prev, feature]
+    );
+  };
+
+  // 용량 범위 업데이트
+  const updateCapacityRange = (index, value) => {
+    const newRange = [...capacityRange];
+    newRange[index] = parseInt(value);
+    setCapacityRange(newRange);
+  };
+
+  // 필터링된 제품
+  const filteredProducts = sampleProducts.filter(product => {
+    // 대분류 필터
+    if (product.mainCategory !== activeMainCategory) return false;
     
-    return matchesSearch && matchesCategory && matchesMaterial && matchesPrice;
-  });
-
-  const sortedContainers = [...filteredContainers].sort((a, b) => {
-    switch (sortBy) {
-      case 'price-low':
-        return a.price - b.price;
-      case 'price-high':
-        return b.price - a.price;
-      case 'rating':
-        return b.rating - a.rating;
-      case 'popular':
-      default:
-        return b.reviews - a.reviews;
+    // 세부카테고리 필터
+    if (activeSubCategory !== 'all' && product.category !== activeSubCategory) return false;
+    
+    // 검색어 필터
+    if (searchTerm && !product.name.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+    
+    // 용량 필터
+    if (product.capacity < capacityRange[0] || product.capacity > capacityRange[1]) return false;
+    
+    // 재질 필터
+    const allSelectedMaterials = [
+      ...selectedMaterials.plastic,
+      ...selectedMaterials.metal,
+      ...selectedMaterials.natural
+    ];
+    if (allSelectedMaterials.length > 0 && !allSelectedMaterials.includes(product.material)) return false;
+    
+    // 기능 필터
+    if (selectedFeatures.length > 0) {
+      const hasFeature = selectedFeatures.some(feature => 
+        product.features.includes(feature)
+      );
+      if (!hasFeature) return false;
     }
+    
+    return true;
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-slate-50/85 to-stone-50/25">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-gray-600 via-stone-600 to-slate-700 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-4xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-gray-700 via-stone-700 to-slate-700 bg-clip-text text-transparent">
-              용기 카탈로그
-            </span>
-          </h1>
-          <p className="text-xl text-gray-100">
-            1,500+ 다양한 화장품 용기를 실시간으로 검색하고 주문하세요
-          </p>
-        </div>
-      </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* 헤더 */}
+      <div className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">용기 카탈로그</h1>
+            <p className="text-gray-600">전문적이고 체계적인 화장품 용기 솔루션을 찾아보세요</p>
+          </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar Filters */}
-          <div className="lg:w-1/4">
-            <div className="bg-white rounded-lg shadow-lg p-6 sticky top-8">
-              <h3 className="text-lg font-bold text-gray-800 mb-4">필터</h3>
-              
-              {/* Search */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">검색</label>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                  <input
-                    type="text"
-                    placeholder="용기명 검색..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-stone-500 focus:border-transparent"
-                  />
-                </div>
-              </div>
-
-              {/* Category */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">카테고리</label>
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-stone-500 focus:border-transparent"
-                >
-                  {categories.map(category => (
-                    <option key={category} value={category}>
-                      {category === 'all' ? '전체 카테고리' : category}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Material */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">소재</label>
-                <select
-                  value={selectedMaterial}
-                  onChange={(e) => setSelectedMaterial(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-stone-500 focus:border-transparent"
-                >
-                  {materials.map(material => (
-                    <option key={material} value={material}>
-                      {material === 'all' ? '전체 소재' : material}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Price Range */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  가격 범위: {priceRange[0].toLocaleString()}원 - {priceRange[1].toLocaleString()}원
-                </label>
-                <input
-                  type="range"
-                  min="0"
-                  max="10000"
-                  step="100"
-                  value={priceRange[1]}
-                  onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-                  className="w-full h-2 bg-gradient-to-r from-gray-400 to-stone-400 rounded-lg appearance-none cursor-pointer"
-                />
-              </div>
-
-              <button className="w-full px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300">
-                필터 초기화
-              </button>
+          {/* 검색창 */}
+          <div className="max-w-2xl mx-auto mb-8">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <input
+                type="text"
+                placeholder="용기명, 재질, 기능으로 검색..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
             </div>
           </div>
 
-          {/* Main Content */}
-          <div className="lg:w-3/4">
-            {/* Toolbar */}
-            <div className="flex flex-col sm:flex-row justify-between items-center mb-6 bg-white rounded-lg shadow-lg p-4">
-              <div className="flex items-center gap-4 mb-4 sm:mb-0">
-                <span className="text-gray-600">
-                  총 <span className="font-semibold text-gray-800">{sortedContainers.length}</span>개 제품
-                </span>
-                <div className="flex border border-gray-300 rounded-lg overflow-hidden">
-                  <button
-                    onClick={() => setViewMode('grid')}
-                    className={`p-2 ${viewMode === 'grid' ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
-                  >
-                    <Grid className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => setViewMode('list')}
-                    className={`p-2 ${viewMode === 'list' ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
-                  >
-                    <List className="w-4 h-4" />
-                  </button>
-                </div>
+          {/* 대분류 탭 */}
+          <div className="flex flex-wrap justify-center gap-2 mb-6">
+            {Object.entries(mainCategories).map(([key, name]) => (
+              <button
+                key={key}
+                onClick={() => {
+                  setActiveMainCategory(key);
+                  setActiveSubCategory('all');
+                }}
+                className={`px-6 py-3 rounded-lg font-medium transition-colors ${
+                  activeMainCategory === key
+                    ? 'bg-gray-600 text-white'
+                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+                }`}
+              >
+                {name}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="flex gap-6">
+          {/* 좌측 사이드바 - 세부카테고리 + 필터 */}
+          <div className="w-80 space-y-6">
+            {/* 세부카테고리 */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">세부 카테고리</h3>
+                <button
+                  onClick={() => setIsSubCategoryCollapsed(!isSubCategoryCollapsed)}
+                  className="p-1 hover:bg-gray-100 rounded transition-colors"
+                >
+                  {isSubCategoryCollapsed ? (
+                    <ChevronDown size={20} className="text-gray-600" />
+                  ) : (
+                    <ChevronUp size={20} className="text-gray-600" />
+                  )}
+                </button>
               </div>
               
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-stone-500 focus:border-transparent"
-              >
-                <option value="popular">인기순</option>
-                <option value="price-low">가격 낮은순</option>
-                <option value="price-high">가격 높은순</option>
-                <option value="rating">평점순</option>
-              </select>
+              {!isSubCategoryCollapsed && (
+                <div className="space-y-3">
+                  {subCategories[activeMainCategory]?.map((category) => (
+                    <button
+                      key={category.id}
+                      onClick={() => setActiveSubCategory(category.id)}
+                      className={`w-full p-4 rounded-lg text-left transition-colors ${
+                        activeSubCategory === category.id
+                          ? 'bg-gray-100 border-2 border-gray-300'
+                          : 'bg-gray-50 hover:bg-gray-100 border border-gray-200'
+                      }`}
+                    >
+                      <div className="font-medium text-gray-900 mb-1">{category.name}</div>
+                      <div className="text-sm text-gray-600">{category.desc}</div>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Products Grid/List */}
-            <div className={viewMode === 'grid' ? 'grid md:grid-cols-2 xl:grid-cols-3 gap-6' : 'space-y-4'}>
-              {sortedContainers.map(container => (
-                <div key={container.id} className={`bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ${viewMode === 'list' ? 'flex' : ''}`}>
-                  <div className={`${viewMode === 'list' ? 'w-48 flex-shrink-0' : ''}`}>
-                    <div className={`bg-gray-100 rounded-t-lg ${viewMode === 'list' ? 'rounded-l-lg rounded-tr-none h-full' : 'aspect-square'} flex items-center justify-center`}>
-                      <div className="text-gray-400 text-center">
-                        <div className="w-16 h-16 bg-gray-200 rounded-lg mx-auto mb-2"></div>
-                        <span className="text-sm">제품 이미지</span>
+            {/* 통합 필터 */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                  <Filter size={20} />
+                  필터
+                </h2>
+                <button
+                  onClick={() => setIsFilterCollapsed(!isFilterCollapsed)}
+                  className="p-1 hover:bg-gray-100 rounded transition-colors"
+                >
+                  {isFilterCollapsed ? (
+                    <ChevronDown size={20} className="text-gray-600" />
+                  ) : (
+                    <ChevronUp size={20} className="text-gray-600" />
+                  )}
+                </button>
+              </div>
+
+              {!isFilterCollapsed && (
+                <div className="space-y-6">
+                  {/* 용량 범위 필터 */}
+                  <div>
+                    <h3 className="font-medium text-gray-900 mb-4">용량 범위 (ml)</h3>
+                    <div className="space-y-4">
+                      <div className="flex justify-between text-sm text-gray-600">
+                        <span>{capacityRange[0]}ml</span>
+                        <span>{capacityRange[1]}ml</span>
+                      </div>
+                      <div className="relative">
+                        <input
+                          type="range"
+                          min="1"
+                          max="500"
+                          value={capacityRange[0]}
+                          onChange={(e) => updateCapacityRange(0, e.target.value)}
+                          className="absolute w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                        />
+                        <input
+                          type="range"
+                          min="1"
+                          max="500"
+                          value={capacityRange[1]}
+                          onChange={(e) => updateCapacityRange(1, e.target.value)}
+                          className="absolute w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                        />
+                      </div>
+                      <div className="flex justify-between gap-2 text-xs">
+                        <span className="text-center">최소<br/>{capacityRange[0]}</span>
+                        <span className="text-center">~</span>
+                        <span className="text-center">최대<br/>{capacityRange[1]}</span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        <button className="p-2 bg-gray-100 rounded text-center">소용량 (1-50ml)</button>
+                        <button className="p-2 bg-gray-100 rounded text-center">중용량 (50-150ml)</button>
+                        <button className="p-2 bg-gray-100 rounded text-center">대용량 (150-300ml)</button>
+                        <button className="p-2 bg-gray-100 rounded text-center">전체</button>
                       </div>
                     </div>
                   </div>
-                  
-                  <div className={`p-6 ${viewMode === 'list' ? 'flex-1' : ''}`}>
-                    <div className="flex justify-between items-start mb-3">
-                      <div>
-                        <h3 className="font-bold text-gray-800 mb-1">{container.name}</h3>
-                        <p className="text-sm text-gray-600">{container.category} • {container.capacity}</p>
-                      </div>
-                      <button className="text-gray-400 hover:text-red-500 transition-colors">
-                        <Heart className="w-5 h-5" />
-                      </button>
-                    </div>
 
-                    <div className="flex items-center mb-3">
-                      <div className="flex items-center">
-                        <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                        <span className="ml-1 text-sm font-medium text-gray-700">{container.rating}</span>
-                        <span className="ml-1 text-sm text-gray-500">({container.reviews})</span>
-                      </div>
-                    </div>
-
+                  {/* 재질 필터 */}
+                  <div>
+                    <h3 className="font-medium text-gray-900 mb-4">재질</h3>
+                    
+                    {/* 플라스틱류 */}
                     <div className="mb-4">
-                      <div className="flex flex-wrap gap-1 mb-2">
-                        {container.colors.map((color, index) => (
-                          <span key={index} className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">
-                            {color}
-                          </span>
+                      <h4 className="font-medium text-gray-800 mb-2">플라스틱류</h4>
+                      <div className="max-h-32 overflow-y-auto">
+                        <div className="grid grid-cols-2 gap-2">
+                          {materialOptions.plastic.map((material) => (
+                            <label key={material} className="flex items-center space-x-2 cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={selectedMaterials.plastic.includes(material)}
+                                onChange={() => toggleMaterial('plastic', material)}
+                                className="rounded border-gray-300 text-gray-600 focus:ring-gray-500"
+                              />
+                              <span className="text-sm text-gray-700">{material}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 금속/고급 */}
+                    <div className="mb-4">
+                      <h4 className="font-medium text-gray-800 mb-2">금속/고급</h4>
+                      <div className="grid grid-cols-2 gap-2">
+                        {materialOptions.metal.map((material) => (
+                          <label key={material} className="flex items-center space-x-2 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={selectedMaterials.metal.includes(material)}
+                              onChange={() => toggleMaterial('metal', material)}
+                              className="rounded border-gray-300 text-gray-600 focus:ring-gray-500"
+                            />
+                            <span className="text-sm text-gray-700">{material}</span>
+                          </label>
                         ))}
                       </div>
-                      <div className="text-sm text-gray-600">
-                        <div>소재: {container.material}</div>
-                        <div>최소주문: {container.minOrder.toLocaleString()}개</div>
-                        <div>납기: {container.leadTime}</div>
+                    </div>
+
+                    {/* 자연/친환경 */}
+                    <div className="mb-4">
+                      <h4 className="font-medium text-gray-800 mb-2">자연/친환경</h4>
+                      <div className="grid grid-cols-2 gap-2">
+                        {materialOptions.natural.map((material) => (
+                          <label key={material} className="flex items-center space-x-2 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={selectedMaterials.natural.includes(material)}
+                              onChange={() => toggleMaterial('natural', material)}
+                              className="rounded border-gray-300 text-gray-600 focus:ring-gray-500"
+                            />
+                            <span className="text-sm text-gray-700">{material}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 기능 필터 */}
+                  <div>
+                    <h3 className="font-medium text-gray-900 mb-4">기능</h3>
+                    <div className="max-h-32 overflow-y-auto">
+                      <div className="space-y-2">
+                        {featureOptions.map((feature) => (
+                          <label key={feature} className="flex items-center space-x-2 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={selectedFeatures.includes(feature)}
+                              onChange={() => toggleFeature(feature)}
+                              className="rounded border-gray-300 text-gray-600 focus:ring-gray-500"
+                            />
+                            <span className="text-sm text-gray-700">{feature}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* 메인 콘텐츠 */}
+          <div className="flex-1">
+            {/* 결과 헤더 */}
+            <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+              <div className="flex justify-between items-center">
+                <h2 className="text-xl font-semibold text-gray-900">
+                  {mainCategories[activeMainCategory]} 전체
+                </h2>
+                <p className="text-gray-600">총 {filteredProducts.length}개의 제품이 있습니다</p>
+              </div>
+            </div>
+
+            {/* 제품 그리드 */}
+            <div className="grid grid-cols-4 gap-6">
+              {filteredProducts.map((product) => (
+                <div key={product.id} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                  <div className="relative">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-48 object-cover"
+                    />
+                    <button className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-sm hover:bg-gray-50">
+                      <Heart size={16} className="text-gray-400" />
+                    </button>
+                  </div>
+                  
+                  <div className="p-4">
+                    <h3 className="font-medium text-gray-900 mb-2">{product.name}</h3>
+                    
+                    <div className="space-y-1 text-sm text-gray-600 mb-3">
+                      <div>재질: {product.material}</div>
+                      <div>용량: {product.capacity}ml</div>
+                      <div className="flex items-center gap-1">
+                        <Star size={14} className="text-yellow-400 fill-current" />
+                        <span>{product.rating}</span>
                       </div>
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <div>
-                        <div className="text-lg font-bold text-gray-800">
-                          {container.price.toLocaleString()}원
-                        </div>
-                        <div className="text-sm text-gray-500">개당 가격</div>
-                      </div>
-                      <div className="flex gap-2">
-                        <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                          <Eye className="w-4 h-4" />
+                      <span className="text-lg font-semibold text-gray-700">
+                        ₩{product.price.toLocaleString()}
+                      </span>
+                      <div className="flex gap-1">
+                        <button className="p-2 text-gray-400 hover:text-gray-600">
+                          <Eye size={16} />
                         </button>
-                        <button className="px-4 py-2 bg-gradient-to-r from-gray-500 to-stone-700 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300 flex items-center">
-                          <ShoppingCart className="w-4 h-4 mr-2" />
-                          주문
+                        <button className="p-2 text-gray-400 hover:text-gray-600">
+                          <ShoppingCart size={16} />
                         </button>
                       </div>
                     </div>
+
+                    <button className="w-full mt-3 bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                      상세보기
+                    </button>
                   </div>
                 </div>
               ))}
             </div>
 
-            {sortedContainers.length === 0 && (
-              <div className="text-center py-12">
+            {/* 제품이 없을 때 */}
+            {filteredProducts.length === 0 && (
+              <div className="bg-white rounded-lg shadow-sm p-12 text-center">
                 <div className="text-gray-400 mb-4">
-                  <Filter className="w-16 h-16 mx-auto" />
+                  <Filter size={48} className="mx-auto" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-600 mb-2">검색 결과가 없습니다</h3>
-                <p className="text-gray-500">다른 검색 조건을 시도해보세요.</p>
-              </div>
-            )}
-
-            {/* Pagination */}
-            {sortedContainers.length > 0 && (
-              <div className="flex justify-center mt-8">
-                <div className="flex gap-2">
-                  <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                    이전
-                  </button>
-                  <button className="px-4 py-2 bg-gradient-to-r from-gray-600 to-stone-700 text-white rounded-lg">
-                    1
-                  </button>
-                  <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                    2
-                  </button>
-                  <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                    3
-                  </button>
-                  <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                    다음
-                  </button>
-                </div>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">검색 결과가 없습니다</h3>
+                <p className="text-gray-600">다른 필터 조건을 시도해보세요</p>
               </div>
             )}
           </div>
