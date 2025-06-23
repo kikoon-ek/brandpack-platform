@@ -140,13 +140,7 @@ const NewAIAssistantPage = () => {
 
       {/* 메인 콘텐츠 - PC에서 좌우 배치, 모바일에서 세로 배치 */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div 
-          style={{
-            display: 'grid',
-            gridTemplateColumns: window.innerWidth >= 640 ? '320px 1fr' : '1fr',
-            gap: '24px'
-          }}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-[320px_1fr] gap-6">
           
           {/* AI 전문가 선택 영역 - PC에서 좌측, 모바일에서 상단 */}
           <div>
