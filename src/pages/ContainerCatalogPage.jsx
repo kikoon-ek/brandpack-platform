@@ -913,22 +913,22 @@ const ContainerCatalogPage = () => {
             </div>
 
             {/* 제품 그리드 */}
-            <div className={`grid gap-6 ${isMobile ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'}`}>
+            <div className={`grid gap-6 ${isMobile ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-4'}`}>
               {filteredProducts.map((product) => (
-                <div key={product.id} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                <div key={product.id} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group">
                   <div className="relative">
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="w-full h-48 object-cover"
+                      className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
                     />
-                    <button className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-sm hover:bg-gray-50">
+                    <button className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-sm hover:bg-gray-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <Heart size={16} className="text-gray-400" />
                     </button>
                   </div>
                   
                   <div className="p-4">
-                    <h3 className="font-medium text-gray-900 mb-2">{product.name}</h3>
+                    <h3 className="font-medium text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">{product.name}</h3>
                     
                     <div className="space-y-1 text-sm text-gray-600 mb-3">
                       <div>재질: {product.material}</div>
@@ -940,10 +940,10 @@ const ContainerCatalogPage = () => {
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <span className="text-lg font-semibold text-gray-700">
+                      <span className="text-lg font-semibold text-gray-700 group-hover:text-blue-600 transition-colors">
                         ₩{product.price.toLocaleString()}
                       </span>
-                      <div className="flex gap-1">
+                      <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         <button className="p-2 text-gray-400 hover:text-gray-600">
                           <Eye size={16} />
                         </button>
@@ -952,10 +952,6 @@ const ContainerCatalogPage = () => {
                         </button>
                       </div>
                     </div>
-
-                    <button className="w-full mt-3 bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition-colors">
-                      상세보기
-                    </button>
                   </div>
                 </div>
               ))}
