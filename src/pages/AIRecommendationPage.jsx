@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Send,
   ChevronDown,
@@ -12,6 +12,18 @@ const AIRecommendationPage = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isAIListExpanded, setIsAIListExpanded] = useState(true);
+
+  // 화면 크기 감지
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // AI 전문가 데이터
   const aiExperts = {
@@ -191,6 +203,89 @@ const AIRecommendationPage = () => {
     setInputMessage(question);
   };
 
+  // AI 전문가 선택 컴포넌트
+  const AIExpertSelector = () => (
+    <div className="bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-100">
+      <div className="p-5 border-b border-gray-100">
+        <div className="flex justify-between items-center">
+          <div>
+            <h2 className="text-lg font-bold text-gray-800">AI 전문가</h2>
+            <p className="text-xs text-gray-500 mt-1">전문 분야별 AI를 선택하세요</p>
+          </div>
+          {isMobile && (
+            <button
+              onClick={() => setIsAIListExpanded(!isAIListExpanded)}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              {isAIListExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+            </button>
+          )}
+        </div>
+      </div>
+      {(!isMobile || isAIListExpanded) && (
+        <div className={`p-3 space-y-2 overflow-y-auto ${isMobile ? 'max-h-96' : ''}`} style={!isMobile ? { height: 'calc(100% - 80px)' } : {}}>
+          {Object.entries(aiExperts).map(([key, ai]) => (
+            <button
+              key={key}
+              onClick={() => setSelectedAI(key)}
+              className={`w-full p-4 rounded-2xl border-2 transition-all duration-300 text-left hover:shadow-md ${
+                selectedAI === key
+                  ? `${ai.bgColor} ${ai.borderColor} shadow-lg transform scale-[1.02]`
+                  : 'bg-gray-50 border-gray-200 hover:bg-gray-100 hover:border-gray-300'
+              }`}
+            >
+              <div className="flex items-start space-x-3">
+                <div className={`text-xl p-2.5 rounded-2xl ${selectedAI === key ? 'bg-white shadow-sm' : 'bg-white'}`}>
+                  {ai.icon}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className={`font-bold text-sm mb-1 ${selectedAI === key ? ai.textColor : 'text-gray-800'}`}>
+                    {ai.name}
+                  </h3>
+                  <p className="text-xs text-gray-600 mb-3 line-clamp-2 leading-relaxed">
+                    {ai.description}
+                  </p>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs text-gray-500">정확도</span>
+                    <span className={`text-sm font-bold ${selectedAI === key ? ai.textColor : 'text-gray-800'}`}>
+                      {ai.accuracy}%
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-1.5 mb-3">
+                    <div 
+                      className={`h-1.5 rounded-full bg-gradient-to-r ${ai.color} transition-all duration-500`}
+                      style={{ width: `${ai.accuracy}%` }}
+                    ></div>
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    {ai.tags.slice(0, 2).map((tag, index) => (
+                      <span 
+                        key={index}
+                        className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors duration-200 ${
+                          selectedAI === key 
+                            ? `${ai.textColor} bg-white shadow-sm` 
+                            : 'text-gray-600 bg-gray-200'
+                        }`}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  {selectedAI === key && (
+                    <div className="mt-3 flex items-center text-green-600">
+                      <CheckCircle className="w-3 h-3 mr-1" />
+                      <span className="text-xs font-medium">현재 선택됨</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* 컴팩트한 헤더 - 높이 대폭 축소 */}
@@ -202,196 +297,260 @@ const AIRecommendationPage = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-4">
-        <div className="flex gap-6 h-[calc(100vh-140px)]">
-          {/* 좌측 AI 전문가 선택 (30%) */}
-          <div className="w-80 flex-shrink-0">
-            <div className="bg-white rounded-3xl shadow-lg h-full overflow-hidden border border-gray-100">
-              <div className="p-5 border-b border-gray-100">
-                <h2 className="text-lg font-bold text-gray-800">AI 전문가</h2>
-                <p className="text-xs text-gray-500 mt-1">전문 분야별 AI를 선택하세요</p>
-              </div>
-              <div className="p-3 space-y-2 overflow-y-auto" style={{ height: 'calc(100% - 80px)' }}>
-                {Object.entries(aiExperts).map(([key, ai]) => (
-                  <button
-                    key={key}
-                    onClick={() => setSelectedAI(key)}
-                    className={`w-full p-4 rounded-2xl border-2 transition-all duration-300 text-left hover:shadow-md ${
-                      selectedAI === key
-                        ? `${ai.bgColor} ${ai.borderColor} shadow-lg transform scale-[1.02]`
-                        : 'bg-gray-50 border-gray-200 hover:bg-gray-100 hover:border-gray-300'
-                    }`}
-                  >
-                    <div className="flex items-start space-x-3">
-                      <div className={`text-xl p-2.5 rounded-2xl ${selectedAI === key ? 'bg-white shadow-sm' : 'bg-white'}`}>
-                        {ai.icon}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className={`font-bold text-sm mb-1 ${selectedAI === key ? ai.textColor : 'text-gray-800'}`}>
-                          {ai.name}
-                        </h3>
-                        <p className="text-xs text-gray-600 mb-3 line-clamp-2 leading-relaxed">
-                          {ai.description}
-                        </p>
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-xs text-gray-500">정확도</span>
-                          <span className={`text-sm font-bold ${selectedAI === key ? ai.textColor : 'text-gray-800'}`}>
-                            {ai.accuracy}%
-                          </span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-1.5 mb-3">
-                          <div 
-                            className={`h-1.5 rounded-full bg-gradient-to-r ${ai.color} transition-all duration-500`}
-                            style={{ width: `${ai.accuracy}%` }}
-                          ></div>
-                        </div>
-                        <div className="flex flex-wrap gap-1">
-                          {ai.tags.slice(0, 2).map((tag, index) => (
-                            <span 
-                              key={index}
-                              className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors duration-200 ${
-                                selectedAI === key 
-                                  ? `${ai.textColor} bg-white shadow-sm` 
-                                  : 'text-gray-600 bg-gray-200'
-                              }`}
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                        {selectedAI === key && (
-                          <div className="mt-3 flex items-center text-green-600">
-                            <CheckCircle className="w-3 h-3 mr-1" />
-                            <span className="text-xs font-medium">현재 선택됨</span>
-                          </div>
-                        )}
-                      </div>
+        {isMobile ? (
+          // 모바일 레이아웃: AI 선택이 상단에, 채팅이 하단에
+          <div className="space-y-4">
+            {/* 모바일: 상단 AI 전문가 선택 */}
+            <AIExpertSelector />
+            
+            {/* 모바일: 채팅 영역 */}
+            <div className="h-[calc(100vh-300px)]">
+              <div className="bg-white rounded-3xl shadow-lg h-full flex flex-col overflow-hidden border border-gray-100">
+                {/* AI 헤더 - 더 컴팩트하게 */}
+                <div className={`bg-gradient-to-r ${currentAI.color} text-white p-5 rounded-t-3xl`}>
+                  <div className="flex items-center space-x-4">
+                    <div className="text-2xl bg-white/20 backdrop-blur-sm rounded-2xl p-3">
+                      {currentAI.icon}
                     </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* 우측 채팅 영역 (70%) */}
-          <div className="flex-1">
-            <div className="bg-white rounded-3xl shadow-lg h-full flex flex-col overflow-hidden border border-gray-100">
-              {/* AI 헤더 - 더 컴팩트하게 */}
-              <div className={`bg-gradient-to-r ${currentAI.color} text-white p-5 rounded-t-3xl`}>
-                <div className="flex items-center space-x-4">
-                  <div className="text-2xl bg-white/20 backdrop-blur-sm rounded-2xl p-3">
-                    {currentAI.icon}
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold">{currentAI.name}</h2>
-                    <p className="text-sm opacity-90 mt-1">{currentAI.description}</p>
+                    <div>
+                      <h2 className="text-xl font-bold">{currentAI.name}</h2>
+                      <p className="text-sm opacity-90 mt-1">{currentAI.description}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* 자주 묻는 질문 */}
-              <div className="p-4 border-b border-gray-100">
-                <button
-                  onClick={() => setShowFAQ(!showFAQ)}
-                  className="flex items-center justify-between w-full text-left hover:bg-gray-50 rounded-xl p-2 transition-colors duration-200"
-                >
-                  <h3 className="text-base font-bold text-gray-800">자주 묻는 질문</h3>
-                  {showFAQ ? (
-                    <ChevronUp className="w-5 h-5 text-gray-400" />
-                  ) : (
-                    <ChevronDown className="w-5 h-5 text-gray-400" />
-                  )}
-                </button>
-                
-                {showFAQ && (
-                  <div className="mt-3 grid grid-cols-1 gap-2">
-                    {currentAI.faqs.map((faq, index) => (
-                      <button
-                        key={index}
-                        onClick={() => handleFAQClick(faq)}
-                        className="p-3 text-left bg-gray-50 hover:bg-gray-100 rounded-2xl transition-all duration-200 border border-gray-200 hover:border-gray-300 text-sm hover:shadow-sm"
-                      >
-                        <span className="text-gray-700">{faq}</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* 채팅 영역 */}
-              <div className="flex-1 overflow-y-auto p-5">
-                {messages.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center h-full text-center">
-                    <div className="text-5xl mb-4 opacity-20">💬</div>
-                    <h3 className={`text-xl font-bold mb-2 ${currentAI.textColor}`}>
-                      안녕하세요! {currentAI.name}입니다.
-                    </h3>
-                    <p className="text-gray-500 text-sm">
-                      궁금한 것이 있으시면 언제든 물어보세요.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {messages.map((message) => (
-                      <div
-                        key={message.id}
-                        className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                      >
-                        <div
-                          className={`max-w-xs lg:max-w-md px-4 py-3 rounded-3xl shadow-sm ${
-                            message.sender === 'user'
-                              ? 'bg-blue-500 text-white'
-                              : 'bg-gray-100 text-gray-800'
-                          }`}
-                        >
-                          <p className="text-sm leading-relaxed">{message.text}</p>
-                          <p className={`text-xs mt-2 ${
-                            message.sender === 'user' ? 'text-blue-100' : 'text-gray-500'
-                          }`}>
-                            {message.sender === 'user' ? '나' : currentAI.name} • {message.timestamp}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                    {isTyping && (
-                      <div className="flex justify-start">
-                        <div className="bg-gray-100 text-gray-800 px-4 py-3 rounded-3xl shadow-sm">
-                          <p className="text-sm">
-                            {currentAI.name}이 답변을 준비하고 있습니다...
-                          </p>
-                          <p className="text-xs text-gray-500 mt-2">
-                            {currentAI.name} • 지금
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              {/* 입력 영역 */}
-              <div className="p-5 border-t border-gray-100">
-                <div className="flex space-x-3">
-                  <input
-                    type="text"
-                    value={inputMessage}
-                    onChange={(e) => setInputMessage(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                    placeholder={`${currentAI.name}에게 질문하세요`}
-                    className="flex-1 px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                  />
+                {/* 자주 묻는 질문 */}
+                <div className="p-4 border-b border-gray-100">
                   <button
-                    onClick={handleSendMessage}
-                    disabled={!inputMessage.trim()}
-                    className="px-6 py-3 bg-blue-500 text-white rounded-2xl hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center space-x-2 shadow-md hover:shadow-lg"
+                    onClick={() => setShowFAQ(!showFAQ)}
+                    className="flex items-center justify-between w-full text-left hover:bg-gray-50 rounded-xl p-2 transition-colors duration-200"
                   >
-                    <Send className="w-4 h-4" />
-                    <span>전송</span>
+                    <h3 className="text-base font-bold text-gray-800">자주 묻는 질문</h3>
+                    {showFAQ ? (
+                      <ChevronUp className="w-5 h-5 text-gray-400" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-gray-400" />
+                    )}
                   </button>
+                  
+                  {showFAQ && (
+                    <div className="mt-3 grid grid-cols-1 gap-2">
+                      {currentAI.faqs.map((faq, index) => (
+                        <button
+                          key={index}
+                          onClick={() => handleFAQClick(faq)}
+                          className="p-3 text-left bg-gray-50 hover:bg-gray-100 rounded-2xl transition-all duration-200 border border-gray-200 hover:border-gray-300 text-sm hover:shadow-sm"
+                        >
+                          <span className="text-gray-700">{faq}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* 채팅 영역 */}
+                <div className="flex-1 overflow-y-auto p-5">
+                  {messages.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center h-full text-center">
+                      <div className="text-5xl mb-4 opacity-20">💬</div>
+                      <h3 className={`text-xl font-bold mb-2 ${currentAI.textColor}`}>
+                        안녕하세요! {currentAI.name}입니다.
+                      </h3>
+                      <p className="text-gray-500 text-sm">
+                        궁금한 것이 있으시면 언제든 물어보세요.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {messages.map((message) => (
+                        <div
+                          key={message.id}
+                          className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                        >
+                          <div
+                            className={`max-w-xs lg:max-w-md px-4 py-3 rounded-3xl shadow-sm ${
+                              message.sender === 'user'
+                                ? 'bg-blue-500 text-white'
+                                : 'bg-gray-100 text-gray-800'
+                            }`}
+                          >
+                            <p className="text-sm leading-relaxed">{message.text}</p>
+                            <p className={`text-xs mt-2 ${
+                              message.sender === 'user' ? 'text-blue-100' : 'text-gray-500'
+                            }`}>
+                              {message.sender === 'user' ? '나' : currentAI.name} • {message.timestamp}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                      {isTyping && (
+                        <div className="flex justify-start">
+                          <div className="bg-gray-100 text-gray-800 px-4 py-3 rounded-3xl shadow-sm">
+                            <p className="text-sm">
+                              {currentAI.name}이 답변을 준비하고 있습니다...
+                            </p>
+                            <p className="text-xs text-gray-500 mt-2">
+                              {currentAI.name} • 지금
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* 입력 영역 */}
+                <div className="p-5 border-t border-gray-100">
+                  <div className="flex space-x-3">
+                    <input
+                      type="text"
+                      value={inputMessage}
+                      onChange={(e) => setInputMessage(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                      placeholder={`${currentAI.name}에게 질문하세요`}
+                      className="flex-1 px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    />
+                    <button
+                      onClick={handleSendMessage}
+                      disabled={!inputMessage.trim()}
+                      className="px-6 py-3 bg-blue-500 text-white rounded-2xl hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center space-x-2 shadow-md hover:shadow-lg"
+                    >
+                      <Send className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        ) : (
+          // 데스크톱 레이아웃: 기존 좌측 사이드바 + 우측 채팅
+          <div className="flex gap-6 h-[calc(100vh-140px)]">
+            {/* 좌측 AI 전문가 선택 (30%) */}
+            <div className="w-80 flex-shrink-0">
+              <AIExpertSelector />
+            </div>
+
+            {/* 우측 채팅 영역 (70%) */}
+            <div className="flex-1">
+              <div className="bg-white rounded-3xl shadow-lg h-full flex flex-col overflow-hidden border border-gray-100">
+                {/* AI 헤더 - 더 컴팩트하게 */}
+                <div className={`bg-gradient-to-r ${currentAI.color} text-white p-5 rounded-t-3xl`}>
+                  <div className="flex items-center space-x-4">
+                    <div className="text-2xl bg-white/20 backdrop-blur-sm rounded-2xl p-3">
+                      {currentAI.icon}
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold">{currentAI.name}</h2>
+                      <p className="text-sm opacity-90 mt-1">{currentAI.description}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 자주 묻는 질문 */}
+                <div className="p-4 border-b border-gray-100">
+                  <button
+                    onClick={() => setShowFAQ(!showFAQ)}
+                    className="flex items-center justify-between w-full text-left hover:bg-gray-50 rounded-xl p-2 transition-colors duration-200"
+                  >
+                    <h3 className="text-base font-bold text-gray-800">자주 묻는 질문</h3>
+                    {showFAQ ? (
+                      <ChevronUp className="w-5 h-5 text-gray-400" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-gray-400" />
+                    )}
+                  </button>
+                  
+                  {showFAQ && (
+                    <div className="mt-3 grid grid-cols-1 gap-2">
+                      {currentAI.faqs.map((faq, index) => (
+                        <button
+                          key={index}
+                          onClick={() => handleFAQClick(faq)}
+                          className="p-3 text-left bg-gray-50 hover:bg-gray-100 rounded-2xl transition-all duration-200 border border-gray-200 hover:border-gray-300 text-sm hover:shadow-sm"
+                        >
+                          <span className="text-gray-700">{faq}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* 채팅 영역 */}
+                <div className="flex-1 overflow-y-auto p-5">
+                  {messages.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center h-full text-center">
+                      <div className="text-5xl mb-4 opacity-20">💬</div>
+                      <h3 className={`text-xl font-bold mb-2 ${currentAI.textColor}`}>
+                        안녕하세요! {currentAI.name}입니다.
+                      </h3>
+                      <p className="text-gray-500 text-sm">
+                        궁금한 것이 있으시면 언제든 물어보세요.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {messages.map((message) => (
+                        <div
+                          key={message.id}
+                          className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                        >
+                          <div
+                            className={`max-w-xs lg:max-w-md px-4 py-3 rounded-3xl shadow-sm ${
+                              message.sender === 'user'
+                                ? 'bg-blue-500 text-white'
+                                : 'bg-gray-100 text-gray-800'
+                            }`}
+                          >
+                            <p className="text-sm leading-relaxed">{message.text}</p>
+                            <p className={`text-xs mt-2 ${
+                              message.sender === 'user' ? 'text-blue-100' : 'text-gray-500'
+                            }`}>
+                              {message.sender === 'user' ? '나' : currentAI.name} • {message.timestamp}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                      {isTyping && (
+                        <div className="flex justify-start">
+                          <div className="bg-gray-100 text-gray-800 px-4 py-3 rounded-3xl shadow-sm">
+                            <p className="text-sm">
+                              {currentAI.name}이 답변을 준비하고 있습니다...
+                            </p>
+                            <p className="text-xs text-gray-500 mt-2">
+                              {currentAI.name} • 지금
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* 입력 영역 */}
+                <div className="p-5 border-t border-gray-100">
+                  <div className="flex space-x-3">
+                    <input
+                      type="text"
+                      value={inputMessage}
+                      onChange={(e) => setInputMessage(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                      placeholder={`${currentAI.name}에게 질문하세요`}
+                      className="flex-1 px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    />
+                    <button
+                      onClick={handleSendMessage}
+                      disabled={!inputMessage.trim()}
+                      className="px-6 py-3 bg-blue-500 text-white rounded-2xl hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center space-x-2 shadow-md hover:shadow-lg"
+                    >
+                      <Send className="w-4 h-4" />
+                      <span>전송</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
