@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Filter, Star, Heart, Eye, ShoppingCart, ChevronUp, ChevronDown } from 'lucide-react';
 
 const ContainerCatalogPage = () => {
@@ -14,6 +14,19 @@ const ContainerCatalogPage = () => {
   const [selectedFeatures, setSelectedFeatures] = useState([]);
   const [isSubCategoryCollapsed, setIsSubCategoryCollapsed] = useState(false);
   const [isFilterCollapsed, setIsFilterCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // 화면 크기 감지
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // 대분류 카테고리
   const mainCategories = {
@@ -558,9 +571,152 @@ const ContainerCatalogPage = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="flex gap-6">
-          {/* 좌측 사이드바 - 세부카테고리 + 필터 */}
-          <div className="w-80 space-y-6">
+        {/* 모바일에서는 필터를 상단에 배치 */}
+        {isMobile && (
+          <div className="mb-6 space-y-4">
+            {/* 세부카테고리 - 모바일 */}
+            <div className="bg-white rounded-lg shadow-sm p-4">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">세부 카테고리</h3>
+                <button
+                  onClick={() => setIsSubCategoryCollapsed(!isSubCategoryCollapsed)}
+                  className="p-1 hover:bg-gray-100 rounded transition-colors"
+                >
+                  {isSubCategoryCollapsed ? (
+                    <ChevronDown size={20} className="text-gray-600" />
+                  ) : (
+                    <ChevronUp size={20} className="text-gray-600" />
+                  )}
+                </button>
+              </div>
+              
+              {!isSubCategoryCollapsed && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {subCategories[activeMainCategory]?.map((category) => (
+                    <button
+                      key={category.id}
+                      onClick={() => setActiveSubCategory(category.id)}
+                      className={`p-3 rounded-lg text-left transition-colors text-sm ${
+                        activeSubCategory === category.id
+                          ? 'bg-blue-50 border-2 border-blue-200 text-blue-800'
+                          : 'bg-gray-50 border border-gray-200 text-gray-700 hover:bg-gray-100'
+                      }`}
+                    >
+                      <div className="font-medium">{category.name}</div>
+                      <div className="text-xs text-gray-500 mt-1">{category.desc}</div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* 필터 - 모바일 */}
+            <div className="bg-white rounded-lg shadow-sm p-4">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">필터</h3>
+                <button
+                  onClick={() => setIsFilterCollapsed(!isFilterCollapsed)}
+                  className="p-1 hover:bg-gray-100 rounded transition-colors"
+                >
+                  {isFilterCollapsed ? (
+                    <ChevronDown size={20} className="text-gray-600" />
+                  ) : (
+                    <ChevronUp size={20} className="text-gray-600" />
+                  )}
+                </button>
+              </div>
+
+              {!isFilterCollapsed && (
+                <div className="space-y-4">
+                  {/* 용량 범위 */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      용량 범위: {capacityRange[0]}ml - {capacityRange[1]}ml
+                    </label>
+                    <div className="flex gap-2">
+                      <input
+                        type="range"
+                        min="1"
+                        max="500"
+                        value={capacityRange[0]}
+                        onChange={(e) => setCapacityRange([parseInt(e.target.value), capacityRange[1]])}
+                        className="flex-1"
+                      />
+                      <input
+                        type="range"
+                        min="1"
+                        max="500"
+                        value={capacityRange[1]}
+                        onChange={(e) => setCapacityRange([capacityRange[0], parseInt(e.target.value)])}
+                        className="flex-1"
+                      />
+                    </div>
+                  </div>
+
+                  {/* 재질 필터 */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">재질</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {['플라스틱', '유리', '금속', '친환경'].map((material) => (
+                        <label key={material} className="flex items-center text-sm">
+                          <input
+                            type="checkbox"
+                            className="mr-2 rounded"
+                            onChange={(e) => {
+                              // 재질 필터 로직
+                            }}
+                          />
+                          {material}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 기능 필터 */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">기능</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {['펌프', '스프레이', '스포이드', '진공', '에어리스'].map((feature) => (
+                        <label key={feature} className="flex items-center text-sm">
+                          <input
+                            type="checkbox"
+                            className="mr-2 rounded"
+                            checked={selectedFeatures.includes(feature)}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setSelectedFeatures([...selectedFeatures, feature]);
+                              } else {
+                                setSelectedFeatures(selectedFeatures.filter(f => f !== feature));
+                              }
+                            }}
+                          />
+                          {feature}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 필터 초기화 */}
+                  <button
+                    onClick={() => {
+                      setCapacityRange([1, 500]);
+                      setSelectedMaterials({ plastic: [], metal: [], natural: [] });
+                      setSelectedFeatures([]);
+                    }}
+                    className="w-full bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium"
+                  >
+                    필터 초기화
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        <div className={`${isMobile ? 'block' : 'flex gap-6'}`}>
+          {/* 데스크톱에서만 좌측 사이드바 표시 */}
+          {!isMobile && (
+            <div className="w-80 space-y-6">
             {/* 세부카테고리 */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <div className="flex justify-between items-center mb-4">
@@ -742,9 +898,10 @@ const ContainerCatalogPage = () => {
               )}
             </div>
           </div>
+          )}
 
           {/* 메인 콘텐츠 */}
-          <div className="flex-1">
+          <div className={`${isMobile ? 'w-full' : 'flex-1'}`}>
             {/* 결과 헤더 */}
             <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
               <div className="flex justify-between items-center">
@@ -756,7 +913,7 @@ const ContainerCatalogPage = () => {
             </div>
 
             {/* 제품 그리드 */}
-            <div className="grid grid-cols-4 gap-6">
+            <div className={`grid gap-6 ${isMobile ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'}`}>
               {filteredProducts.map((product) => (
                 <div key={product.id} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
                   <div className="relative">
