@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Filter, Eye, Heart, Star, Tag, Users, TrendingUp, ArrowRight, X } from 'lucide-react';
 import '../App.css';
 
@@ -8,6 +8,19 @@ const ConceptViewPage = () => {
   const [selectedTarget, setSelectedTarget] = useState('all');
   const [selectedPriceRange, setSelectedPriceRange] = useState('all');
   const [showFloatingCTA, setShowFloatingCTA] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // 화면 크기 감지
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const concepts = [
     {
@@ -579,9 +592,9 @@ const ConceptViewPage = () => {
       </div>
 
       {/* 플로팅 CTA */}
-      {showFloatingCTA && (
+      {showFloatingCTA && !isMobile && (
         <div 
-          className="md:block fixed bottom-24 left-6 bg-transparent p-4 max-w-xs"
+          className="fixed bottom-24 left-6 bg-transparent p-4 max-w-xs"
           style={{ zIndex: 9999 }}
         >
           {/* 닫기 버튼 */}
