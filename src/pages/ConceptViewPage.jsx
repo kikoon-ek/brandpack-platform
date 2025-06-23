@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, Eye, Heart, Star, Tag, Users, TrendingUp, ArrowRight, X } from 'lucide-react';
+import { Search, Filter, Eye, Heart, Star, Tag, Users, TrendingUp, ArrowRight, X, ChevronDown, ChevronUp } from 'lucide-react';
 import '../App.css';
 
 const ConceptViewPage = () => {
@@ -9,6 +9,7 @@ const ConceptViewPage = () => {
   const [selectedPriceRange, setSelectedPriceRange] = useState('all');
   const [showFloatingCTA, setShowFloatingCTA] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const [isFilterExpanded, setIsFilterExpanded] = useState(true);
 
   // 화면 크기 감지
   useEffect(() => {
@@ -432,82 +433,101 @@ const ConceptViewPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-stone-100">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex gap-8">
-          {/* 좌측 사이드바 - 검색 및 필터 */}
-          <div className="w-56 space-y-6">
-            {/* 검색 */}
+          {/* 좌측 사이드바 - 통합 필터 */}
+          <div className="w-56">
             <div className="bg-white rounded-lg shadow-lg p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">검색</h3>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="콘셉트명 또는 설명 검색..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                />
+              {/* 검색 및 필터 토글 헤더 */}
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-800">필터</h3>
+                <button
+                  onClick={() => setIsFilterExpanded(!isFilterExpanded)}
+                  className="p-1 hover:bg-gray-100 rounded transition-colors"
+                >
+                  {isFilterExpanded ? (
+                    <ChevronUp className="w-5 h-5 text-gray-600" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5 text-gray-600" />
+                  )}
+                </button>
               </div>
-            </div>
 
-            {/* 카테고리 */}
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">카테고리</h3>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-              >
-                {categories.map(category => (
-                  <option key={category} value={category}>
-                    {category === 'all' ? '전체 카테고리' : category}
-                  </option>
-                ))}
-              </select>
-            </div>
+              {/* 검색 (항상 표시) */}
+              <div className="mb-4">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <input
+                    type="text"
+                    placeholder="콘셉트명 또는 설명 검색..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
 
-            {/* 타겟 */}
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">타겟</h3>
-              <select
-                value={selectedTarget}
-                onChange={(e) => setSelectedTarget(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-              >
-                <option value="all">전체 타겟</option>
-                {targets.slice(1).map(target => (
-                  <option key={target} value={target}>{target}</option>
-                ))}
-              </select>
-            </div>
+              {/* 접을 수 있는 필터 섹션 */}
+              {isFilterExpanded && (
+                <div className="space-y-4">
+                  {/* 카테고리 */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">카테고리</label>
+                    <select
+                      value={selectedCategory}
+                      onChange={(e) => setSelectedCategory(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-sm"
+                    >
+                      {categories.map(category => (
+                        <option key={category} value={category}>
+                          {category === 'all' ? '전체 카테고리' : category}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-            {/* 가격대 */}
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">가격대</h3>
-              <select
-                value={selectedPriceRange}
-                onChange={(e) => setSelectedPriceRange(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-              >
-                <option value="all">전체 가격대</option>
-                {priceRanges.slice(1).map(range => (
-                  <option key={range} value={range}>{range}</option>
-                ))}
-              </select>
-            </div>
+                  {/* 타겟 */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">타겟</label>
+                    <select
+                      value={selectedTarget}
+                      onChange={(e) => setSelectedTarget(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-sm"
+                    >
+                      <option value="all">전체 타겟</option>
+                      {targets.slice(1).map(target => (
+                        <option key={target} value={target}>{target}</option>
+                      ))}
+                    </select>
+                  </div>
 
-            {/* 필터 초기화 */}
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <button
-                onClick={() => {
-                  setSearchTerm('');
-                  setSelectedCategory('all');
-                  setSelectedTarget('all');
-                  setSelectedPriceRange('all');
-                }}
-                className="w-full bg-gray-600 text-white py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors"
-              >
-                필터 초기화
-              </button>
+                  {/* 가격대 */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">가격대</label>
+                    <select
+                      value={selectedPriceRange}
+                      onChange={(e) => setSelectedPriceRange(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-sm"
+                    >
+                      <option value="all">전체 가격대</option>
+                      {priceRanges.slice(1).map(range => (
+                        <option key={range} value={range}>{range}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* 필터 초기화 */}
+                  <button
+                    onClick={() => {
+                      setSearchTerm('');
+                      setSelectedCategory('all');
+                      setSelectedTarget('all');
+                      setSelectedPriceRange('all');
+                    }}
+                    className="w-full bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium"
+                  >
+                    필터 초기화
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
