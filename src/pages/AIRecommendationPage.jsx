@@ -205,7 +205,7 @@ const AIRecommendationPage = () => {
 
   // AI 전문가 선택 컴포넌트
   const AIExpertSelector = () => (
-    <div className={`bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-100 ${isMobile ? 'w-full' : 'h-full'}`}>
+    <div className={`bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-100 ${isMobile ? 'w-full' : 'h-full'} ${isMobile && !isAIListExpanded ? 'h-auto' : ''}`}>
       <div className="p-5 border-b border-gray-100">
         <div className="flex justify-between items-center">
           <div>
