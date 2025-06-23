@@ -510,87 +510,88 @@ const ConceptViewPage = () => {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredConcepts.map((concept) => (
                 <div key={concept.id} className="relative group cursor-pointer">
-                  {/* 메인 이미지 카드 - 실제 화장품 이미지 */}
+                  {/* 메인 이미지 카드 */}
                   <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                     <div 
-                      className="h-80 relative bg-cover bg-center"
+                      className="h-64 relative bg-cover bg-center"
                       style={{
                         backgroundImage: `url(${concept.image})`
                       }}
                     >
-                      {/* 기본 상태에서는 아무것도 표시하지 않음 - 순수 이미지만 */}
+                      {/* 호버 시 나타나는 정보 오버레이 */}
+                      <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-center p-6">
+                        <div className="text-white space-y-3">
+                          {/* 설명 */}
+                          <div className="mb-3">
+                            <p className="text-white/90 text-sm leading-relaxed line-clamp-3">{concept.description}</p>
+                          </div>
+
+                          {/* 주요 정보 */}
+                          <div className="space-y-2 text-sm">
+                            <div className="flex justify-between">
+                              <span className="text-white/70">타겟</span>
+                              <span className="text-white font-medium">{concept.target}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-white/70">예상 가격</span>
+                              <span className="text-white font-medium">{concept.targetPrice}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-white/70">시장 규모</span>
+                              <span className="text-white font-medium">{concept.marketSize}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-white/70">개발 기간</span>
+                              <span className="text-white font-medium">{concept.developmentTime}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-white/70">경쟁 강도</span>
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${getCompetitionColor(concept.competition)}`}>
+                                {concept.competition}
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* 통계 */}
+                          <div className="flex justify-center space-x-6 pt-3 border-t border-white/20">
+                            <div className="flex items-center space-x-1">
+                              <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                              <span className="text-sm font-medium">{concept.rating}</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <Heart className="w-4 h-4 text-red-400" />
+                              <span className="text-sm">{concept.likes}</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <Eye className="w-4 h-4 text-blue-400" />
+                              <span className="text-sm">{concept.views}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
 
-                  {/* 호버 시 나타나는 정보 오버레이 */}
-                  <div className="absolute inset-0 bg-black/70 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-center p-6">
-                    <div className="text-white space-y-4">
-                      {/* 제품명 */}
-                      <div className="text-center mb-4">
-                        <h3 className="text-xl font-bold mb-1">{concept.name}</h3>
-                        <p className="text-white/90 text-sm">{concept.category}</p>
-                      </div>
-
-                      {/* 설명 */}
-                      <div className="mb-4">
-                        <p className="text-white/90 text-sm leading-relaxed line-clamp-3">{concept.description}</p>
-                      </div>
-
-                      {/* 주요 정보 */}
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-white/70">타겟</span>
-                          <span className="text-white font-medium">{concept.target}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-white/70">예상 가격</span>
-                          <span className="text-white font-medium">{concept.targetPrice}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-white/70">시장 규모</span>
-                          <span className="text-white font-medium">{concept.marketSize}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-white/70">개발 기간</span>
-                          <span className="text-white font-medium">{concept.developmentTime}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-white/70">경쟁 강도</span>
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            concept.competition === '낮음' ? 'bg-green-500 text-white' :
-                            concept.competition === '중간' ? 'bg-yellow-500 text-white' :
-                            'bg-red-500 text-white'
-                          }`}>
-                            {concept.competition}
-                          </span>
+                    {/* 이미지 아래 기본 정보 */}
+                    <div className="p-4">
+                      {/* 제품명과 런칭 가능여부 */}
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="text-lg font-bold text-gray-900">{concept.name}</h3>
+                        <div className="flex items-center space-x-1">
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                          <span className="text-sm text-green-600 font-medium">런칭 가능</span>
                         </div>
                       </div>
 
-                      {/* 태그 */}
-                      <div className="flex flex-wrap gap-1 mb-4">
-                        {concept.tags.slice(0, 3).map((tag, index) => (
-                          <span key={index} className="px-2 py-1 bg-white/20 text-white text-xs rounded-full">
+                      {/* 태그들 */}
+                      <div className="flex flex-wrap gap-1">
+                        {concept.tags.map((tag, index) => (
+                          <span 
+                            key={index}
+                            className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded-full"
+                          >
                             #{tag}
                           </span>
                         ))}
-                      </div>
-
-                      {/* 통계만 표시 (자세히 보기 버튼 제거) */}
-                      <div className="flex items-center justify-center pt-4 border-t border-white/20">
-                        <div className="flex items-center gap-4 text-sm text-white/80">
-                          <div className="flex items-center gap-1">
-                            <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                            <span>{concept.rating}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Heart className="w-4 h-4" />
-                            <span>{concept.likes}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Eye className="w-4 h-4" />
-                            <span>{concept.views}</span>
-                          </div>
-                        </div>
                       </div>
                     </div>
                   </div>
