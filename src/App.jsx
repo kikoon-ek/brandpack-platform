@@ -11,6 +11,7 @@ import ProjectPage from './pages/ProjectPage';
 import GlobalBusinessPage from './pages/GlobalBusinessPage';
 import AIRecommendationPage from './pages/AIRecommendationPage';
 import PortfolioPage from './pages/PortfolioPage';
+import PortfolioDetailPage from './pages/PortfolioDetailPage';
 import ContentPage from './pages/ContentPage';
 import LoginPage from './pages/LoginPage';
 import './App.css';
@@ -30,6 +31,7 @@ function App() {
           <Route path="/global-business" element={<GlobalBusinessPage />} />
           <Route path="/ai-assistant" element={<AIRecommendationPage />} />
           <Route path="/portfolio" element={<PortfolioPage />} />
+          <Route path="/portfolio/:id" element={<PortfolioDetailPage />} />
           <Route path="/content" element={<ContentPage />} />
           <Route path="/login" element={<LoginPage />} />
         </Routes>
