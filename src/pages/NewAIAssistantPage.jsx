@@ -140,10 +140,10 @@ const NewAIAssistantPage = () => {
 
       {/* 메인 콘텐츠 - PC에서 좌우 배치, 모바일에서 세로 배치 */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex flex-col md:flex-row gap-6">
           
           {/* AI 전문가 선택 영역 - PC에서 좌측, 모바일에서 상단 */}
-          <div className="w-full lg:w-80 lg:flex-shrink-0">
+          <div className="w-full md:w-80 md:flex-shrink-0">
             <div className="bg-white rounded-xl shadow-sm border border-gray-200">
               
               {/* 헤더 - 모바일에서만 접기 버튼 */}
@@ -151,14 +151,14 @@ const NewAIAssistantPage = () => {
                 <h3 className="text-lg font-semibold text-gray-900">AI 전문가</h3>
                 <button 
                   onClick={() => setIsAIListExpanded(!isAIListExpanded)}
-                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors lg:hidden"
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors md:hidden"
                 >
                   <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform ${isAIListExpanded ? 'rotate-180' : ''}`} />
                 </button>
               </div>
               
               {/* AI 목록 */}
-              <div className={`p-6 space-y-4 ${!isAIListExpanded ? 'hidden lg:block' : ''}`}>
+              <div className={`p-6 space-y-4 ${!isAIListExpanded ? 'hidden md:block' : ''}`}>
                 {Object.entries(aiExperts).map(([key, ai]) => (
                   <button
                     key={key}
@@ -203,7 +203,7 @@ const NewAIAssistantPage = () => {
           
           {/* 채팅 영역 - PC에서 우측, 모바일에서 하단 */}
           <div className="flex-1">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-[600px] lg:h-[700px]">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-[600px] md:h-[700px]">
               
               {/* AI 헤더 */}
               <div className="bg-gray-900 text-white p-6 rounded-t-xl">
