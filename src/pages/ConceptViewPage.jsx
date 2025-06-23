@@ -150,17 +150,12 @@ const ConceptViewPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-stone-100">
-      {/* Header - 극도로 축소 */}
-      <div className="bg-gradient-to-r from-gray-600 via-stone-600 to-slate-700 text-white py-1">
+      {/* Header - 거의 없애다시피 축소 */}
+      <div className="bg-gradient-to-r from-gray-600 via-stone-600 to-slate-700 text-white py-0.5">
         <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-sm font-bold">
-            <span className="bg-gradient-to-r from-gray-700 to-stone-700 bg-clip-text text-transparent">
-              콘셉트 보기
-            </span>
+          <h1 className="text-xs font-medium">
+            콘셉트 보기
           </h1>
-          <p className="text-xs text-gray-100">
-            완성된 브랜드 기획안을 살펴보고 당신의 브랜드를 시작하세요
-          </p>
         </div>
       </div>
 
