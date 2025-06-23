@@ -1,411 +1,574 @@
 import React, { useState } from 'react';
-import { Search, Filter, Calendar, User, Eye, Heart, Share2, BookOpen, TrendingUp, Award } from 'lucide-react';
-import '../App.css';
+import { Search, ChevronDown, ChevronUp, Bot, Building, DollarSign, Calendar, ExternalLink, User, Clock, Eye } from 'lucide-react';
 
 const ContentPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedType, setSelectedType] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState('전체');
+  const [isFilterExpanded, setIsFilterExpanded] = useState(false);
+  const [isSearchExpanded, setIsSearchExpanded] = useState(true);
+  const [isCategoryExpanded, setIsCategoryExpanded] = useState(true);
+  const [selectedSupportType, setSelectedSupportType] = useState('화장품 지원사업');
+  const [isSupportExpanded, setIsSupportExpanded] = useState(true);
+
+  const categories = [
+    { id: 'all', name: '전체', icon: '📚' },
+    { id: 'trend', name: '트렌드 분석', icon: '📊' },
+    { id: 'guide', name: '실무 가이드', icon: '📖' },
+    { id: 'makeup', name: '메이크업 팁', icon: '💄' },
+    { id: 'skincare', name: '스킨케어', icon: '🧴' },
+    { id: 'ingredient', name: '성분 분석', icon: '🔬' },
+    { id: 'review', name: '제품 리뷰', icon: '⭐' },
+    { id: 'seasonal', name: '계절별 팁', icon: '🌸' },
+    { id: 'diy', name: 'DIY 뷰티', icon: '🏠' }
+  ];
+
+  const supportPrograms = [
+    {
+      id: 1,
+      title: 'K-뷰티 글로벌 진출 지원사업',
+      organization: '중소벤처기업부',
+      amount: '최대 5억원',
+      deadline: '2024.07.31',
+      status: '접수중',
+      description: 'K-뷰티 브랜드의 해외 진출을 위한 마케팅, 유통, 인증 지원'
+    },
+    {
+      id: 2,
+      title: '화장품 R&D 혁신 지원사업',
+      organization: '산업통상자원부',
+      amount: '최대 3억원',
+      deadline: '2024.08.15',
+      status: '접수중',
+      description: '혁신적인 화장품 기술 개발 및 상용화 지원'
+    },
+    {
+      id: 3,
+      title: '친환경 화장품 개발 지원사업',
+      organization: '환경부',
+      amount: '최대 2억원',
+      deadline: '2024.09.30',
+      status: '접수중',
+      description: '지속가능한 친환경 화장품 개발 및 인증 지원'
+    }
+  ];
 
   const contentItems = [
     {
       id: 1,
-      title: "2024 K-뷰티 글로벌 트렌드 분석",
-      category: "시장 분석",
-      type: "리포트",
-      author: "BrandPack 리서치팀",
-      publishDate: "2024.03.15",
-      readTime: "12분",
-      views: 2340,
-      likes: 156,
-      summary: "K-뷰티의 글로벌 시장 동향과 2024년 주요 트렌드를 심층 분석한 종합 리포트입니다.",
-      content: "한국 화장품의 글로벌 진출이 가속화되면서 K-뷰티는 이제 세계적인 트렌드를 주도하고 있습니다. 특히 스킨케어 분야에서의 혁신적인 성분 개발과 독창적인 제품 컨셉이 해외 소비자들의 큰 관심을 받고 있습니다.",
-      tags: ["K-뷰티", "글로벌", "트렌드", "시장분석"],
-      image: "/api/placeholder/600/400"
+      title: '2024 K-뷰티 트렌드 완벽 가이드',
+      category: '트렌드 분석',
+      author: '뷰티 에디터',
+      readTime: '15분',
+      views: 8524,
+      publishDate: '2024-12-20',
+      description: '2024년 가장 핫한 K-뷰티 트렌드와 글로벌 시장 동향을 심층 분석합니다.',
+      image: '/images/cosmetics/N2IYFVfkjLDB.jpg',
+      tags: ['K-뷰티', '트렌드', '글로벌']
     },
     {
       id: 2,
-      title: "화장품 수출 인증 완벽 가이드",
-      category: "법규/인증",
-      type: "가이드",
-      author: "법무팀",
-      publishDate: "2024.03.10",
-      readTime: "8분",
-      views: 1890,
-      likes: 203,
-      summary: "해외 수출을 위한 각국별 화장품 인증 절차와 필요 서류를 상세히 정리한 실무 가이드입니다.",
-      content: "화장품 해외 수출 시 가장 중요한 것은 각국의 법규와 인증 요구사항을 정확히 파악하는 것입니다. 이 가이드에서는 주요 수출국별 인증 절차와 준비해야 할 서류들을 단계별로 설명합니다.",
-      tags: ["수출", "인증", "법규", "가이드"],
-      image: "/api/placeholder/600/400"
+      title: '완벽한 스킨케어 루틴 10단계',
+      category: '실무 가이드',
+      author: '스킨케어 전문가',
+      readTime: '20분',
+      views: 12340,
+      publishDate: '2024-12-18',
+      description: '한국식 10단계 스킨케어 루틴의 모든 것을 상세히 알려드립니다.',
+      image: '/images/cosmetics/zyvbFMXDGBmc.jpg',
+      tags: ['스킨케어', '루틴', '가이드']
     },
     {
       id: 3,
-      title: "친환경 패키징의 미래",
-      category: "패키징",
-      type: "아티클",
-      author: "디자인팀",
-      publishDate: "2024.03.08",
-      readTime: "6분",
-      views: 1560,
-      likes: 89,
-      summary: "지속가능한 뷰티 산업을 위한 친환경 패키징 솔루션과 최신 기술 동향을 소개합니다.",
-      content: "환경에 대한 관심이 높아지면서 화장품 업계에서도 친환경 패키징에 대한 수요가 급증하고 있습니다. 재활용 가능한 소재부터 생분해성 포장재까지, 다양한 친환경 솔루션들을 살펴봅니다.",
-      tags: ["친환경", "패키징", "지속가능성", "트렌드"],
-      image: "/api/placeholder/600/400"
+      title: '립스틱 컬러 매칭 완벽 가이드',
+      category: '메이크업 팁',
+      author: '메이크업 아티스트',
+      readTime: '12분',
+      views: 9876,
+      publishDate: '2024-12-15',
+      description: '퍼스널 컬러에 맞는 완벽한 립스틱 선택법과 활용 팁을 공개합니다.',
+      image: '/images/cosmetics/fvO53KLDUyd5.png',
+      tags: ['립스틱', '컬러매칭', '메이크업']
     },
     {
       id: 4,
-      title: "성공적인 브랜드 런칭 전략",
-      category: "브랜딩",
-      type: "케이스 스터디",
-      author: "마케팅팀",
-      publishDate: "2024.03.05",
-      readTime: "15분",
-      views: 2890,
-      likes: 234,
-      summary: "실제 성공 사례를 통해 살펴보는 화장품 브랜드 런칭의 핵심 전략과 실행 방법입니다.",
-      content: "새로운 화장품 브랜드의 성공적인 런칭을 위해서는 체계적인 전략과 실행이 필요합니다. 타겟 고객 분석부터 마케팅 전략까지, 성공 사례를 통해 핵심 포인트들을 분석해봅니다.",
-      tags: ["브랜딩", "런칭", "마케팅", "전략"],
-      image: "/api/placeholder/600/400"
+      title: '민감성 피부를 위한 화장품 성분 분석',
+      category: '성분 분석',
+      author: '화장품 연구원',
+      readTime: '18분',
+      views: 7654,
+      publishDate: '2024-12-12',
+      description: '민감성 피부에 안전한 화장품 성분과 피해야 할 성분들을 자세히 분석합니다.',
+      image: '/images/cosmetics/BRswTZrbJkq9.png',
+      tags: ['민감성피부', '성분', '안전']
     },
     {
       id: 5,
-      title: "AI가 바꾸는 화장품 개발",
-      category: "기술/혁신",
-      type: "아티클",
-      author: "R&D팀",
-      publishDate: "2024.03.01",
-      readTime: "10분",
-      views: 2150,
-      likes: 178,
-      summary: "인공지능 기술이 화장품 연구개발에 미치는 영향과 미래 전망을 분석합니다.",
-      content: "AI 기술의 발전으로 화장품 개발 과정이 혁신적으로 변화하고 있습니다. 성분 분석부터 제품 테스트까지, AI가 어떻게 화장품 산업을 변화시키고 있는지 살펴봅니다.",
-      tags: ["AI", "기술", "혁신", "R&D"],
-      image: "/api/placeholder/600/400"
+      title: '아이섀도 팔레트 활용법 마스터',
+      category: '메이크업 팁',
+      author: '뷰티 인플루언서',
+      readTime: '14분',
+      views: 11234,
+      publishDate: '2024-12-10',
+      description: '하나의 아이섀도 팔레트로 다양한 룩을 연출하는 전문가 노하우를 공개합니다.',
+      image: '/images/cosmetics/C4UC9YEIqfCe.jpg',
+      tags: ['아이섀도', '팔레트', '메이크업']
     },
     {
       id: 6,
-      title: "글로벌 화장품 시장 진출 성공 사례",
-      category: "글로벌",
-      type: "케이스 스터디",
-      author: "글로벌사업팀",
-      publishDate: "2024.02.28",
-      readTime: "12분",
-      views: 1780,
-      likes: 145,
-      summary: "해외 시장 진출에 성공한 국내 화장품 브랜드들의 전략과 노하우를 분석합니다.",
-      content: "국내 화장품 브랜드들의 해외 진출이 활발해지고 있습니다. 성공적인 글로벌 진출을 위한 전략과 현지화 방법, 그리고 실제 성공 사례들을 통해 인사이트를 얻어보세요.",
-      tags: ["글로벌", "해외진출", "성공사례", "전략"],
-      image: "/api/placeholder/600/400"
+      title: '여름철 무너지지 않는 베이스 메이크업',
+      category: '계절별 팁',
+      author: '메이크업 전문가',
+      readTime: '16분',
+      views: 8901,
+      publishDate: '2024-12-08',
+      description: '습하고 더운 여름철에도 완벽하게 지속되는 베이스 메이크업 비법을 알려드립니다.',
+      image: '/images/cosmetics/Cmp5r4I61uUt.jpg',
+      tags: ['베이스메이크업', '여름', '지속력']
+    },
+    {
+      id: 7,
+      title: '안티에이징 스킨케어 완벽 가이드',
+      category: '스킨케어',
+      author: '피부과 전문의',
+      readTime: '22분',
+      views: 15678,
+      publishDate: '2024-12-05',
+      description: '나이별 맞춤 안티에이징 케어법과 효과적인 성분들을 전문의가 직접 설명합니다.',
+      image: '/images/cosmetics/s1RjDBMIXGS6.jpg',
+      tags: ['안티에이징', '스킨케어', '전문의']
+    },
+    {
+      id: 8,
+      title: '블러셔 위치별 얼굴형 보정법',
+      category: '메이크업 팁',
+      author: '페이스 컨투어링 전문가',
+      readTime: '10분',
+      views: 6789,
+      publishDate: '2024-12-03',
+      description: '얼굴형별 최적의 블러셔 위치와 컨투어링 기법을 상세히 알려드립니다.',
+      image: '/images/cosmetics/yHKFODZ6rzM1.jpg',
+      tags: ['블러셔', '얼굴형', '컨투어링']
+    },
+    {
+      id: 9,
+      title: '드럭스토어 화장품 숨은 명품 찾기',
+      category: '제품 리뷰',
+      author: '뷰티 리뷰어',
+      readTime: '13분',
+      views: 9432,
+      publishDate: '2024-12-01',
+      description: '저렴한 가격에 만날 수 있는 드럭스토어 화장품 중 진짜 명품급 제품들을 소개합니다.',
+      image: '/images/cosmetics/P3bBITJ6IQ0r.jpg',
+      tags: ['드럭스토어', '가성비', '리뷰']
+    },
+    {
+      id: 10,
+      title: '파운데이션 선택의 모든 것',
+      category: '제품 가이드',
+      author: '메이크업 아티스트',
+      readTime: '17분',
+      views: 10987,
+      publishDate: '2024-11-28',
+      description: '피부타입별, 커버리지별 완벽한 파운데이션 선택법과 발라주는 기법을 알려드립니다.',
+      image: '/images/cosmetics/2yNK5FKxfyD7.jpg',
+      tags: ['파운데이션', '베이스', '선택법']
+    },
+    {
+      id: 11,
+      title: '홈케어 DIY 페이스 마스크 레시피',
+      category: 'DIY 뷰티',
+      author: '천연 화장품 연구가',
+      readTime: '11분',
+      views: 7123,
+      publishDate: '2024-11-25',
+      description: '집에서 쉽게 만들 수 있는 천연 재료 페이스 마스크 레시피와 효능을 소개합니다.',
+      image: '/images/cosmetics/VXu2duIn6d78.jpg',
+      tags: ['DIY', '천연', '마스크']
+    },
+    {
+      id: 12,
+      title: '브러시 관리와 세정법 완벽 가이드',
+      category: '도구 관리',
+      author: '메이크업 도구 전문가',
+      readTime: '9분',
+      views: 5678,
+      publishDate: '2024-11-22',
+      description: '메이크업 브러시의 올바른 세정법과 관리법으로 브러시 수명을 늘려보세요.',
+      image: '/images/cosmetics/RNd2fLfyWdRY.jpg',
+      tags: ['브러시', '관리', '세정']
+    },
+    {
+      id: 13,
+      title: '겨울철 건조한 피부 집중 케어',
+      category: '계절별 팁',
+      author: '스킨케어 전문가',
+      readTime: '19분',
+      views: 13456,
+      publishDate: '2024-11-20',
+      description: '건조한 겨울철 피부를 위한 집중 보습 케어법과 추천 제품들을 소개합니다.',
+      image: '/images/cosmetics/WTNI5WfUbkdR.jpg',
+      tags: ['겨울케어', '보습', '건조피부']
+    },
+    {
+      id: 14,
+      title: '아이라이너 스타일별 그리는 법',
+      category: '메이크업 팁',
+      author: '아이 메이크업 전문가',
+      readTime: '12분',
+      views: 8765,
+      publishDate: '2024-11-18',
+      description: '눈매별 최적의 아이라이너 스타일과 깔끔하게 그리는 전문가 팁을 공개합니다.',
+      image: '/images/cosmetics/ige6M7LQZPuR.jpg',
+      tags: ['아이라이너', '눈매', '그리기']
+    },
+    {
+      id: 15,
+      title: '세럼 레이어링 순서와 조합법',
+      category: '스킨케어',
+      author: '화장품 성분 전문가',
+      readTime: '15분',
+      views: 11890,
+      publishDate: '2024-11-15',
+      description: '여러 세럼을 효과적으로 레이어링하는 순서와 성분별 조합 가이드를 제공합니다.',
+      image: '/images/cosmetics/DdtqX7ZZtcTM.jpg',
+      tags: ['세럼', '레이어링', '성분']
+    },
+    {
+      id: 16,
+      title: '컨실러 활용법 A to Z',
+      category: '메이크업 팁',
+      author: '베이스 메이크업 전문가',
+      readTime: '14분',
+      views: 9234,
+      publishDate: '2024-11-12',
+      description: '다크서클, 잡티, 홍조까지 완벽하게 커버하는 컨실러 활용법을 알려드립니다.',
+      image: '/images/cosmetics/F9XJtCrEaS71.jpg',
+      tags: ['컨실러', '커버', '베이스']
+    },
+    {
+      id: 17,
+      title: '향수 레이어링과 지속력 높이는 법',
+      category: '향수 가이드',
+      author: '향수 소믈리에',
+      readTime: '13분',
+      views: 6543,
+      publishDate: '2024-11-10',
+      description: '향수의 지속력을 높이고 나만의 시그니처 향을 만드는 레이어링 기법을 소개합니다.',
+      image: '/images/cosmetics/uAGHOmLv4lCY.jpg',
+      tags: ['향수', '레이어링', '지속력']
+    },
+    {
+      id: 18,
+      title: '민감성 피부를 위한 클렌징 가이드',
+      category: '스킨케어',
+      author: '피부과 전문의',
+      readTime: '16분',
+      views: 10234,
+      publishDate: '2024-11-08',
+      description: '민감성 피부도 안심하고 사용할 수 있는 올바른 클렌징 방법과 제품 선택법입니다.',
+      image: '/images/cosmetics/zxYYLc581N9m.jpg',
+      tags: ['민감성피부', '클렌징', '순함']
+    },
+    {
+      id: 19,
+      title: '메이크업 픽서 완벽 활용법',
+      category: '메이크업 팁',
+      author: '메이크업 아티스트',
+      readTime: '11분',
+      views: 7890,
+      publishDate: '2024-11-05',
+      description: '메이크업의 지속력을 극대화하는 픽서 사용법과 타이밍을 상세히 알려드립니다.',
+      image: '/images/cosmetics/JHSnR52EBchc.jpg',
+      tags: ['픽서', '지속력', '메이크업']
+    },
+    {
+      id: 20,
+      title: '올인원 메이크업 키트 활용 가이드',
+      category: '제품 가이드',
+      author: '뷰티 에디터',
+      readTime: '18분',
+      views: 12567,
+      publishDate: '2024-11-03',
+      description: '하나의 키트로 다양한 룩을 연출하는 올인원 메이크업 키트 완벽 활용법을 소개합니다.',
+      image: '/images/cosmetics/9BBXgL6NC1ms.jpg',
+      tags: ['올인원', '키트', '활용법']
     }
   ];
 
-  const categories = ['all', '시장 분석', '법규/인증', '패키징', '브랜딩', '기술/혁신', '글로벌'];
-  const types = ['all', '리포트', '가이드', '아티클', '케이스 스터디'];
-
-  const filteredContent = contentItems.filter(item => {
-    const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.summary.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
-    const matchesType = selectedType === 'all' || item.type === selectedType;
-    
-    return matchesSearch && matchesCategory && matchesType;
-  });
-
-  const featuredContent = contentItems.slice(0, 3);
-  const popularTags = ['K-뷰티', '글로벌', '친환경', '브랜딩', 'AI', '인증', '트렌드', '마케팅'];
-
-  const stats = [
-    { label: "전체 콘텐츠", value: "500+", icon: BookOpen, color: "text-gray-600" },
-    { label: "월간 조회수", value: "50만+", icon: Eye, color: "text-stone-600" },
-    { label: "구독자", value: "12,000+", icon: User, color: "text-slate-600" },
-    { label: "평균 평점", value: "4.8/5", icon: Award, color: "text-gray-700" }
-  ];
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-slate-50/85 to-stone-50/25">
-      {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-gray-600 via-stone-600 to-slate-700 text-white py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-600/20 to-stone-600/20"></div>
-        <div className="relative max-w-7xl mx-auto px-4">
-          <div className="text-center">
-            <h1 className="text-5xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-gray-700 via-stone-700 to-slate-700 bg-clip-text text-transparent">
-                콘텐츠 허브
-              </span>
-            </h1>
-            <p className="text-xl text-gray-100 mb-8 max-w-3xl mx-auto">
-              화장품 산업의 최신 트렌드와 전문 지식을 제공하는 콘텐츠 플랫폼
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Stats Section */}
-      <div className="py-16 bg-gradient-to-br from-gray-50 to-stone-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-white rounded-2xl shadow-lg flex items-center justify-center mx-auto mb-4">
-                  <stat.icon className={`w-8 h-8 ${stat.color}`} />
-                </div>
-                <div className={`text-3xl font-bold mb-2 ${stat.color}`}>{stat.value}</div>
-                <div className="text-gray-600">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar */}
-          <div className="lg:w-64">
-            <div className="bg-white rounded-lg shadow-lg p-6 sticky top-8">
-              <h3 className="text-lg font-bold text-gray-800 mb-4">필터</h3>
-              
-              {/* Search */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">검색</label>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                  <input
-                    type="text"
-                    placeholder="제목, 내용 검색..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                  />
-                </div>
-              </div>
-
-              {/* Category */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">카테고리</label>
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="content-layout gap-8">
+          {/* 좌측 필터 영역 */}
+          <div className="content-sidebar">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sticky top-8">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-semibold text-gray-900">필터</h3>
+                <button 
+                  className="lg:hidden p-2 text-gray-500 hover:text-gray-700"
+                  onClick={() => setIsFilterExpanded(!isFilterExpanded)}
                 >
-                  {categories.map(category => (
-                    <option key={category} value={category}>
-                      {category === 'all' ? '전체 카테고리' : category}
-                    </option>
-                  ))}
-                </select>
+                  <ChevronDown className="w-5 h-5" />
+                </button>
               </div>
 
-              {/* Type */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">콘텐츠 유형</label>
-                <select
-                  value={selectedType}
-                  onChange={(e) => setSelectedType(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                >
-                  {types.map(type => (
-                    <option key={type} value={type}>
-                      {type === 'all' ? '전체 유형' : type}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Popular Tags */}
-              <div>
-                <h4 className="text-sm font-medium text-gray-700 mb-3">인기 태그</h4>
-                <div className="flex flex-wrap gap-2">
-                  {popularTags.map((tag, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setSearchTerm(tag)}
-                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors"
+              <div className="space-y-6">
+                {/* 검색 */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-sm font-medium text-gray-700">검색</label>
+                    <button 
+                      className="p-1 text-gray-400 hover:text-gray-600"
+                      onClick={() => setIsSearchExpanded(!isSearchExpanded)}
                     >
-                      #{tag}
+                      {isSearchExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </button>
-                  ))}
+                  </div>
+                  {isSearchExpanded && (
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                      <input
+                        type="text"
+                        placeholder="제목, 내용, 태그 검색..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* 카테고리 */}
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <label className="text-sm font-medium text-gray-700">카테고리</label>
+                    <button 
+                      className="p-1 text-gray-400 hover:text-gray-600"
+                      onClick={() => setIsCategoryExpanded(!isCategoryExpanded)}
+                    >
+                      {isCategoryExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                    </button>
+                  </div>
+                  {isCategoryExpanded && (
+                    <div className="space-y-2">
+                      {categories.map((category) => (
+                        <button
+                          key={category.id}
+                          onClick={() => setSelectedCategory(category.name)}
+                          className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors ${
+                            selectedCategory === category.name
+                              ? 'bg-purple-100 text-purple-700 border border-purple-200'
+                              : 'text-gray-600 hover:bg-gray-100'
+                          }`}
+                        >
+                          <span className="text-lg">{category.icon}</span>
+                          <span className="text-sm font-medium">{category.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Main Content */}
-          <div className="lg:flex-1">
-            {/* Featured Content */}
-            <div className="mb-12">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6">추천 콘텐츠</h2>
-              <div className="grid md:grid-cols-3 gap-6">
-                {featuredContent.map(item => (
-                  <div key={item.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300">
-                    <div className="aspect-video bg-gray-100 flex items-center justify-center">
-                      <div className="text-gray-400 text-center">
-                        <div className="w-16 h-16 bg-gray-200 rounded-lg mx-auto mb-2"></div>
-                        <span className="text-sm">콘텐츠 이미지</span>
-                      </div>
+          {/* 우측 메인 콘텐츠 영역 */}
+          <div className="content-main">
+            {/* 정부지원사업 정보 */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 mb-8">
+              <div className="p-6 border-b border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-blue-100 rounded-lg">
+                      <Bot className="w-6 h-6 text-blue-600" />
                     </div>
-                    <div className="p-6">
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">{item.category}</span>
-                        <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">{item.type}</span>
-                      </div>
-                      <h3 className="font-bold text-gray-800 mb-2 line-clamp-2">{item.title}</h3>
-                      <p className="text-gray-600 text-sm mb-4 line-clamp-3">{item.summary}</p>
-                      <div className="flex items-center justify-between text-sm text-gray-500">
-                        <span>{item.readTime}</span>
-                        <div className="flex items-center gap-3">
-                          <span className="flex items-center">
-                            <Eye className="w-4 h-4 mr-1" />
-                            {item.views}
-                          </span>
-                          <span className="flex items-center">
-                            <Heart className="w-4 h-4 mr-1" />
-                            {item.likes}
-                          </span>
-                        </div>
-                      </div>
+                    <div>
+                      <h2 className="text-xl font-bold text-gray-900">정부지원사업 정보</h2>
+                      <p className="text-sm text-gray-600">AI가 실시간으로 수집한 최신 지원사업 정보</p>
                     </div>
+                    <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                      실시간 업데이트
+                    </span>
                   </div>
-                ))}
+                  <button 
+                    className="p-2 text-gray-400 hover:text-gray-600"
+                    onClick={() => setIsSupportExpanded(!isSupportExpanded)}
+                  >
+                    {isSupportExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                  </button>
+                </div>
               </div>
-            </div>
 
-            {/* Content List */}
-            <div className="mb-6 flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-gray-800">전체 콘텐츠</h2>
-              <span className="text-gray-600">
-                총 <span className="font-semibold text-gray-800">{filteredContent.length}</span>개 콘텐츠
-              </span>
-            </div>
+              {isSupportExpanded && (
+              <div className="p-6">
+                <div className="flex gap-4 mb-6">
+                  <button 
+                    onClick={() => setSelectedSupportType('화장품 지원사업')}
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                      selectedSupportType === '화장품 지원사업'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    화장품 지원사업
+                  </button>
+                  <button 
+                    onClick={() => setSelectedSupportType('건강기능식품 지원사업')}
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                      selectedSupportType === '건강기능식품 지원사업'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    건강기능식품 지원사업
+                  </button>
+                </div>
 
-            <div className="space-y-6">
-              {filteredContent.map(item => (
-                <div key={item.id} className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300">
-                  <div className="flex gap-6">
-                    <div className="w-48 flex-shrink-0">
-                      <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
-                        <div className="text-gray-400 text-center">
-                          <div className="w-12 h-12 bg-gray-200 rounded-lg mx-auto mb-2"></div>
-                          <span className="text-xs">이미지</span>
+                <div className="grid grid-cols-3 gap-4">
+                  {supportPrograms.map((program) => (
+                    <div key={program.id} className="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:shadow-md transition-shadow">
+                      <div className="flex items-start justify-between mb-2">
+                        <h3 className="text-sm font-semibold text-gray-900 line-clamp-2">{program.title}</h3>
+                        <span className="px-2 py-1 rounded-full text-xs font-medium border bg-green-100 text-green-800 border-green-200">
+                          {program.status}
+                        </span>
+                      </div>
+                      
+                      <div className="space-y-1 text-xs text-gray-600 mb-3">
+                        <div className="flex items-center gap-1">
+                          <Building className="w-3 h-3" />
+                          <span>{program.organization}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <DollarSign className="w-3 h-3" />
+                          <span>{program.amount}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Calendar className="w-3 h-3" />
+                          <span>마감: {program.deadline}</span>
                         </div>
                       </div>
+                      
+                      <p className="text-xs text-gray-600 mb-3 line-clamp-2">{program.description}</p>
+                      
+                      <button className="w-full flex items-center justify-center gap-1 px-3 py-2 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition-colors">
+                        <ExternalLink className="w-3 h-3" />
+                        자세히 보기
+                      </button>
                     </div>
-                    
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">{item.category}</span>
-                        <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">{item.type}</span>
-                      </div>
-                      
-                      <h3 className="text-xl font-bold text-gray-800 mb-3">{item.title}</h3>
-                      <p className="text-gray-600 mb-4 leading-relaxed">{item.summary}</p>
-                      
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {item.tags.map((tag, index) => (
-                          <span key={index} className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">
-                            #{tag}
-                          </span>
-                        ))}
-                      </div>
-                      
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4 text-sm text-gray-500">
-                          <div className="flex items-center">
-                            <User className="w-4 h-4 mr-1" />
-                            {item.author}
+                  ))}
+                </div>
+                </div>
+              )}
+            </div>
+
+            {/* 콘텐츠 목록 */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+              <div className="p-6 border-b border-gray-200">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-semibold text-gray-900">콘텐츠 (20개)</h2>
+                  <div className="text-sm text-gray-500">20 / 20개 표시 중</div>
+                </div>
+              </div>
+
+              <div className="p-6">
+                <div className="grid grid-cols-2 gap-6">
+                  {contentItems.map((item) => (
+                    <div key={item.id} className="group relative bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer">
+                      {/* 4:3 비율 이미지 영역 */}
+                      <div className="relative w-full" style={{ paddingBottom: '75%' }}>
+                        <img 
+                          alt={item.title}
+                          className="absolute inset-0 w-full h-full object-cover"
+                          src={item.image}
+                        />
+                        
+                        {/* 호버 시 나타나는 설명 오버레이 */}
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                          <div className="text-white p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
+                            <p className="text-sm leading-relaxed">{item.description}</p>
                           </div>
-                          <div className="flex items-center">
-                            <Calendar className="w-4 h-4 mr-1" />
-                            {item.publishDate}
-                          </div>
-                          <span>{item.readTime}</span>
                         </div>
                         
-                        <div className="flex items-center gap-4">
-                          <div className="flex items-center gap-3 text-sm text-gray-500">
-                            <span className="flex items-center">
-                              <Eye className="w-4 h-4 mr-1" />
-                              {item.views}
-                            </span>
-                            <span className="flex items-center">
-                              <Heart className="w-4 h-4 mr-1" />
-                              {item.likes}
-                            </span>
+                        {/* 카테고리 배지 */}
+                        <div className="absolute top-3 right-3">
+                          <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">
+                            {item.category}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      {/* 콘텐츠 정보 */}
+                      <div className="p-4">
+                        <h3 className="text-lg font-semibold text-gray-900 group-hover:text-purple-600 transition-colors mb-2 line-clamp-2">
+                          {item.title}
+                        </h3>
+                        
+                        <div className="flex items-center gap-3 text-sm text-gray-500 mb-3">
+                          <div className="flex items-center gap-1">
+                            <User className="w-4 h-4" />
+                            <span>{item.author}</span>
                           </div>
-                          <div className="flex gap-2">
-                            <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
-                              <Share2 className="w-4 h-4" />
-                            </button>
-                            <button className="px-4 py-2 bg-gradient-to-r from-gray-500 to-stone-600 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300">
-                              읽기
-                            </button>
+                          <div className="flex items-center gap-1">
+                            <Clock className="w-4 h-4" />
+                            <span>{item.readTime}</span>
                           </div>
+                          <div className="flex items-center gap-1">
+                            <Eye className="w-4 h-4" />
+                            <span>{item.views.toLocaleString()}</span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            {item.tags.slice(0, 2).map((tag, index) => (
+                              <span key={index} className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                          <span className="text-xs text-gray-400">{item.publishDate}</span>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
-
-            {filteredContent.length === 0 && (
-              <div className="text-center py-12">
-                <div className="text-gray-400 mb-4">
-                  <Filter className="w-16 h-16 mx-auto" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-600 mb-2">검색 결과가 없습니다</h3>
-                <p className="text-gray-500">다른 검색 조건을 시도해보세요.</p>
-              </div>
-            )}
-
-            {/* Pagination */}
-            {filteredContent.length > 0 && (
-              <div className="flex justify-center mt-8">
-                <div className="flex gap-2">
-                  <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                    이전
-                  </button>
-                  <button className="px-4 py-2 bg-gradient-to-r from-gray-600 to-stone-700 text-white rounded-lg">
-                    1
-                  </button>
-                  <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                    2
-                  </button>
-                  <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                    3
-                  </button>
-                  <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                    다음
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>
 
-      {/* Newsletter Subscription */}
-      <div className="py-16 bg-gradient-to-r from-gray-600 via-stone-600 to-slate-700 text-white">
-        <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-4xl font-bold mb-6">
-            최신 콘텐츠를 놓치지 마세요
-          </h2>
-          <p className="text-xl text-gray-100 mb-8">
-            화장품 산업의 최신 트렌드와 인사이트를 이메일로 받아보세요
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="이메일 주소를 입력하세요"
-              className="flex-1 px-4 py-3 rounded-lg text-gray-800 focus:ring-2 focus:ring-white focus:outline-none"
-            />
-            <button className="px-6 py-3 bg-white text-gray-800 rounded-lg font-semibold hover:shadow-lg transition-all duration-300">
-              구독하기
-            </button>
-          </div>
-        </div>
-      </div>
+      {/* 커스텀 CSS */}
+      <style jsx>{`
+        .content-layout {
+          display: flex;
+          flex-direction: column;
+        }
+        
+        .content-sidebar {
+          width: 100%;
+        }
+        
+        .content-main {
+          width: 100%;
+        }
+        
+        @media (min-width: 1024px) {
+          .content-layout {
+            flex-direction: row;
+          }
+          
+          .content-sidebar {
+            width: 260px;
+            flex-shrink: 0;
+          }
+          
+          .content-main {
+            flex: 1;
+          }
+        }
+      `}</style>
     </div>
   );
 };
