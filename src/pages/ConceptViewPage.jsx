@@ -165,202 +165,205 @@ const ConceptViewPage = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Search and Filters */}
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-          <div className="grid md:grid-cols-4 gap-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="콘셉트명 또는 설명 검색..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-              />
-            </div>
-            
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-            >
-              {categories.map(category => (
-                <option key={category} value={category}>
-                  {category === 'all' ? '전체 카테고리' : category}
-                </option>
-              ))}
-            </select>
-            
-            <select
-              value={selectedTarget}
-              onChange={(e) => setSelectedTarget(e.target.value)}
-              className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-            >
-              <option value="all">전체 타겟</option>
-              {targets.slice(1).map(target => (
-                <option key={target} value={target}>{target}</option>
-              ))}
-            </select>
-            
-            <select
-              value={selectedPriceRange}
-              onChange={(e) => setSelectedPriceRange(e.target.value)}
-              className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-            >
-              {priceRanges.map(range => (
-                <option key={range} value={range}>
-                  {range === 'all' ? '전체 가격대' : range}
-                </option>
-              ))}
-            </select>
-          </div>
-          
-          <div className="mt-4 flex justify-between items-center">
-            <span className="text-gray-600">
-              총 <span className="font-semibold text-gray-800">{filteredConcepts.length}</span>개 콘셉트
-            </span>
-            <button className="px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300">
-              필터 초기화
-            </button>
-          </div>
-        </div>
-
-        {/* Concepts Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredConcepts.map(concept => (
-            <div key={concept.id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-              {/* Color Palette */}
-              <div className="h-24 flex">
-                {concept.colors.map((color, index) => (
-                  <div
-                    key={index}
-                    className="flex-1"
-                    style={{ backgroundColor: color }}
-                  ></div>
-                ))}
+        <div className="flex gap-8">
+          {/* 좌측 사이드바 - 검색 및 필터 */}
+          <div className="w-80 space-y-6">
+            {/* 검색 */}
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">검색</h3>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <input
+                  type="text"
+                  placeholder="콘셉트명 또는 설명 검색..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                />
               </div>
-              
-              <div className="p-6">
-                {/* Header */}
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-800 mb-2">{concept.name}</h3>
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded">{concept.category}</span>
-                      <span className={`px-2 py-1 rounded ${getCompetitionColor(concept.competition)}`}>
-                        경쟁도 {concept.competition}
-                      </span>
+            </div>
+
+            {/* 카테고리 */}
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">카테고리</h3>
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+              >
+                {categories.map(category => (
+                  <option key={category} value={category}>
+                    {category === 'all' ? '전체 카테고리' : category}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* 타겟 */}
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">타겟</h3>
+              <select
+                value={selectedTarget}
+                onChange={(e) => setSelectedTarget(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+              >
+                <option value="all">전체 타겟</option>
+                {targets.slice(1).map(target => (
+                  <option key={target} value={target}>{target}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* 가격대 */}
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">가격대</h3>
+              <select
+                value={selectedPriceRange}
+                onChange={(e) => setSelectedPriceRange(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+              >
+                <option value="all">전체 가격대</option>
+                {priceRanges.slice(1).map(range => (
+                  <option key={range} value={range}>{range}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* 필터 초기화 */}
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <button
+                onClick={() => {
+                  setSearchTerm('');
+                  setSelectedCategory('all');
+                  setSelectedTarget('all');
+                  setSelectedPriceRange('all');
+                }}
+                className="w-full bg-gray-600 text-white py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                필터 초기화
+              </button>
+            </div>
+          </div>
+
+          {/* 우측 메인 영역 - 제품 그리드 */}
+          <div className="flex-1">
+            {/* 결과 개수 */}
+            <div className="mb-6">
+              <p className="text-gray-600">
+                총 <span className="font-semibold text-gray-800">{filteredConcepts.length}</span>개 콘셉트
+              </p>
+            </div>
+
+            {/* 콘셉트 그리드 */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredConcepts.map((concept) => (
+                <div key={concept.id} className="relative group cursor-pointer">
+                  {/* 메인 이미지 카드 */}
+                  <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div 
+                      className="h-80 relative"
+                      style={{
+                        background: `linear-gradient(135deg, ${concept.colors[0]}, ${concept.colors[1]}, ${concept.colors[2]})`
+                      }}
+                    >
+                      {/* 기본 상태에서는 제품명만 표시 */}
+                      <div className="absolute bottom-4 left-4">
+                        <h3 className="text-2xl font-bold text-white drop-shadow-lg">{concept.name}</h3>
+                        <p className="text-white/90 text-sm">{concept.category}</p>
+                      </div>
                     </div>
                   </div>
-                  <button className="text-gray-400 hover:text-red-500 transition-colors">
-                    <Heart className="w-5 h-5" />
-                  </button>
-                </div>
 
-                {/* Description */}
-                <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                  {concept.description}
-                </p>
+                  {/* 호버 시 나타나는 정보 오버레이 */}
+                  <div className="absolute inset-0 bg-black/70 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-center p-6">
+                    <div className="text-white space-y-4">
+                      {/* 제품명 */}
+                      <div className="text-center mb-4">
+                        <h3 className="text-xl font-bold mb-1">{concept.name}</h3>
+                        <p className="text-white/90 text-sm">{concept.category}</p>
+                      </div>
 
-                {/* Key Info */}
-                <div className="space-y-3 mb-4">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">타겟:</span>
-                    <span className="text-gray-700 font-medium">{concept.target}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">예상 가격:</span>
-                    <span className="text-gray-700 font-medium">{concept.targetPrice}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">시장 규모:</span>
-                    <span className="text-gray-700 font-medium">{concept.marketSize}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">개발 기간:</span>
-                    <span className="text-gray-700 font-medium">{concept.developmentTime}</span>
+                      {/* 설명 */}
+                      <div className="mb-4">
+                        <p className="text-white/90 text-sm leading-relaxed line-clamp-3">{concept.description}</p>
+                      </div>
+
+                      {/* 주요 정보 */}
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-white/70">타겟</span>
+                          <span className="text-white font-medium">{concept.target}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-white/70">예상 가격</span>
+                          <span className="text-white font-medium">{concept.targetPrice}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-white/70">시장 규모</span>
+                          <span className="text-white font-medium">{concept.marketSize}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-white/70">개발 기간</span>
+                          <span className="text-white font-medium">{concept.developmentTime}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-white/70">경쟁 강도</span>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            concept.competition === '낮음' ? 'bg-green-500 text-white' :
+                            concept.competition === '중간' ? 'bg-yellow-500 text-white' :
+                            'bg-red-500 text-white'
+                          }`}>
+                            {concept.competition}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* 태그 */}
+                      <div className="flex flex-wrap gap-1 mb-4">
+                        {concept.tags.slice(0, 3).map((tag, index) => (
+                          <span key={index} className="px-2 py-1 bg-white/20 text-white text-xs rounded-full">
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* 통계 및 버튼 */}
+                      <div className="flex items-center justify-between pt-4 border-t border-white/20">
+                        <div className="flex items-center gap-3 text-sm text-white/80">
+                          <div className="flex items-center gap-1">
+                            <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                            <span>{concept.rating}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Heart className="w-4 h-4" />
+                            <span>{concept.likes}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Eye className="w-4 h-4" />
+                            <span>{concept.views}</span>
+                          </div>
+                        </div>
+                        <button className="bg-white text-gray-800 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors">
+                          자세히 보기
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
+              ))}
+            </div>
 
-                {/* Key Ingredients */}
-                <div className="mb-4">
-                  <h4 className="text-sm font-semibold text-gray-700 mb-2">핵심 성분</h4>
-                  <div className="flex flex-wrap gap-1">
-                    {concept.keyIngredients.map((ingredient, index) => (
-                      <span key={index} className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">
-                        {ingredient}
-                      </span>
-                    ))}
-                  </div>
+            {filteredConcepts.length === 0 && (
+              <div className="text-center py-12">
+                <div className="text-gray-400 mb-4">
+                  <Filter className="w-16 h-16 mx-auto" />
                 </div>
-
-                {/* Tags */}
-                <div className="mb-4">
-                  <div className="flex flex-wrap gap-1">
-                    {concept.tags.map((tag, index) => (
-                      <span key={index} className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs flex items-center">
-                        <Tag className="w-3 h-3 mr-1" />
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Stats */}
-                <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
-                  <div className="flex items-center">
-                    <Star className="w-4 h-4 text-yellow-400 fill-current mr-1" />
-                    <span className="font-medium">{concept.rating}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Heart className="w-4 h-4 mr-1" />
-                    <span>{concept.likes}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Eye className="w-4 h-4 mr-1" />
-                    <span>{concept.views}</span>
-                  </div>
-                </div>
-
-                {/* Uniqueness */}
-                <div className="mb-6">
-                  <h4 className="text-sm font-semibold text-gray-700 mb-1">차별화 포인트</h4>
-                  <p className="text-sm text-gray-600">{concept.uniqueness}</p>
-                </div>
-
-                {/* Actions */}
-                <div className="flex gap-2">
-                  <button className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-all duration-300 flex items-center justify-center">
-                    <Eye className="w-4 h-4 mr-2" />
-                    상세보기
-                  </button>
-                  <button className="flex-1 px-4 py-2 bg-gradient-to-r from-gray-600 to-slate-700 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300">
-                    선택하기
-                  </button>
-                </div>
+                <h3 className="text-lg font-medium text-gray-600 mb-2">검색 결과가 없습니다</h3>
+                <p className="text-gray-500">다른 검색어나 필터를 시도해보세요.</p>
               </div>
-            </div>
-          ))}
+            )}
+          </div>
         </div>
-
-        {filteredConcepts.length === 0 && (
-          <div className="text-center py-12">
-            <div className="text-gray-400 mb-4">
-              <Filter className="w-16 h-16 mx-auto" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-600 mb-2">검색 결과가 없습니다</h3>
-            <p className="text-gray-500">다른 검색 조건을 시도해보세요.</p>
-          </div>
-        )}
-
-        {/* Load More */}
-        {filteredConcepts.length > 0 && (
-          <div className="text-center mt-8">
-            <button className="px-8 py-3 bg-gradient-to-r from-gray-600 to-slate-700 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300">
-              더보기
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );
