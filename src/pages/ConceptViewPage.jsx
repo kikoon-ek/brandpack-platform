@@ -581,7 +581,7 @@ const ConceptViewPage = () => {
       {/* 플로팅 CTA */}
       {showFloatingCTA && (
         <div 
-          className="fixed bottom-24 right-6 bg-transparent p-4 max-w-xs"
+          className="fixed bottom-24 left-6 bg-transparent p-4 max-w-xs"
           style={{ zIndex: 9999 }}
         >
           {/* 닫기 버튼 */}
