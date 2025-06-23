@@ -95,7 +95,7 @@ const AIRecommendationPage = () => {
         timestamp: new Date()
       }
     ]);
-  }, [selectedAI]);
+  }, [selectedAI, currentAI.name]);
 
   // 메시지 전송
   const handleSendMessage = async () => {
@@ -131,11 +131,11 @@ const AIRecommendationPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       {/* 헤더 섹션 */}
-      <section className="relative py-12 overflow-hidden">
+      <section className="relative py-16 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6">
-            AI 추천 시스템
+          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6">
+            AI 어시스턴트
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
             화장품 업계 전문 AI가 법규, 마케팅, 수출, 성분 분석까지 모든 궁금증을 해결해드립니다
@@ -157,12 +157,13 @@ const AIRecommendationPage = () => {
         </div>
       </section>
 
-      {/* 메인 콘텐츠 - 완전히 새로운 반응형 구조 */}
+      {/* 메인 콘텐츠 - 모바일 우선 반응형 구조 */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+        {/* 모바일: 세로 배치, 데스크톱: 좌우 배치 */}
         <div className="flex flex-col lg:flex-row gap-8">
           
-          {/* AI 전문가 선택 영역 */}
-          <div className="w-full lg:w-80 lg:flex-shrink-0">
+          {/* AI 전문가 선택 영역 - 모바일에서 상단, 데스크톱에서 좌측 */}
+          <div className="w-full lg:w-80 lg:flex-shrink-0 order-1 lg:order-1">
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20">
               
               {/* 헤더 - 모바일에서만 접기 버튼 표시 */}
@@ -218,8 +219,8 @@ const AIRecommendationPage = () => {
             </div>
           </div>
           
-          {/* 채팅 영역 */}
-          <div className="flex-1">
+          {/* 채팅 영역 - 모바일에서 하단, 데스크톱에서 우측 */}
+          <div className="flex-1 order-2 lg:order-2">
             <div className="bg-white rounded-2xl shadow-xl border border-white/20 flex flex-col h-[600px] lg:h-[700px]">
               
               {/* AI 헤더 */}
