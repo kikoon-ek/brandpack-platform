@@ -581,20 +581,20 @@ const ConceptViewPage = () => {
       {/* 플로팅 CTA */}
       {showFloatingCTA && (
         <div 
-          className="fixed bottom-6 right-2 bg-transparent p-4 max-w-xs"
+          className="fixed bottom-6 right-6 bg-transparent p-3 max-w-xs"
           style={{ zIndex: 9999 }}
         >
           {/* 닫기 버튼 */}
           <button 
             onClick={() => setShowFloatingCTA(false)}
-            className="absolute top-1 right-1 text-gray-400 hover:text-gray-600 transition-colors"
+            className="absolute -top-1 -right-1 text-gray-400 hover:text-gray-600 transition-colors"
           >
-            <X className="w-3 h-3" />
+            <X className="w-4 h-4" />
           </button>
 
           {/* 메인 카피 */}
-          <div className="text-right mb-4">
-            <h3 className="text-sm font-bold text-gray-900 mb-2 leading-tight">
+          <div className="text-right mb-3">
+            <h3 className="text-xs font-bold text-gray-900 mb-1 leading-tight">
               당신만의 브랜드,<br />
               이제 아이디어에서 제품까지 한 번에.
             </h3>
@@ -604,7 +604,7 @@ const ConceptViewPage = () => {
           </div>
 
           {/* CTA 버튼 */}
-          <button className="w-full bg-gray-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-600 transition-colors text-sm">
+          <button className="w-full bg-gray-400 text-white font-medium py-2 px-3 rounded-md hover:bg-gray-500 transition-colors text-xs">
             Brand Pack 문의하기
           </button>
         </div>
