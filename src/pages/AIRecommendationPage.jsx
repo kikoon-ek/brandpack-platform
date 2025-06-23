@@ -205,90 +205,66 @@ const AIRecommendationPage = () => {
 
   // AI 전문가 선택 컴포넌트
   const AIExpertSelector = () => (
-    <div className="bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-100">
-      <div className="p-5 border-b border-gray-100">
-        <div className="flex justify-between items-center">
-          <div>
-            <h2 className="text-lg font-bold text-gray-800">AI 전문가</h2>
-            <p className="text-xs text-gray-500 mt-1">전문 분야별 AI를 선택하세요</p>
-          </div>
-          {isMobile && (
-            <button
-              onClick={() => setIsAIListExpanded(!isAIListExpanded)}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              {isAIListExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-            </button>
-          )}
-        </div>
+    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg">
+      <div className="flex items-center justify-between p-6 pb-4">
+        <h3 className="text-lg font-semibold text-gray-800">AI 전문가 선택</h3>
+        <button 
+          onClick={() => setIsAIListExpanded(!isAIListExpanded)}
+          className="p-2 hover:bg-gray-100 rounded-lg transition-colors lg:hidden"
+        >
+          <svg className={`w-5 h-5 text-gray-500 transition-transform ${isAIListExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
       </div>
-      {(!isMobile || isAIListExpanded) && (
-        <div className={`p-3 space-y-2 overflow-y-auto ${isMobile ? 'max-h-96' : 'h-[calc(100%-80px)]'}`}>
-          {Object.entries(aiExperts).map(([key, ai]) => (
-            <button
-              key={key}
-              onClick={() => setSelectedAI(key)}
-              className={`w-full p-4 rounded-2xl border-2 transition-all duration-300 text-left hover:shadow-md ${
-                selectedAI === key
-                  ? `${ai.bgColor} ${ai.borderColor} shadow-lg transform scale-[1.02]`
-                  : 'bg-gray-50 border-gray-200 hover:bg-gray-100 hover:border-gray-300'
-              }`}
-            >
-              <div className="flex items-start space-x-3">
-                <div className={`text-xl p-2.5 rounded-2xl ${selectedAI === key ? 'bg-white shadow-sm' : 'bg-white'}`}>
-                  {ai.icon}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className={`font-bold text-sm mb-1 ${selectedAI === key ? ai.textColor : 'text-gray-800'}`}>
-                    {ai.name}
-                  </h3>
-                  <p className="text-xs text-gray-600 mb-3 line-clamp-2 leading-relaxed">
-                    {ai.description}
-                  </p>
-                  <div className="flex items-center justify-between mb-2">
+      <div className={`px-6 pb-6 space-y-4 ${!isAIListExpanded ? 'hidden lg:block' : ''}`}>
+        {Object.entries(aiExperts).map(([key, ai]) => (
+          <button
+            key={key}
+            onClick={() => setSelectedAI(key)}
+            className={`group cursor-pointer bg-white rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 border-2 w-full text-left ${
+              selectedAI === key
+                ? 'border-blue-500 ring-2 ring-blue-500/20'
+                : 'border-gray-100 hover:border-gray-200'
+            }`}
+          >
+            <div className="flex items-start gap-3">
+              <div className="text-2xl">{ai.icon}</div>
+              <div className="flex-1 min-w-0">
+                <h4 className="font-bold text-gray-800 text-sm mb-1">{ai.name}</h4>
+                <p className="text-xs text-gray-600 mb-2 line-clamp-2">{ai.description}</p>
+                <div className="space-y-1 mb-3">
+                  <div className="flex justify-between items-center">
                     <span className="text-xs text-gray-500">정확도</span>
-                    <span className={`text-sm font-bold ${selectedAI === key ? ai.textColor : 'text-gray-800'}`}>
-                      {ai.accuracy}%
+                    <span className="text-xs font-bold text-green-600">{ai.accuracy}%</span>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-1 mb-3">
+                  {ai.tags.slice(0, 2).map((tag, index) => (
+                    <span key={index} className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">
+                      {tag}
                     </span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-1.5 mb-3">
-                    <div 
-                      className={`h-1.5 rounded-full bg-gradient-to-r ${ai.color} transition-all duration-500`}
-                      style={{ width: `${ai.accuracy}%` }}
-                    ></div>
-                  </div>
-                  <div className="flex flex-wrap gap-1">
-                    {ai.tags.slice(0, 2).map((tag, index) => (
-                      <span 
-                        key={index}
-                        className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors duration-200 ${
-                          selectedAI === key 
-                            ? `${ai.textColor} bg-white shadow-sm` 
-                            : 'text-gray-600 bg-gray-200'
-                        }`}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  {selectedAI === key && (
-                    <div className="mt-3 flex items-center text-green-600">
-                      <CheckCircle className="w-3 h-3 mr-1" />
-                      <span className="text-xs font-medium">현재 선택됨</span>
-                    </div>
+                  ))}
+                  {ai.tags.length > 2 && (
+                    <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">
+                      +{ai.tags.length - 2}
+                    </span>
                   )}
                 </div>
+                {selectedAI === key && (
+                  <div className="text-xs text-blue-600 font-medium">✓ 현재 선택됨</div>
+                )}
               </div>
-            </button>
-          ))}
-        </div>
-      )}
+            </div>
+          </button>
+        ))}
+      </div>
     </div>
   );
 
   // 채팅 영역 컴포넌트
   const ChatArea = () => (
-    <div className="bg-white rounded-3xl shadow-lg flex flex-col overflow-hidden border border-gray-100 h-full">
+    <div className="bg-white rounded-2xl shadow-lg flex flex-col overflow-hidden h-full lg:h-[600px]">
       {/* AI 헤더 */}
       <div className={`bg-gradient-to-r ${currentAI.color} text-white p-5 rounded-t-3xl`}>
         <div className="flex items-center space-x-4">
@@ -406,44 +382,34 @@ const AIRecommendationPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* 컴팩트한 헤더 */}
-      <div className="bg-white border-b border-gray-200 py-3">
-        <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-2xl font-bold text-gray-800">AI 어시스턴트</h1>
-          <p className="text-gray-600 text-sm mt-1">화장품 업계 전문 AI가 모든 궁금증을 해결해드립니다</p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      {/* 헤더 섹션 */}
+      <section className="relative py-8 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+            AI 어시스턴트
+          </h1>
+          <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+            화장품 업계 전문 AI가 모든 궁금증을 해결해드립니다
+          </p>
         </div>
-      </div>
+      </section>
 
-      <div className="max-w-7xl mx-auto px-4 py-4">
-        {isMobile ? (
-          // 모바일 레이아웃: AI 선택이 상단에, 채팅이 하단에 완전 분리
-          <div className="flex flex-col space-y-4 h-[calc(100vh-120px)]">
-            {/* 모바일: 상단 AI 전문가 선택 - 동적 높이 */}
-            <div className="flex-shrink-0">
-              <AIExpertSelector />
-            </div>
-            
-            {/* 모바일: 하단 채팅 영역 - 남은 공간 모두 사용 */}
-            <div className="flex-1 min-h-0">
-              <ChatArea />
-            </div>
+      {/* 메인 콘텐츠 */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* AI 전문가 선택 영역 */}
+          <div className="w-full lg:w-80 lg:flex-shrink-0">
+            <AIExpertSelector />
           </div>
-        ) : (
-          // 데스크톱 레이아웃: 좌우 분할
-          <div className="flex gap-6 h-[calc(100vh-140px)]">
-            {/* 데스크톱: 좌측 AI 전문가 선택 */}
-            <div className="w-80 flex-shrink-0">
-              <AIExpertSelector />
-            </div>
-
-            {/* 데스크톱: 우측 채팅 영역 */}
-            <div className="flex-1">
-              <ChatArea />
-            </div>
+          
+          {/* 채팅 영역 */}
+          <div className="flex-1">
+            <ChatArea />
           </div>
-        )}
-      </div>
+        </div>
+      </section>
     </div>
   );
 };
