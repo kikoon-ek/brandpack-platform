@@ -519,54 +519,19 @@ const ConceptViewPage = () => {
                       }}
                     >
                       {/* 호버 시 나타나는 정보 오버레이 */}
-                      <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-center p-6">
-                        <div className="text-white space-y-3">
-                          {/* 설명 */}
-                          <div className="mb-3">
-                            <p className="text-white/90 text-sm leading-relaxed line-clamp-3">{concept.description}</p>
+                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-center items-center p-6">
+                        {/* 우측 상단 화살표 아이콘 */}
+                        <div className="absolute top-4 right-4">
+                          <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17L17 7M17 7H7M17 7V17" />
+                            </svg>
                           </div>
+                        </div>
 
-                          {/* 주요 정보 */}
-                          <div className="space-y-2 text-sm">
-                            <div className="flex justify-between">
-                              <span className="text-white/70">타겟</span>
-                              <span className="text-white font-medium">{concept.target}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-white/70">예상 가격</span>
-                              <span className="text-white font-medium">{concept.targetPrice}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-white/70">시장 규모</span>
-                              <span className="text-white font-medium">{concept.marketSize}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-white/70">개발 기간</span>
-                              <span className="text-white font-medium">{concept.developmentTime}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-white/70">경쟁 강도</span>
-                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${getCompetitionColor(concept.competition)}`}>
-                                {concept.competition}
-                              </span>
-                            </div>
-                          </div>
-
-                          {/* 통계 */}
-                          <div className="flex justify-center space-x-6 pt-3 border-t border-white/20">
-                            <div className="flex items-center space-x-1">
-                              <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                              <span className="text-sm font-medium">{concept.rating}</span>
-                            </div>
-                            <div className="flex items-center space-x-1">
-                              <Heart className="w-4 h-4 text-red-400" />
-                              <span className="text-sm">{concept.likes}</span>
-                            </div>
-                            <div className="flex items-center space-x-1">
-                              <Eye className="w-4 h-4 text-blue-400" />
-                              <span className="text-sm">{concept.views}</span>
-                            </div>
-                          </div>
+                        {/* 가운데 제품 설명 */}
+                        <div className="text-center text-white max-w-xs">
+                          <p className="text-sm leading-relaxed">{concept.description}</p>
                         </div>
                       </div>
                     </div>
