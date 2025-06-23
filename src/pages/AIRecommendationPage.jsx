@@ -288,7 +288,7 @@ const AIRecommendationPage = () => {
 
   // 채팅 영역 컴포넌트
   const ChatArea = () => (
-    <div className="bg-white rounded-3xl shadow-lg flex flex-col overflow-hidden border border-gray-100 h-full">
+    <div className={`bg-white rounded-3xl shadow-lg flex flex-col overflow-hidden border border-gray-100 ${!isMobile ? 'h-full' : ''}`}>
       {/* AI 헤더 */}
       <div className={`bg-gradient-to-r ${currentAI.color} text-white p-5 rounded-t-3xl`}>
         <div className="flex items-center space-x-4">
