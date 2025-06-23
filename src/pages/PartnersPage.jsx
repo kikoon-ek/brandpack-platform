@@ -11,7 +11,8 @@ const PartnersPage = () => {
   const [selectedPartner, setSelectedPartner] = useState(null);
   const [selectedFilters, setSelectedFilters] = useState({
     manufacturers: {
-      productCategory: [],
+      productCategory: [], // 대분류 (스킨케어, 클렌징 등)
+      productSubCategory: [], // 세부분류 (스킨/미스트, 로션/에멀전 등)
       productType: [],
       equipment: [],
       certifications: []
@@ -33,7 +34,25 @@ const PartnersPage = () => {
   // 탭별 필터 옵션
   const filterOptions = {
     manufacturers: {
-      productCategory: ['스킨케어', '클렌징', '메이크업', '립 메이크업/케어', '아이 메이크업/케어', '헤어케어', '바디케어', '팩/시트 제품', '비누', '네일/페디', '향수/아로마', '기능성'],
+      productCategory: {
+        '스킨케어': ['스킨/미스트', '로션/에멀전', '멀티밤', '에센스/앰플/오일', '크림/수딩젤/아이크림', '스팟/미세침/캡슐', '부스터', '파우더', '스팟'],
+        '클렌징': ['클렌징폼/오일/워터/밤/젤', '클렌징패드/티슈', '필링젤/팩', '클렌징파우더', '피지연화제/스크럽', '메이크업 리무버', '블랙헤드', '클렌징 스틱/비누'],
+        '베이스메이크업': ['파우더', '파운데이션/쿠션', '컨실러/블러셔/쿼셔', '하이라이터/프라이머', 'BB/CC 크림', '톤업크림', '스틱/밤'],
+        '립메이크업/케어': ['립스틱', '립글로스', '립밤', '립틴트', '립케어/클렌저'],
+        '아이메이크업/케어': ['마스카라', '아이라이너', '아이브로우', '아이섀도우', '속눈썹영양제/펌', '속눈썹글루/픽서'],
+        '헤어케어': ['샴푸/린스/트리트먼트/팩', '헤어로션/크림/오일/앰플', '헤어미스트/토닉', '두피케어', '헤어젤/왁스/스프레이', '헤어 곡서', '헤어끈', '염색제', '흑채', '헤어/두피 파우더'],
+        '바디케어': ['바디로션/크림/오일', '바디워시/스크럽/미스트', '핸드크림/워시', '풋케어', '청결제', '입욕제', '바스밤/솔트', '제모크림', '데오드란트', '튼살/스포츠/마사지 크림'],
+        '시트제품': ['마스크팩/패드', '하이드로겔', '골프패치', '코팅/필름마스크', '아이/리프팅패치', '코팩/틈/석패치', '헤어/바디/와이존', '녹는콜라겐필름'],
+        '팩': ['모델링팩', '하이드로겔', '석고팩', '팩/워시오프팩'],
+        '기능성': ['새치샴푸', '아토피', '주름개선/미백/탄력', '여드름/뾰루지', '탈모기능성 샴푸', '잡티/기미', '여성청결제', '선케어'],
+        '홈/라이프': ['탈취제/방향제', '주방/청소/세탁세제', '칫솔/치약', '물티슈/휴지/면봉', '보건용 마스크', '손소독제/티슈', '아로마/아피지파', '피치 실크레스프레이', '구강제품', '크리닉스/사우던트', '점착제/접착제'],
+        '의약외품': ['치아미백제/고체치약', '손소독제', '마스크', '샴푸', '소독제', '가피제', '손발톱 케어'],
+        '식품': ['음료/차', '파우더', '유산균/비타민', '건강기능식품'],
+        '비누': ['바디바', '샴푸/트리트먼트 바', '클렌징바', '세제바', '애견 비누'],
+        '네일/페디': ['네일/패디', '젤네일', '네일로션오일', '네일/림무/소독', '네일영양제/탑젤', '네일패디_스티커'],
+        '향수/아로마': ['향수/밤', '디퓨저/캔들', '이너/오일/퍼퓸', '아로마 오일', '시향지/프래그런스', '인센스', '차량용방향제'],
+        '반려동물': ['목욕', '위생', '미용/케어', '구강케어', '아웃케어']
+      },
       productType: ['일반 화장품', '의약외품', '동물용 의약외품', '건강기능식품', '생활용품'],
       equipment: ['호모믹서', '샴푸믹서', '립스틱믹서', '아이섀도우믹서', '파운데이션믹서', '크림 자동충전기', '립스틱 자동충전기', '마스카라 자동충전기', '고온 자동충전기', '향상파우치 충전기', '튜브 실링기', '립스틱 자동충전기', '마스카라 자동충전기', '고온 자동충전기', '향상파우치 충전기'],
       certifications: ['ISO', 'CGMP', 'VEGAN', '할랄', 'KGMP']
@@ -1251,9 +1270,7 @@ const PartnersPage = () => {
                           
                           {/* 크림/밤 제품분류 */}
                           <div>
-                            <h4 className="font-medium text-blue-600 mb-2">크림/밤</h4>
-                            <span className="text-sm text-gray-600">제품분류 > 기초</span>
-                          </div>
+                            <h4 className="font-medium text-blue-600 mb-2">크림/밤</h4>                              <span className="text-sm text-gray-600">제품분류 &gt; 기초</span>                          </div>
                         </div>
                       </div>
 
@@ -1367,6 +1384,64 @@ const PartnersPage = () => {
                 // 용기사에서 용도 필터 다음에 슬라이더 삽입
                 const isUsageFilter = filterType === 'usage' && activeTab === 'containers';
                 
+                // 제조사의 productCategory는 2단계 구조로 처리
+                if (filterType === 'productCategory' && activeTab === 'manufacturers') {
+                  return (
+                    <React.Fragment key={filterType}>
+                      {/* 대분류 선택 */}
+                      <div className="bg-white rounded-lg border border-gray-200 p-4">
+                        <h3 className="font-medium text-gray-900 mb-3">
+                          제품 카테고리 (대분류) {(currentSelectedFilters[filterType]?.length || 0)}
+                        </h3>
+                        
+                        <div className="grid grid-cols-2 gap-2">
+                          {Object.keys(options).map((category, categoryIndex) => (
+                            <label key={categoryIndex} className="flex items-center space-x-2 cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={(currentSelectedFilters[filterType] || []).includes(category)}
+                                onChange={() => toggleFilter(filterType, category)}
+                                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                              />
+                              <span className="text-sm text-gray-700">{category}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* 세부분류 선택 (선택된 대분류가 있을 때만) */}
+                      {(currentSelectedFilters[filterType] || []).length > 0 && (
+                        <div className="bg-white rounded-lg border border-gray-200 p-4">
+                          <h3 className="font-medium text-gray-900 mb-3">
+                            제품 세부분류 {(currentSelectedFilters.productSubCategory?.length || 0)}
+                          </h3>
+                          
+                          <div className="space-y-4">
+                            {(currentSelectedFilters[filterType] || []).map((selectedCategory, catIndex) => (
+                              <div key={catIndex}>
+                                <h4 className="text-sm font-medium text-blue-600 mb-2">{selectedCategory}</h4>
+                                <div className="grid grid-cols-2 gap-2 ml-4">
+                                  {options[selectedCategory]?.map((subCategory, subIndex) => (
+                                    <label key={subIndex} className="flex items-center space-x-2 cursor-pointer">
+                                      <input
+                                        type="checkbox"
+                                        checked={(currentSelectedFilters.productSubCategory || []).includes(subCategory)}
+                                        onChange={() => toggleFilter('productSubCategory', subCategory)}
+                                        className="rounded border-gray-300 text-green-600 focus:ring-green-500"
+                                      />
+                                      <span className="text-xs text-gray-600">{subCategory}</span>
+                                    </label>
+                                  ))}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </React.Fragment>
+                  );
+                }
+                
                 return (
                   <React.Fragment key={filterType}>
                     {/* 기본 필터 */}
@@ -1383,7 +1458,7 @@ const PartnersPage = () => {
                       </h3>
                       
                       <div className="grid grid-cols-2 gap-2">
-                        {options.map((option, optionIndex) => (
+                        {Array.isArray(options) && options.map((option, optionIndex) => (
                           <label key={optionIndex} className="flex items-center space-x-2 cursor-pointer">
                             <input
                               type="checkbox"
@@ -1536,7 +1611,7 @@ const PartnersPage = () => {
                     {/* 크림/밤 제품분류 */}
                     <div>
                       <h4 className="font-medium text-blue-600 mb-2">크림/밤</h4>
-                      <span className="text-sm text-gray-600">제품분류 > 기초</span>
+                      <span className="text-sm text-gray-600">제품분류 &gt; 기초</span>
                     </div>
                   </div>
                 </div>
