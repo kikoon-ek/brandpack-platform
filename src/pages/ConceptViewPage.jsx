@@ -14,7 +14,7 @@ const ConceptViewPage = () => {
   // 화면 크기 감지
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      setIsMobile(window.innerWidth < 480);
     };
     
     checkMobile();
@@ -645,7 +645,7 @@ const ConceptViewPage = () => {
             </div>
 
             {/* 콘셉트 그리드 */}
-            <div className={`grid gap-6 ${isMobile ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 lg:grid-cols-2 xl:grid-cols-3'}`}>
+            <div className="concept-grid-responsive">
               {filteredConcepts.map((concept) => (
                 <div key={concept.id} className="relative group cursor-pointer">
                   {/* 메인 이미지 카드 */}

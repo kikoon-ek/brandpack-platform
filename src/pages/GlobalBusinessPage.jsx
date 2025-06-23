@@ -1,388 +1,1336 @@
-import React, { useState } from 'react';
-import { Globe, TrendingUp, Users, Award, MapPin, ArrowRight, CheckCircle, Star } from 'lucide-react';
-import '../App.css';
+import React, { useState, useEffect } from 'react';
+import { 
+  Zap, 
+  Users, 
+  Search, 
+  Calculator, 
+  FileText, 
+  Bell, 
+  CheckCircle, 
+  ArrowRight,
+  Star,
+  Globe,
+  TrendingUp,
+  Shield,
+  Award
+} from 'lucide-react';
 
 const GlobalBusinessPage = () => {
-  const [selectedRegion, setSelectedRegion] = useState('all');
+  const [activeTab, setActiveTab] = useState('tools');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [expandedTool, setExpandedTool] = useState(null);
+  const [currentReview, setCurrentReview] = useState(0);
+  const [calculatorData, setCalculatorData] = useState({
+    productPrice: '',
+    targetCountry: 'japan',
+    hsCode: '',
+    searchQuery: '',
+    tariffResult: null
+  });
+  const [counters, setCounters] = useState({
+    exports: 0,
+    partners: 0,
+    countries: 0,
+    success: 0
+  });
 
-  const globalStats = [
-    { label: "진출 국가", value: "15+", icon: Globe, color: "text-gray-600" },
-    { label: "해외 매출", value: "120억원", icon: TrendingUp, color: "text-stone-600" },
-    { label: "글로벌 파트너", value: "50+", icon: Users, color: "text-slate-600" },
-    { label: "수출 인증", value: "25+", icon: Award, color: "text-gray-700" }
-  ];
+  // 실시간 카운터 애니메이션
+  useEffect(() => {
+    const targets = { exports: 46, partners: 155, countries: 22, success: 87 };
+    const duration = 2000;
+    const steps = 60;
+    const stepTime = duration / steps;
 
-  const regions = [
-    {
-      id: 'asia',
-      name: '아시아',
-      countries: ['일본', '중국', '태국', '베트남', '싱가포르'],
-      marketSize: '2,500억원',
-      growth: '+15%',
-      opportunities: [
-        { level: 'high', title: 'K-뷰티 열풍', description: '한국 화장품에 대한 높은 관심도' },
-        { level: 'medium', title: '온라인 시장 확대', description: '이커머스 플랫폼 성장' },
-        { level: 'high', title: '프리미엄 시장', description: '고급 제품에 대한 수요 증가' }
-      ],
-      requirements: ['FDA 승인', 'HALAL 인증', '현지 언어 라벨링'],
-      timeline: '3-6개월'
-    },
-    {
-      id: 'europe',
-      name: '유럽',
-      countries: ['독일', '프랑스', '이탈리아', '영국', '스페인'],
-      marketSize: '1,800억원',
-      growth: '+8%',
-      opportunities: [
-        { level: 'high', title: '친환경 트렌드', description: '지속가능한 뷰티 제품 선호' },
-        { level: 'medium', title: '안티에이징', description: '성숙한 소비자층의 니즈' },
-        { level: 'medium', title: '럭셔리 시장', description: '프리미엄 브랜드 선호도' }
-      ],
-      requirements: ['CE 마킹', 'CPNP 등록', 'REACH 규정 준수'],
-      timeline: '6-9개월'
-    },
-    {
-      id: 'americas',
-      name: '아메리카',
-      countries: ['미국', '캐나다', '브라질', '멕시코', '칠레'],
-      marketSize: '3,200억원',
-      growth: '+12%',
-      opportunities: [
-        { level: 'high', title: '다양성 중시', description: '다양한 피부톤 대응 제품' },
-        { level: 'high', title: '클린 뷰티', description: '천연 성분 선호도 증가' },
-        { level: 'medium', title: '남성 시장', description: '남성 화장품 시장 확대' }
-      ],
-      requirements: ['FDA 등록', 'Health Canada 승인', 'ANVISA 인증'],
-      timeline: '4-8개월'
-    }
-  ];
+    const intervals = Object.keys(targets).map(key => {
+      const target = targets[key];
+      const increment = target / steps;
+      let current = 0;
 
-  const services = [
-    {
-      title: "시장 조사 및 분석",
-      description: "타겟 시장의 트렌드, 경쟁사, 소비자 니즈를 심층 분석하여 진출 전략을 수립합니다.",
-      features: ["시장 규모 분석", "경쟁사 벤치마킹", "소비자 조사", "트렌드 분석"],
-      icon: TrendingUp
-    },
-    {
-      title: "법규 및 인증 컨설팅",
-      description: "각 국가별 화장품 관련 법규를 분석하고 필요한 인증 절차를 지원합니다.",
-      features: ["법규 분석", "인증 신청", "라벨링 가이드", "규제 대응"],
-      icon: Award
-    },
-    {
-      title: "현지 파트너 매칭",
-      description: "신뢰할 수 있는 현지 유통업체, 리테일러와의 파트너십을 중개합니다.",
-      features: ["유통업체 매칭", "리테일러 연결", "계약 지원", "관계 관리"],
-      icon: Users
-    },
-    {
-      title: "물류 및 배송",
-      description: "효율적인 글로벌 물류 네트워크를 통해 안전하고 빠른 배송을 지원합니다.",
-      features: ["국제 배송", "창고 관리", "통관 지원", "배송 추적"],
-      icon: Globe
-    }
-  ];
+      return setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          current = target;
+          clearInterval(intervals.find(i => i === interval));
+        }
+        setCounters(prev => ({ ...prev, [key]: Math.floor(current) }));
+      }, stepTime);
+    });
 
-  const successStories = [
-    {
-      brand: "RICE BRAN",
-      region: "일본",
-      achievement: "런칭 6개월 만에 월 매출 2억원 달성",
-      challenge: "까다로운 일본 시장 진출",
-      solution: "현지 트렌드에 맞춘 제품 개발 및 마케팅",
-      result: "주요 드럭스토어 체인 입점 성공"
-    },
-    {
-      brand: "NATURAL GLOW",
-      region: "독일",
-      achievement: "친환경 인증 획득 후 매출 300% 증가",
-      challenge: "엄격한 EU 화장품 규제",
-      solution: "REACH 규정 준수 및 친환경 포장재 적용",
-      result: "유럽 전역 온라인 판매 확대"
-    },
-    {
-      brand: "PURE ESSENCE",
-      region: "미국",
-      achievement: "아마존 베스트셀러 1위 달성",
-      challenge: "경쟁이 치열한 미국 시장",
-      solution: "인플루언서 마케팅 및 브랜드 스토리텔링",
-      result: "전국 백화점 입점 및 브랜드 인지도 확산"
-    }
-  ];
+    return () => intervals.forEach(clearInterval);
+  }, []);
 
-  const filteredRegions = selectedRegion === 'all' ? regions : regions.filter(r => r.id === selectedRegion);
-
-  const getOpportunityColor = (level) => {
-    switch (level) {
-      case 'high': return 'bg-green-100 text-green-700';
-      case 'medium': return 'bg-yellow-100 text-yellow-700';
-      case 'low': return 'bg-red-100 text-red-700';
-      default: return 'bg-gray-100 text-gray-700';
-    }
+  // 관세 계산 함수
+  const calculateTariff = (price, country) => {
+    const rates = {
+      japan: { tariff: 0.085, vat: 0.10 },
+      usa: { tariff: 0.12, vat: 0.08 },
+      china: { tariff: 0.15, vat: 0.13 },
+      europe: { tariff: 0.10, vat: 0.20 }
+    };
+    
+    const rate = rates[country] || rates.japan;
+    const tariffAmount = Math.floor(price * rate.tariff);
+    const vatAmount = Math.floor(tariffAmount * rate.vat);
+    const clearanceFee = 5000; // 통관수수료
+    const total = tariffAmount + vatAmount + clearanceFee;
+    
+    return {
+      tariff: tariffAmount,
+      vat: vatAmount,
+      clearanceFee: clearanceFee,
+      total: total
+    };
   };
 
+  // HS코드 검색 함수
+  const searchHSCode = (query) => {
+    const hsCodeData = {
+      '화장품': '3304.99.00',
+      '립스틱': '3304.10.00',
+      '파운데이션': '3304.20.00',
+      '아이섀도': '3304.30.00',
+      '마스카라': '3304.20.00',
+      '스킨케어': '3304.99.00',
+      '선크림': '3304.99.00',
+      '향수': '3303.00.00'
+    };
+    
+    const found = Object.keys(hsCodeData).find(key => 
+      key.includes(query) || query.includes(key)
+    );
+    
+    return found ? hsCodeData[found] : '3304.99.00';
+  };
+
+  // 도구 확장/축소 함수
+  const toggleTool = (toolId) => {
+    setExpandedTool(expandedTool === toolId ? null : toolId);
+  };
+
+  // 리뷰 데이터
+  const reviewsData = [
+    {
+      text: "브랜드팩 덕분에 일본 진출 성공!",
+      author: "뷰티브랜드 A사",
+      rating: 5,
+      country: "🇯🇵"
+    },
+    {
+      text: "전문적인 컨설팅으로 유럽 시장 개척",
+      author: "코스메틱 B사",
+      rating: 5,
+      country: "🇪🇺"
+    },
+    {
+      text: "AI 도구가 정말 정확해요!",
+      author: "스킨케어 C사",
+      rating: 4,
+      country: "🇺🇸"
+    }
+  ];
+
+  // 리뷰 자동 슬라이더
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentReview((prev) => (prev + 1) % reviewsData.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const toolsData = [
+    {
+      id: 'hs-classifier',
+      title: 'HS코드 AI 분류기',
+      description: '제품명 입력으로 정확한 HS코드와 관세율을 자동 분류',
+      icon: Search,
+      category: 'ai',
+      features: ['AI 기반 자동 분류', '실시간 관세율 조회'],
+      demo: true
+    },
+    {
+      id: 'tariff-calculator',
+      title: '관세 계산기',
+      description: '실시간 환율 반영 관세 자동 계산',
+      icon: Calculator,
+      category: 'calculation',
+      features: ['실시간 환율 반영', '국가별 관세율'],
+      demo: true
+    },
+    {
+      id: 'labeling-ai',
+      title: '라벨링 AI 검토',
+      description: '수출국 규정에 맞는 라벨링 자동 검토',
+      icon: CheckCircle,
+      category: 'ai',
+      features: ['규정 자동 검토', '개선사항 제안'],
+      demo: false
+    },
+    {
+      id: 'export-calculator',
+      title: '수출 비용 계산기',
+      description: '포장부터 배송까지 전체 비용 계산',
+      icon: Calculator,
+      category: 'calculation',
+      features: ['전체 비용 계산', '수익률 분석'],
+      demo: false
+    },
+    {
+      id: 'packaging-template',
+      title: '포장 라벨 템플릿',
+      description: '국가별 포장 라벨 템플릿 제공',
+      icon: FileText,
+      category: 'template',
+      features: ['국가별 템플릿', '자동 생성'],
+      demo: false
+    },
+    {
+      id: 'document-template',
+      title: '수출서류 템플릿',
+      description: '필수 수출서류 템플릿과 작성 가이드',
+      icon: FileText,
+      category: 'template',
+      features: ['필수 서류 템플릿', '작성 가이드'],
+      demo: false
+    },
+    {
+      id: 'market-analysis',
+      title: '시장 분석 AI',
+      description: 'AI 기반 타겟 시장 분석과 진출 전략',
+      icon: TrendingUp,
+      category: 'ai',
+      features: ['시장 트렌드 분석', '진출 전략 제안'],
+      demo: false
+    },
+    {
+      id: 'certification-check',
+      title: '인증 체크리스트',
+      description: '국가별 필수 인증 체크리스트',
+      icon: Shield,
+      category: 'template',
+      features: ['필수 인증 목록', '진행 상황 추적'],
+      demo: false
+    },
+    {
+      id: 'exchange-alert',
+      title: '환율 알림 설정',
+      description: '목표 환율 도달 시 실시간 알림',
+      icon: Bell,
+      category: 'notification',
+      features: ['실시간 알림', '목표 환율 설정'],
+      demo: false
+    }
+  ];
+
+  const servicesData = [
+    {
+      id: 'distributor-matching',
+      title: '유통업체 매칭 & 제안',
+      description: '현지 유통업체 발굴부터 계약까지 전문 매칭 서비스',
+      price: '문의하기',
+      successRate: '94%',
+      timeline: '2-3주',
+      features: ['현지 유통업체 발굴', '계약 협상 대행', '법무 검토', '사후 관리'],
+      popular: true
+    },
+    {
+      id: 'export-management',
+      title: '수출 대행 관리',
+      description: '서류 작성부터 통관까지 수출 전 과정 대행',
+      price: '문의하기',
+      successRate: '98%',
+      timeline: '1-2주',
+      features: ['서류 작성 대행', '통관 처리', '배송 관리', '실시간 추적'],
+      popular: false
+    },
+    {
+      id: 'certification-support',
+      title: '인증 취득 지원',
+      description: '현지 인증 취득을 위한 전문 컨설팅',
+      price: '문의하기',
+      successRate: '91%',
+      timeline: '4-6주',
+      features: ['인증 컨설팅', '서류 준비', '심사 대응', '사후 관리'],
+      popular: false
+    },
+    {
+      id: 'market-entry',
+      title: '시장 진출 컨설팅',
+      description: '타겟 시장 분석부터 진출 전략까지',
+      price: '문의하기',
+      successRate: '89%',
+      timeline: '3-4주',
+      features: ['시장 조사', '경쟁사 분석', '진출 전략', '실행 계획'],
+      popular: false
+    },
+    {
+      id: 'legal-support',
+      title: '법무 지원 서비스',
+      description: '현지 법규 검토와 계약서 작성 지원',
+      price: '문의하기',
+      successRate: '96%',
+      timeline: '1-2주',
+      features: ['법규 검토', '계약서 작성', '분쟁 대응', '법무 자문'],
+      popular: false
+    }
+  ];
+
+  const categories = [
+    { id: 'all', name: '전체 도구', count: toolsData.length },
+    { id: 'calculation', name: '계산 도구', count: toolsData.filter(t => t.category === 'calculation').length },
+    { id: 'ai', name: 'AI 도구', count: toolsData.filter(t => t.category === 'ai').length },
+    { id: 'template', name: '템플릿', count: toolsData.filter(t => t.category === 'template').length },
+    { id: 'notification', name: '알림 설정', count: toolsData.filter(t => t.category === 'notification').length }
+  ];
+
+  const filteredTools = selectedCategory === 'all' 
+    ? toolsData 
+    : toolsData.filter(tool => tool.category === selectedCategory);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-slate-50/85 to-stone-50/25">
-      {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-gray-600 via-stone-600 to-slate-700 text-white py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-600/20 to-stone-600/20"></div>
-        <div className="relative max-w-7xl mx-auto px-4">
-          <div className="text-center">
-            <h1 className="text-5xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-gray-700 via-stone-700 to-slate-700 bg-clip-text text-transparent">
-                글로벌 비즈니스
-              </span>
-            </h1>
-            <p className="text-xl text-gray-100 mb-8 max-w-3xl mx-auto">
-              해외 시장 진출 원스톱 솔루션으로 전 세계 고객에게 당신의 브랜드를 선보이세요
-            </p>
-            <button className="px-8 py-4 bg-gradient-to-r from-gray-600 to-stone-700 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300 flex items-center mx-auto">
-              글로벌 진출 상담받기
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </button>
+    <div className="global-business-page">
+      {/* 커스텀 CSS 스타일 */}
+      <style jsx>{`
+        .global-business-page {
+          min-height: 100vh;
+          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        .header-section {
+          background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+          color: white;
+          padding: 1.5rem 0 1rem;
+          text-align: center;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .header-section::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+          opacity: 0.3;
+        }
+
+        .header-content {
+          position: relative;
+          z-index: 1;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 2rem;
+        }
+
+        .header-icon {
+          width: 2.5rem;
+          height: 2.5rem;
+          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 0.75rem;
+          box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .header-title {
+          font-size: 1.75rem;
+          font-weight: 800;
+          margin-bottom: 0.5rem;
+          background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .header-subtitle {
+          font-size: 1rem;
+          margin-bottom: 0.5rem;
+          opacity: 0.9;
+        }
+
+        .header-description {
+          font-size: 0.875rem;
+          opacity: 0.7;
+          max-width: 500px;
+          margin: 0 auto;
+        }
+
+        .main-container {
+          max-width: 1400px;
+          margin: 0 auto;
+          padding: 2rem;
+        }
+
+        .stats-section {
+          background: rgba(255, 255, 255, 0.9);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          border-radius: 1rem;
+          padding: 1.5rem;
+          margin-bottom: 2rem;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-container {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 2rem;
+        }
+
+        .stats-title {
+          font-size: 1.25rem;
+          font-weight: 700;
+          color: #1f2937;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .stats-grid {
+          display: flex;
+          gap: 3rem;
+        }
+
+        .reviews-section {
+          margin-left: auto;
+          text-align: right;
+        }
+
+        .reviews-title {
+          font-size: 1rem;
+          font-weight: 600;
+          color: #1f2937;
+          margin-bottom: 0.5rem;
+        }
+
+        .reviews-content {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+        }
+
+        .review-item {
+          display: flex;
+          flex-direction: column;
+          gap: 0.125rem;
+        }
+
+        .review-text {
+          font-size: 0.875rem;
+          color: #374151;
+          font-style: italic;
+        }
+
+        .review-author {
+          font-size: 0.75rem;
+          color: #6b7280;
+        }
+
+        .review-rating {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          justify-content: flex-end;
+        }
+
+        .stars {
+          color: #f59e0b;
+          font-size: 0.875rem;
+        }
+
+        .rating-text {
+          font-size: 0.75rem;
+          color: #6b7280;
+          font-weight: 600;
+        }
+
+        .review-dots {
+          display: flex;
+          gap: 0.25rem;
+          justify-content: flex-end;
+          margin-top: 0.5rem;
+        }
+
+        .review-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #d1d5db;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .review-dot.active {
+          background: #3b82f6;
+          transform: scale(1.2);
+        }
+
+        .review-dot:hover {
+          background: #6b7280;
+        }
+
+        .stat-item {
+          text-align: center;
+        }
+
+        .stat-value {
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin-bottom: 0.25rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .stat-label {
+          font-size: 0.875rem;
+          color: #6b7280;
+          font-weight: 500;
+        }
+
+        .pulse-dot {
+          width: 6px;
+          height: 6px;
+          background: #10b981;
+          border-radius: 50%;
+          animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+
+        .tabs-section {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 2rem;
+        }
+
+        .tabs-container {
+          background: #f1f5f9;
+          padding: 0.25rem;
+          border-radius: 0.75rem;
+          display: flex;
+          gap: 0.25rem;
+        }
+
+        .tab-button {
+          padding: 0.75rem 1.5rem;
+          border-radius: 0.5rem;
+          font-weight: 600;
+          transition: all 0.3s ease;
+          border: none;
+          background: transparent;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: 0.875rem;
+        }
+
+        .tab-button.active {
+          background: #3b82f6;
+          color: white;
+          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .tab-button:not(.active) {
+          color: #64748b;
+        }
+
+        .tab-button:not(.active):hover {
+          background: white;
+          color: #1f2937;
+        }
+
+        .tab-badge {
+          background: rgba(255, 255, 255, 0.2);
+          padding: 0.125rem 0.5rem;
+          border-radius: 0.375rem;
+          font-size: 0.75rem;
+        }
+
+        .content-section {
+          display: flex;
+          gap: 2rem;
+          min-height: 600px;
+        }
+
+        .sidebar {
+          width: 280px;
+          background: white;
+          border-radius: 1rem;
+          padding: 1.5rem;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+          height: fit-content;
+        }
+
+        .sidebar-title {
+          font-size: 1.125rem;
+          font-weight: 700;
+          color: #1f2937;
+          margin-bottom: 1rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .category-list {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .category-button {
+          padding: 0.75rem 1rem;
+          border-radius: 0.5rem;
+          border: none;
+          background: transparent;
+          cursor: pointer;
+          text-align: left;
+          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          font-weight: 500;
+        }
+
+        .category-button.active {
+          background: #3b82f6;
+          color: white;
+        }
+
+        .category-button:not(.active) {
+          color: #64748b;
+        }
+
+        .category-button:not(.active):hover {
+          background: #f8fafc;
+          color: #1f2937;
+        }
+
+        .category-count {
+          background: rgba(255, 255, 255, 0.2);
+          padding: 0.125rem 0.5rem;
+          border-radius: 0.375rem;
+          font-size: 0.75rem;
+          font-weight: 600;
+        }
+
+        .main-content {
+          flex: 1;
+        }
+
+        .section-header {
+          text-align: center;
+          margin-bottom: 2rem;
+        }
+
+        .section-title {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #1f2937;
+          margin-bottom: 0.5rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+        }
+
+        .section-description {
+          color: #6b7280;
+          font-size: 0.875rem;
+        }
+
+        .tools-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+          gap: 1.5rem;
+        }
+
+        .tool-card {
+          background: white;
+          border-radius: 1rem;
+          padding: 1.5rem;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s ease;
+          border: 1px solid #e5e7eb;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .tool-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .tool-header {
+          display: flex;
+          align-items: flex-start;
+          gap: 1rem;
+          margin-bottom: 1rem;
+        }
+
+        .tool-icon {
+          width: 3rem;
+          height: 3rem;
+          background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+          border-radius: 0.75rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          flex-shrink: 0;
+        }
+
+        .tool-info {
+          flex: 1;
+        }
+
+        .tool-title {
+          font-size: 1.125rem;
+          font-weight: 700;
+          color: #1f2937;
+          margin-bottom: 0.5rem;
+        }
+
+        .tool-description {
+          color: #6b7280;
+          font-size: 0.875rem;
+          line-height: 1.5;
+        }
+
+        .tool-features {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          margin-bottom: 1rem;
+        }
+
+        .feature-tag {
+          background: #f0f9ff;
+          color: #0369a1;
+          padding: 0.25rem 0.75rem;
+          border-radius: 0.375rem;
+          font-size: 0.75rem;
+          font-weight: 500;
+          border: 1px solid #bae6fd;
+        }
+
+        .demo-badge {
+          position: absolute;
+          top: 1rem;
+          right: 1rem;
+          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+          color: white;
+          padding: 0.25rem 0.75rem;
+          border-radius: 0.375rem;
+          font-size: 0.75rem;
+          font-weight: 600;
+        }
+
+        .services-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+          gap: 2rem;
+        }
+
+        .service-card {
+          background: white;
+          border-radius: 1rem;
+          padding: 2rem;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s ease;
+          border: 1px solid #e5e7eb;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .service-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .popular-badge {
+          position: absolute;
+          top: -0.5rem;
+          right: -0.5rem;
+          background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+          color: white;
+          padding: 0.5rem 1rem;
+          border-radius: 0.5rem;
+          font-size: 0.75rem;
+          font-weight: 700;
+          transform: rotate(12deg);
+          box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .service-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 1.5rem;
+        }
+
+        .service-icon {
+          width: 3.5rem;
+          height: 3.5rem;
+          background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+          border-radius: 1rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+        }
+
+        .service-timeline {
+          text-align: right;
+        }
+
+        .timeline-label {
+          font-size: 0.75rem;
+          color: #6b7280;
+          margin-bottom: 0.25rem;
+        }
+
+        .timeline-value {
+          font-weight: 600;
+          color: #1f2937;
+        }
+
+        .service-title {
+          font-size: 1.25rem;
+          font-weight: 700;
+          color: #1f2937;
+          margin-bottom: 0.75rem;
+        }
+
+        .service-description {
+          color: #6b7280;
+          line-height: 1.6;
+          margin-bottom: 1.5rem;
+        }
+
+        .price-section {
+          background: #f8fafc;
+          border-radius: 0.75rem;
+          padding: 1rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .price-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 0.5rem;
+        }
+
+        .price-current {
+          font-size: 1.25rem;
+          font-weight: 700;
+          color: #3b82f6;
+        }
+
+        .price-original {
+          font-size: 0.875rem;
+          color: #9ca3af;
+          text-decoration: line-through;
+        }
+
+        .success-rate {
+          color: #10b981;
+          font-weight: 600;
+          font-size: 0.875rem;
+        }
+
+        .industry-average {
+          color: #6b7280;
+          font-size: 0.875rem;
+        }
+
+        .features-list {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 0.5rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .feature-item {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: 0.875rem;
+          color: #374151;
+        }
+
+        .feature-check {
+          color: #10b981;
+          flex-shrink: 0;
+        }
+
+        .action-button {
+          width: 100%;
+          background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+          color: white;
+          border: none;
+          padding: 0.75rem 1.5rem;
+          border-radius: 0.5rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+        }
+
+        .action-button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .tool-demo {
+          margin-top: 1rem;
+          padding: 1rem;
+          background: #f8fafc;
+          border-radius: 0.5rem;
+          border: 1px solid #e2e8f0;
+        }
+
+        .demo-content {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+
+        .demo-content h4 {
+          font-size: 1rem;
+          font-weight: 600;
+          color: #1f2937;
+          margin: 0;
+        }
+
+        .demo-input, .demo-select {
+          padding: 0.5rem 0.75rem;
+          border: 1px solid #d1d5db;
+          border-radius: 0.375rem;
+          font-size: 0.875rem;
+          background: white;
+        }
+
+        .demo-input:focus, .demo-select:focus {
+          outline: none;
+          border-color: #3b82f6;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .demo-button {
+          padding: 0.5rem 1rem;
+          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+          color: white;
+          border: none;
+          border-radius: 0.375rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .demo-button:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .result-display {
+          margin-top: 1rem;
+          padding: 1rem;
+          background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+          border: 1px solid #0ea5e9;
+          border-radius: 0.5rem;
+          font-size: 0.875rem;
+        }
+
+        .result-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 0.5rem;
+        }
+
+        .result-row:last-child {
+          margin-bottom: 0;
+        }
+
+        .result-row.total {
+          font-weight: 700;
+          font-size: 1rem;
+          padding-top: 0.5rem;
+          border-top: 1px solid #0ea5e9;
+          color: #0369a1;
+        }
+
+        @media (max-width: 768px) {
+          .header-title {
+            font-size: 2rem;
+          }
+          
+          .main-container {
+            padding: 1rem;
+          }
+          
+          .content-section {
+            flex-direction: column;
+          }
+          
+          .sidebar {
+            width: 100%;
+          }
+          
+          .stats-container {
+            flex-direction: column;
+            gap: 1rem;
+          }
+          
+          .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            width: 100%;
+          }
+          
+          .tools-grid {
+            grid-template-columns: 1fr;
+          }
+          
+          .services-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
+
+      {/* 헤더 섹션 */}
+      <div className="header-section">
+        <div className="header-content">
+          <div className="header-icon">
+            <Globe className="w-8 h-8" />
           </div>
+          <h1 className="header-title">글로벌 비즈니스</h1>
+          <p className="header-subtitle">
+            화장품 해외 진출, 브랜드팩이 <strong>A to Z 대행</strong>해드립니다
+          </p>
+          <p className="header-description">
+            AI 기반 스마트 도구와 전문가 네트워크로 성공적인 글로벌 진출을 지원합니다
+          </p>
         </div>
       </div>
 
-      {/* Global Stats */}
-      <div className="py-16 bg-gradient-to-br from-gray-50 to-stone-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {globalStats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-white rounded-2xl shadow-lg flex items-center justify-center mx-auto mb-4">
-                  <stat.icon className={`w-8 h-8 ${stat.color}`} />
+      <div className="main-container">
+        {/* 실시간 현황 */}
+        <div className="stats-section">
+          <div className="stats-container">
+            <div className="stats-title">
+              📊 실시간 현황
+            </div>
+            
+            <div className="stats-grid">
+              <div className="stat-item">
+                <div className="stat-value" style={{ color: '#3b82f6' }}>
+                  {counters.exports}
+                  <div className="pulse-dot"></div>
                 </div>
-                <div className={`text-3xl font-bold mb-2 ${stat.color}`}>{stat.value}</div>
-                <div className="text-gray-600">{stat.label}</div>
+                <div className="stat-label">이번 달 수출</div>
               </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Services Section */}
-      <div className="py-16">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-gray-700 via-stone-700 to-slate-700 bg-clip-text text-transparent">
-                글로벌 진출 서비스
-              </span>
-            </h2>
-            <p className="text-xl text-gray-600">
-              체계적인 프로세스로 성공적인 해외 진출을 지원합니다
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {services.map((service, index) => (
-              <div key={index} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300">
-                <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mb-6">
-                  <service.icon className="w-8 h-8 text-gray-600" />
+              <div className="stat-item">
+                <div className="stat-value" style={{ color: '#10b981' }}>
+                  {counters.partners}
                 </div>
-                <h3 className="text-xl font-bold text-gray-800 mb-4">{service.title}</h3>
-                <p className="text-gray-600 mb-6 leading-relaxed">{service.description}</p>
-                <div className="space-y-2">
-                  {service.features.map((feature, idx) => (
-                    <div key={idx} className="flex items-center text-sm text-gray-600">
-                      <CheckCircle className="w-4 h-4 text-green-500 mr-2 flex-shrink-0" />
-                      {feature}
-                    </div>
+                <div className="stat-label">글로벌 파트너</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-value" style={{ color: '#8b5cf6' }}>
+                  {counters.countries}
+                </div>
+                <div className="stat-label">진출 국가</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-value" style={{ color: '#f59e0b' }}>
+                  {counters.success}%
+                </div>
+                <div className="stat-label">성공률</div>
+              </div>
+            </div>
+            
+            <div className="reviews-section">
+              <div className="reviews-title">
+                ⭐ 고객 후기
+              </div>
+              <div className="reviews-content">
+                <div className="review-item">
+                  <span className="review-text">"{reviewsData[currentReview].text}"</span>
+                  <span className="review-author">- {reviewsData[currentReview].author} {reviewsData[currentReview].country}</span>
+                </div>
+                <div className="review-rating">
+                  <span className="stars">{'★'.repeat(reviewsData[currentReview].rating)}{'☆'.repeat(5-reviewsData[currentReview].rating)}</span>
+                  <span className="rating-text">4.8/5.0</span>
+                </div>
+                <div className="review-dots">
+                  {reviewsData.map((_, index) => (
+                    <span 
+                      key={index}
+                      className={`review-dot ${index === currentReview ? 'active' : ''}`}
+                      onClick={() => setCurrentReview(index)}
+                    ></span>
                   ))}
                 </div>
-                <button className="mt-6 px-6 py-2 bg-gradient-to-r from-gray-500 to-stone-600 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300">
-                  자세히 보기
-                </button>
               </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Regional Markets */}
-      <div className="py-16 bg-gradient-to-br from-gray-50 to-stone-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-gray-700 via-stone-700 to-slate-700 bg-clip-text text-transparent">
-                지역별 시장 기회
-              </span>
-            </h2>
-            <p className="text-xl text-gray-600 mb-8">
-              각 지역의 시장 특성과 기회를 분석해보세요
-            </p>
-            
-            <div className="flex justify-center gap-4 mb-8">
-              <button
-                onClick={() => setSelectedRegion('all')}
-                className={`px-6 py-2 rounded-lg font-semibold transition-all duration-300 ${
-                  selectedRegion === 'all'
-                    ? 'bg-gradient-to-r from-gray-600 to-stone-700 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-50'
-                }`}
-              >
-                전체
-              </button>
-              {regions.map(region => (
-                <button
-                  key={region.id}
-                  onClick={() => setSelectedRegion(region.id)}
-                  className={`px-6 py-2 rounded-lg font-semibold transition-all duration-300 ${
-                    selectedRegion === region.id
-                      ? 'bg-gradient-to-r from-gray-600 to-stone-700 text-white'
-                      : 'bg-white text-gray-700 hover:bg-gray-50'
-                  }`}
-                >
-                  {region.name}
-                </button>
-              ))}
             </div>
           </div>
+        </div>
 
-          <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-8">
-            {filteredRegions.map(region => (
-              <div key={region.id} className="bg-white rounded-2xl p-8 shadow-lg">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-2xl font-bold text-gray-800">{region.name}</h3>
-                  <div className="text-right">
-                    <div className="text-lg font-bold text-gray-600">{region.marketSize}</div>
-                    <div className="text-sm text-green-600 font-medium">{region.growth}</div>
+        {/* 탭 네비게이션 */}
+        <div className="tabs-section">
+          <div className="tabs-container">
+            <button
+              className={`tab-button ${activeTab === 'tools' ? 'active' : ''}`}
+              onClick={() => setActiveTab('tools')}
+            >
+              <Zap className="w-4 h-4" />
+              <span>셀프 도구</span>
+              <span className="tab-badge">9</span>
+            </button>
+            <button
+              className={`tab-button ${activeTab === 'services' ? 'active' : ''}`}
+              onClick={() => setActiveTab('services')}
+            >
+              <Users className="w-4 h-4" />
+              <span>대행 서비스</span>
+              <span className="tab-badge">5</span>
+            </button>
+          </div>
+        </div>
+
+        {/* 콘텐츠 섹션 */}
+        <div className="content-section">
+          {activeTab === 'tools' && (
+            <>
+              {/* 사이드바 */}
+              <div className="sidebar">
+                <div className="sidebar-title">
+                  🔍 카테고리
+                </div>
+                <div className="category-list">
+                  {categories.map(category => (
+                    <button
+                      key={category.id}
+                      className={`category-button ${selectedCategory === category.id ? 'active' : ''}`}
+                      onClick={() => setSelectedCategory(category.id)}
+                    >
+                      <span>{category.name}</span>
+                      <span className="category-count">{category.count}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 메인 콘텐츠 */}
+              <div className="main-content">
+                <div className="section-header">
+                  <div className="section-title">
+                    🛠️ 스마트 셀프 도구
+                  </div>
+                  <div className="section-description">
+                    AI 기반 도구로 수출 준비를 더 쉽고 정확하게 해보세요
                   </div>
                 </div>
 
-                <div className="mb-6">
-                  <h4 className="font-semibold text-gray-700 mb-3">주요 국가</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {region.countries.map((country, index) => (
-                      <span key={index} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
-                        {country}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mb-6">
-                  <h4 className="font-semibold text-gray-700 mb-3">시장 기회</h4>
-                  <div className="space-y-2">
-                    {region.opportunities.map((opp, index) => (
-                      <div key={index} className="flex items-start">
-                        <span className={`px-2 py-1 rounded text-xs font-medium mr-3 mt-0.5 ${getOpportunityColor(opp.level)}`}>
-                          {opp.level === 'high' ? '높음' : opp.level === 'medium' ? '보통' : '낮음'}
-                        </span>
-                        <div>
-                          <div className="font-medium text-gray-800 text-sm">{opp.title}</div>
-                          <div className="text-gray-600 text-xs">{opp.description}</div>
+                <div className="tools-grid">
+                  {filteredTools.map(tool => {
+                    const Icon = tool.icon;
+                    return (
+                      <div key={tool.id} className="tool-card">
+                        {tool.demo && (
+                          <div className="demo-badge">체험 가능</div>
+                        )}
+                        
+                        <div className="tool-header">
+                          <div className="tool-icon">
+                            <Icon className="w-6 h-6" />
+                          </div>
+                          <div className="tool-info">
+                            <div className="tool-title">{tool.title}</div>
+                            <div className="tool-description">{tool.description}</div>
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
 
-                <div className="mb-6">
-                  <h4 className="font-semibold text-gray-700 mb-3">필수 요구사항</h4>
-                  <div className="space-y-1">
-                    {region.requirements.map((req, index) => (
-                      <div key={index} className="flex items-center text-sm text-gray-600">
-                        <CheckCircle className="w-4 h-4 text-green-500 mr-2 flex-shrink-0" />
-                        {req}
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                        <div className="tool-features">
+                          {tool.features.map((feature, index) => (
+                            <div key={index} className="feature-tag">
+                              {feature}
+                            </div>
+                          ))}
+                        </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                  <div>
-                    <div className="text-sm text-gray-500">예상 진출 기간</div>
-                    <div className="font-semibold text-gray-700">{region.timeline}</div>
-                  </div>
-                  <button className="px-4 py-2 bg-gradient-to-r from-gray-500 to-stone-600 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300">
-                    상담받기
-                  </button>
+                        {/* 도구 기능 인터페이스 - 항상 표시 */}
+                        {tool.demo && (
+                          <div className="tool-demo">
+                            {tool.id === 'hs-classifier' && (
+                              <div className="demo-content">
+                                <h4>HS코드 AI 분류기</h4>
+                                <input
+                                  type="text"
+                                  placeholder="제품명을 입력하세요 (예: 립스틱)"
+                                  value={calculatorData.searchQuery}
+                                  onChange={(e) => setCalculatorData({...calculatorData, searchQuery: e.target.value})}
+                                  className="demo-input"
+                                />
+                                <button 
+                                  className="demo-button"
+                                  onClick={() => {
+                                    const hsCode = searchHSCode(calculatorData.searchQuery);
+                                    setCalculatorData({...calculatorData, hsCode: hsCode});
+                                  }}
+                                >
+                                  분류하기
+                                </button>
+                                {calculatorData.hsCode && (
+                                  <div className="result-display">
+                                    <strong>분류 결과:</strong> {calculatorData.searchQuery} → HS코드: {calculatorData.hsCode}
+                                  </div>
+                                )}
+                              </div>
+                            )}
+
+                            {tool.id === 'tariff-calculator' && (
+                              <div className="demo-content">
+                                <h4>관세 계산기</h4>
+                                <input
+                                  type="number"
+                                  placeholder="제품 가격 (원)"
+                                  value={calculatorData.productPrice}
+                                  onChange={(e) => setCalculatorData({...calculatorData, productPrice: e.target.value})}
+                                  className="demo-input"
+                                />
+                                <select
+                                  value={calculatorData.targetCountry}
+                                  onChange={(e) => setCalculatorData({...calculatorData, targetCountry: e.target.value})}
+                                  className="demo-select"
+                                >
+                                  <option value="japan">일본</option>
+                                  <option value="usa">미국</option>
+                                  <option value="china">중국</option>
+                                  <option value="europe">유럽</option>
+                                </select>
+                                <button 
+                                  className="demo-button"
+                                  onClick={() => {
+                                    if (calculatorData.productPrice) {
+                                      const result = calculateTariff(calculatorData.productPrice, calculatorData.targetCountry);
+                                      setCalculatorData({...calculatorData, tariffResult: result});
+                                    }
+                                  }}
+                                >
+                                  계산하기
+                                </button>
+                                {calculatorData.tariffResult && (
+                                  <div className="result-display">
+                                    <div className="result-row">
+                                      <span>관세:</span>
+                                      <span>{calculatorData.tariffResult.tariff.toLocaleString()}원</span>
+                                    </div>
+                                    <div className="result-row">
+                                      <span>부가세:</span>
+                                      <span>{calculatorData.tariffResult.vat.toLocaleString()}원</span>
+                                    </div>
+                                    <div className="result-row">
+                                      <span>통관수수료:</span>
+                                      <span>{calculatorData.tariffResult.clearanceFee.toLocaleString()}원</span>
+                                    </div>
+                                    <div className="result-row total">
+                                      <span>총 관세비용:</span>
+                                      <span>{calculatorData.tariffResult.total.toLocaleString()}원</span>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </div>
+            </>
+          )}
 
-      {/* Success Stories */}
-      <div className="py-16">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-gray-700 via-stone-700 to-slate-700 bg-clip-text text-transparent">
-                글로벌 성공 사례
-              </span>
-            </h2>
-            <p className="text-xl text-gray-600">
-              BrandPack과 함께 해외 시장에서 성공한 브랜드들의 이야기
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-3 gap-8">
-            {successStories.map((story, index) => (
-              <div key={index} className="bg-white rounded-2xl p-8 shadow-lg">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-bold text-gray-800">{story.brand}</h3>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <MapPin className="w-4 h-4 mr-1" />
-                    {story.region}
-                  </div>
+          {activeTab === 'services' && (
+            <div className="main-content">
+              <div className="section-header">
+                <div className="section-title">
+                  💼 전문 대행 서비스
                 </div>
-
-                <div className="text-lg font-semibold text-gray-700 mb-6">
-                  {story.achievement}
-                </div>
-
-                <div className="space-y-4 mb-6">
-                  <div>
-                    <h4 className="font-semibold text-gray-700 mb-1">도전과제</h4>
-                    <p className="text-gray-600 text-sm">{story.challenge}</p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-700 mb-1">솔루션</h4>
-                    <p className="text-gray-600 text-sm">{story.solution}</p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-700 mb-1">결과</h4>
-                    <p className="text-gray-600 text-sm">{story.result}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                  <div className="flex items-center">
-                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                    <span className="ml-1 text-sm font-medium text-gray-700">성공 사례</span>
-                  </div>
-                  <button className="text-sm text-gray-600 hover:text-gray-800 transition-colors">
-                    자세히 보기 →
-                  </button>
+                <div className="section-description">
+                  전문가가 직접 수행하는 맞춤형 글로벌 진출 서비스
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </div>
 
-      {/* CTA Section */}
-      <div className="py-16 bg-gradient-to-r from-gray-600 via-stone-600 to-slate-700 text-white">
-        <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-4xl font-bold mb-6">
-            지금 바로 글로벌 진출을 시작하세요
-          </h2>
-          <p className="text-xl text-gray-100 mb-8">
-            전문가와의 무료 상담을 통해 당신의 브랜드에 맞는 글로벌 전략을 수립해보세요
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-4 bg-white text-gray-800 rounded-lg font-semibold hover:shadow-lg transition-all duration-300">
-              무료 상담 신청
-            </button>
-            <button className="px-8 py-4 border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-gray-800 transition-all duration-300">
-              성공 사례 더보기
-            </button>
-          </div>
+              <div className="services-grid">
+                {servicesData.map(service => (
+                  <div key={service.id} className="service-card">
+                    {service.popular && (
+                      <div className="popular-badge">🔥 인기</div>
+                    )}
+                    
+                    <div className="service-header">
+                      <div className="service-icon">
+                        <Users className="w-6 h-6" />
+                      </div>
+                      <div className="service-timeline">
+                        <div className="timeline-label">예상 소요시간</div>
+                        <div className="timeline-value">{service.timeline}</div>
+                      </div>
+                    </div>
+
+                    <div className="service-title">{service.title}</div>
+                    <div className="service-description">{service.description}</div>
+
+                    <div className="price-section">
+                      <div className="price-row">
+                        <span className="price-current">{service.price}</span>
+                      </div>
+                      <div className="price-row">
+                        <span className="success-rate">성공률 {service.successRate}</span>
+                        <span className="industry-average">업계 평균 대비 +15%</span>
+                      </div>
+                    </div>
+
+                    <div className="features-list">
+                      {service.features.map((feature, index) => (
+                        <div key={index} className="feature-item">
+                          <CheckCircle className="w-4 h-4 feature-check" />
+                          <span>{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <button 
+                      className="action-button"
+                      onClick={() => {
+                        alert(`${service.title} 상담 신청이 접수되었습니다!\n\n담당자가 24시간 내에 연락드리겠습니다.\n\n서비스: ${service.title}\n예상 소요시간: ${service.timeline}\n\n맞춤형 견적을 제공해드리겠습니다.`);
+                      }}
+                    >
+                      <span>상담 신청</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
