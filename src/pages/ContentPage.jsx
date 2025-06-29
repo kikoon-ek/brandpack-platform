@@ -7,9 +7,6 @@ const ContentPage = () => {
   const [isFilterExpanded, setIsFilterExpanded] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(true);
   const [isCategoryExpanded, setIsCategoryExpanded] = useState(true);
-  const [selectedSupportType, setSelectedSupportType] = useState('화장품 지원사업');
-  const [isSupportExpanded, setIsSupportExpanded] = useState(true);
-
   const categories = [
     { id: 'all', name: '전체', icon: '📚' },
     { id: 'trend', name: '트렌드 분석', icon: '📊' },
@@ -20,36 +17,6 @@ const ContentPage = () => {
     { id: 'review', name: '제품 리뷰', icon: '⭐' },
     { id: 'seasonal', name: '계절별 팁', icon: '🌸' },
     { id: 'diy', name: 'DIY 뷰티', icon: '🏠' }
-  ];
-
-  const supportPrograms = [
-    {
-      id: 1,
-      title: 'K-뷰티 글로벌 진출 지원사업',
-      organization: '중소벤처기업부',
-      amount: '최대 5억원',
-      deadline: '2024.07.31',
-      status: '접수중',
-      description: 'K-뷰티 브랜드의 해외 진출을 위한 마케팅, 유통, 인증 지원'
-    },
-    {
-      id: 2,
-      title: '화장품 R&D 혁신 지원사업',
-      organization: '산업통상자원부',
-      amount: '최대 3억원',
-      deadline: '2024.08.15',
-      status: '접수중',
-      description: '혁신적인 화장품 기술 개발 및 상용화 지원'
-    },
-    {
-      id: 3,
-      title: '친환경 화장품 개발 지원사업',
-      organization: '환경부',
-      amount: '최대 2억원',
-      deadline: '2024.09.30',
-      status: '접수중',
-      description: '지속가능한 친환경 화장품 개발 및 인증 지원'
-    }
   ];
 
   const contentItems = [
@@ -374,94 +341,6 @@ const ContentPage = () => {
 
           {/* 우측 메인 콘텐츠 영역 */}
           <div className="content-main">
-            {/* 정부지원사업 정보 */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 mb-8">
-              <div className="p-6 border-b border-gray-200">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-blue-100 rounded-lg">
-                      <Bot className="w-6 h-6 text-blue-600" />
-                    </div>
-                    <div>
-                      <h2 className="text-xl font-bold text-gray-900">정부지원사업 정보</h2>
-                      <p className="text-sm text-gray-600">AI가 실시간으로 수집한 최신 지원사업 정보</p>
-                    </div>
-                    <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
-                      실시간 업데이트
-                    </span>
-                  </div>
-                  <button 
-                    className="p-2 text-gray-400 hover:text-gray-600"
-                    onClick={() => setIsSupportExpanded(!isSupportExpanded)}
-                  >
-                    {isSupportExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-                  </button>
-                </div>
-              </div>
-
-              {isSupportExpanded && (
-              <div className="p-6">
-                <div className="flex gap-4 mb-6">
-                  <button 
-                    onClick={() => setSelectedSupportType('화장품 지원사업')}
-                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                      selectedSupportType === '화장품 지원사업'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
-                  >
-                    화장품 지원사업
-                  </button>
-                  <button 
-                    onClick={() => setSelectedSupportType('건강기능식품 지원사업')}
-                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                      selectedSupportType === '건강기능식품 지원사업'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
-                  >
-                    건강기능식품 지원사업
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-3 gap-4">
-                  {supportPrograms.map((program) => (
-                    <div key={program.id} className="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:shadow-md transition-shadow">
-                      <div className="flex items-start justify-between mb-2">
-                        <h3 className="text-sm font-semibold text-gray-900 line-clamp-2">{program.title}</h3>
-                        <span className="px-2 py-1 rounded-full text-xs font-medium border bg-green-100 text-green-800 border-green-200">
-                          {program.status}
-                        </span>
-                      </div>
-                      
-                      <div className="space-y-1 text-xs text-gray-600 mb-3">
-                        <div className="flex items-center gap-1">
-                          <Building className="w-3 h-3" />
-                          <span>{program.organization}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <DollarSign className="w-3 h-3" />
-                          <span>{program.amount}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Calendar className="w-3 h-3" />
-                          <span>마감: {program.deadline}</span>
-                        </div>
-                      </div>
-                      
-                      <p className="text-xs text-gray-600 mb-3 line-clamp-2">{program.description}</p>
-                      
-                      <button className="w-full flex items-center justify-center gap-1 px-3 py-2 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition-colors">
-                        <ExternalLink className="w-3 h-3" />
-                        자세히 보기
-                      </button>
-                    </div>
-                  ))}
-                </div>
-                </div>
-              )}
-            </div>
-
             {/* 콘텐츠 목록 */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200">
               <div className="p-6 border-b border-gray-200">

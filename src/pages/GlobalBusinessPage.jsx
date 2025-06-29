@@ -504,11 +504,21 @@ const GlobalBusinessPage = () => {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.5; }
         }
-
         .tabs-section {
+          position: relative;
           display: flex;
-          justify-content: center;
+          justify-content: flex-start;
+          align-items: center;
           margin-bottom: 2rem;
+        }
+
+        .tab-title-section {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          text-align: center;
+          width: 100%;
+          pointer-events: none;
         }
 
         .tabs-container {
@@ -553,6 +563,29 @@ const GlobalBusinessPage = () => {
           padding: 0.125rem 0.5rem;
           border-radius: 0.375rem;
           font-size: 0.75rem;
+        }
+
+        .tab-title-section {
+          flex: 1;
+          margin-left: 1rem;
+          text-align: center;
+        }
+
+        .tab-title {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #1f2937;
+          margin-bottom: 0.5rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+        }
+
+        .tab-description {
+          color: #6b7280;
+          font-size: 0.875rem;
+          text-align: center;
         }
 
         .content-section {
@@ -1111,6 +1144,30 @@ const GlobalBusinessPage = () => {
               <span className="tab-badge">5</span>
             </button>
           </div>
+          
+          {/* 탭별 제목 */}
+          <div className="tab-title-section">
+            {activeTab === 'tools' && (
+              <>
+                <div className="tab-title">
+                  🛠️ 스마트 셀프 도구
+                </div>
+                <div className="tab-description">
+                  AI 기반 도구로 수출 준비를 더 쉽고 정확하게 해보세요
+                </div>
+              </>
+            )}
+            {activeTab === 'services' && (
+              <>
+                <div className="tab-title">
+                  💼 전문 대행 서비스
+                </div>
+                <div className="tab-description">
+                  전문가가 직접 처리하는 맞춤형 글로벌 진출 서비스
+                </div>
+              </>
+            )}
+          </div>
         </div>
 
         {/* 콘텐츠 섹션 */}
@@ -1138,15 +1195,6 @@ const GlobalBusinessPage = () => {
 
               {/* 메인 콘텐츠 */}
               <div className="main-content">
-                <div className="section-header">
-                  <div className="section-title">
-                    🛠️ 스마트 셀프 도구
-                  </div>
-                  <div className="section-description">
-                    AI 기반 도구로 수출 준비를 더 쉽고 정확하게 해보세요
-                  </div>
-                </div>
-
                 <div className="tools-grid">
                   {filteredTools.map(tool => {
                     const Icon = tool.icon;
@@ -1269,15 +1317,6 @@ const GlobalBusinessPage = () => {
 
           {activeTab === 'services' && (
             <div className="main-content">
-              <div className="section-header">
-                <div className="section-title">
-                  💼 전문 대행 서비스
-                </div>
-                <div className="section-description">
-                  전문가가 직접 수행하는 맞춤형 글로벌 진출 서비스
-                </div>
-              </div>
-
               <div className="services-grid">
                 {servicesData.map(service => (
                   <div key={service.id} className="service-card">
